@@ -1,5 +1,6 @@
-import {BaseEntity} from "../@shared/entity/base.entity";
-
+import {BaseEntity} from "../../@shared/entity/base.entity";
+import {compare, hash} from "bcryptjs";
+import { randomUUID } from 'crypto';
 
 export class UserEntity extends BaseEntity {
   private _uuid: string;
@@ -8,12 +9,34 @@ export class UserEntity extends BaseEntity {
   private _email: string;
   private _password: string;
 
-  constructor() {
-    super();
+  public async create({ name = '', username = '', email = '', password = ''}) {
+    this.uuid = randomUUID();
+    this.name = name;
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    await this.hashPassword();
+    this.validate();
   }
 
-  public checkPassword(password: string): boolean {
-    return this._password === password;
+  private validate(){
+    if (!this.email.match(/@/)) {
+      throw new Error('Invalid email');
+    }
+    if(this.username.length < 4) {
+      throw new Error('Username must be at least 4 characters');
+    }
+    if(this.password.length < 8) {
+      throw new Error('Password must be at least 8 characters');
+    }
+  }
+
+  public async checkPassword(password: string): Promise<boolean> {
+    return await compare(password, this._password)
+  }
+
+  public async hashPassword(): Promise<void> {
+    this._password = await hash(this._password, 10);
   }
 
   public get uuid(): string {

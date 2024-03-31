@@ -1,10 +1,10 @@
 
-type SessionValidationTypes = "jwt" | "paseto"
-type AvailableDatabases = "postgres" | "mysql"
+type SessionValidationTypes = "jwt"
+type AvailableDatabases = "pgsql" | "sqlite"
 
 export class ConfigEntity {
   private _sessionValidationType: SessionValidationTypes = "jwt";
-  private _database: AvailableDatabases = "postgres";
+  private _database: AvailableDatabases = "pgsql";
   private _port: number = 3000;
   private _host: string = "localhost";
 

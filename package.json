@@ -17,14 +17,22 @@
     "@swc/cli": "^0.3.10",
     "@swc/core": "^1.4.11",
     "@swc/jest": "^0.2.36",
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^4.17.21",
+    "bcryptjs": "^2.4.3",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "sequelize": "^6.37.2",
+    "sqlite3": "^5.1.7",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.12.2",
+    "@types/uuid": "^9.0.8",
     "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "eslint-import-resolver-typescript": "^3.6.1",
