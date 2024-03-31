@@ -12,6 +12,10 @@ export class UserEntity extends BaseEntity {
     super();
   }
 
+  public checkPassword(password: string): boolean {
+    return this._password === password;
+  }
+
   public get uuid(): string {
     return this._uuid;
   }
