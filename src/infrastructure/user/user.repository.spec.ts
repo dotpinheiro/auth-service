@@ -1,5 +1,31 @@
 describe('UserRepository tests', () => {
-    it('should be defined', () => {
-        expect(true).toBe(true);
-    });
+
+  describe("create", () => {
+
+  })
+
+  describe("delete", () => {
+
+  })
+
+  describe("findAll", () => {
+
+  })
+
+  describe("findOne", () => {
+
+  })
+
+  describe("findOneByUuid", () => {
+
+  })
+
+  describe("findByEmailOrFail", () => {
+
+  })
+
+  describe("findByUsernameOrFail", () => {
+
+  })
+
 });

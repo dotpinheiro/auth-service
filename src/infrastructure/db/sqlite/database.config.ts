@@ -1,10 +1,10 @@
 import { Sequelize } from "sequelize-typescript";
-import UserModel from "./models/User.model";
+import {sharedModels} from "../@shared";
 
 
-const sequelize = new Sequelize('sqlite::memory:');
+const sequelize = new Sequelize(process.env.SQLITE_DB_URI || 'sqlite::memory:');
 sequelize.addModels([
-  UserModel
+  ...sharedModels
 ])
 
 export default sequelize

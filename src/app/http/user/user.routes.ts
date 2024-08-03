@@ -13,8 +13,12 @@ userRouter.post('/', async (req, res) => {
     email: req.body.email,
     password: req.body.password
   });
-  const user = await userService.createUser(userEntity);
-  res.send(user);
+  try{
+    const user = await userService.createUser(userEntity);
+    res.send(user);
+  }catch (e: any) {
+    res.status(400).send(e.message);
+  }
 });
 
 export default userRouter;
