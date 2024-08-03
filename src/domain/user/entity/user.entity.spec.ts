@@ -4,12 +4,7 @@ import { validate } from "uuid";
 
 describe('UserEntity tests', () => {
 
-  it('should be defined', () => {
-    const defaultUserEntity = new UserEntity()
-    expect(defaultUserEntity).toBeDefined();
-  })
-
-  it('should be a valid user', async () => {
+  it('creates a valid user', async () => {
     const user = new UserEntity()
     const defaultPassword = faker.internet.password();
     await user.create({

@@ -17,6 +17,17 @@ export class UserEntity extends BaseEntity {
     this.password = password;
     await this.hashPassword();
     this.validate();
+    return this;
+  }
+
+  public static from({ uuid, name, username, email, password }: any): UserEntity {
+    const user = new UserEntity();
+    user.uuid = uuid;
+    user.name = name;
+    user.username = username;
+    user.email = email;
+    user.password = password;
+    return user;
   }
 
   private validate(){
@@ -32,7 +43,11 @@ export class UserEntity extends BaseEntity {
   }
 
   public async checkPassword(password: string): Promise<boolean> {
-    return await compare(password, this._password)
+    const valid = await compare(password, this._password)
+    if(!valid){
+      throw new Error('Invalid password');
+    }
+    return valid;
   }
 
   public async hashPassword(): Promise<void> {

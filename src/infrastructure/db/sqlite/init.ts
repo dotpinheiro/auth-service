@@ -1,7 +1,8 @@
-import {UserModel} from "./models/User.model";
+import UserModel from "./models/User.model";
+import sequelize from "./database.config";
 
 const isDev = process.env.NODE_ENV === 'development';
 
-const initDb = () => {
-  UserModel.sync({ force: isDev });
+export const initDb = async () => {
+  await sequelize.sync({ force: isDev });
 }

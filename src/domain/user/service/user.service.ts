@@ -9,6 +9,10 @@ export class UserService {
         this._userRepository = userRepository;
     }
 
+    async createUser(user: UserEntity): Promise<UserEntity> {
+        await this._userRepository.create(user);
+        return user;
+    }
 
     async findUserByEmail(email: string): Promise<UserEntity> {
         return this._userRepository.findByEmailOrFail(email);

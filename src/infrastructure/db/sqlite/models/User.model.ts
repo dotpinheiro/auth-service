@@ -1,41 +1,31 @@
-import DatabaseConfig from '../database.config';
-import { DataTypes, Model } from 'sequelize';
+import {
+  Model,
+  PrimaryKey,
+  Column, Table
+} from "sequelize-typescript";
 
-export class UserModel extends Model {
-  public uuid!: string;
-  public name!: string;
-  public email!: string;
-  public password!: string;
-  public isActive: boolean;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-  public readonly deletedAt!: Date;
-}
-
-UserModel.init({
-  uuid: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  isActive: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
-}, {
+@Table({
+  tableName: "users",
   timestamps: true,
-  paranoid: true,
-  sequelize: DatabaseConfig,
 })
+export default class UserModel extends Model {
+  @PrimaryKey
+  @Column
+  declare uuid: string;
+
+  @Column({ allowNull: false })
+  declare name: string;
+
+  @Column({ allowNull: false })
+  declare username: string;
+
+  @Column({ allowNull: false })
+  declare email: string;
+
+  @Column({ allowNull: false })
+  declare password: string;
+
+  @Column({ allowNull: false, defaultValue: true })
+  declare isActive: boolean;
+
+}
