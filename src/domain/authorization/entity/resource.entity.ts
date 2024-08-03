@@ -1,4 +1,4 @@
-import {ActionEntity} from "../action/action.entity";
+import {ActionEntity} from "./action.entity";
 
 export class ResourceEntity {
   private _id: string;

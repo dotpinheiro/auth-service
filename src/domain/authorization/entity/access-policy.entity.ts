@@ -1,5 +1,5 @@
-import {ResourceEntity} from "../resource/resource.entity";
-import {ActionEntity} from "../action/action.entity";
+import {ResourceEntity} from "./resource.entity";
+import {ActionEntity} from "./action.entity";
 
 export class AccessPolicyEntity {
   private _id: string;

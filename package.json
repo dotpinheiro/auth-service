@@ -11,7 +11,8 @@
     "start": "node dist/index.js",
     "build": "",
     "dev": "concurrently \"yarn tsc --watch\" \"nodemon -q dist/index.js\"",
-    "test": "yarn tsc -- --noEmit && jest"
+    "test": "yarn tsc -- --noEmit && jest",
+    "lint": "eslint --fix ."
   },
   "dependencies": {
     "@swc/cli": "^0.3.10",
@@ -34,19 +35,25 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.8.0",
     "@faker-js/faker": "^8.4.1",
     "@types/jest": "^29.5.12",
     "@types/mime": "3",
     "@types/node": "^22.1.0",
     "@types/uuid": "^9.0.8",
     "@types/validator": "^13.12.0",
+    "babel-eslint": "^10.1.0",
     "concurrently": "^8.2.2",
-    "eslint": "^8.57.0",
+    "eslint": "9.x",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.9.0",
     "nodemon": "^3.1.0",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.0.0"
   }
 }

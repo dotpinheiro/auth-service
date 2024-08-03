@@ -11,9 +11,9 @@ describe('AuthenticationService tests', () => {
   const baseUsers = [1,2,3,4].map(() => ({ name: faker.person.fullName(), email: faker.internet.email(), username: faker.internet.userName(), password: faker.internet.password()}))
   let users: Array<UserEntity> = [];
 
-  let userService = new UserService();
+  const userService = new UserService();
 
-  let service = new AuthenticationService(userService);
+  const service = new AuthenticationService(userService);
 
   beforeEach(async () => {
     jest.clearAllMocks();

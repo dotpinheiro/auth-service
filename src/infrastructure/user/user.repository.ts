@@ -20,28 +20,28 @@ export class UserRepository implements UserRepositoryInterface{
     }
   }
 
-  delete(entity: UserEntity): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async delete(entity: UserEntity): Promise<boolean> {
+    const affectedRows = await UserModel.destroy({ where: { uuid: entity.uuid } });
+    return affectedRows > 0;
   }
 
   findAll(): Promise<UserEntity[]> {
-    throw new Error('Method not implemented.');
+    return UserModel.findAll().then(users => users.map(UserModel.toEntity));
   }
 
-  findOne(entity: UserEntity): Promise<UserEntity> {
-    throw new Error('Method not implemented.');
+  async findOne(entity: UserEntity): Promise<UserEntity> {
+    try{
+      const user = await UserModel.findOne({ where: { uuid: entity.uuid }, rejectOnEmpty: true });
+      return UserModel.toEntity(user);
+    }catch{
+      throw new Error('User not found');
+    }
   }
 
   async findOneByUuid(uuid: string): Promise<UserEntity> {
     try{
       const user = await UserModel.findOne({ where: { uuid }, rejectOnEmpty: true });
-      return UserEntity.from({
-        uuid: user.uuid,
-        name: user.name,
-        username: user.username,
-        email: user.email,
-        password: user.password
-      })
+      return UserModel.toEntity(user);
     }catch{
       throw new Error('User not found');
     }
@@ -50,24 +50,34 @@ export class UserRepository implements UserRepositoryInterface{
   async findByEmailOrFail(email: string): Promise<UserEntity> {
     try{
       const user = await UserModel.findOne({ where: { email }, rejectOnEmpty: true });
-      return UserEntity.from({
-        uuid: user.uuid,
-        name: user.name,
-        username: user.username,
-        email: user.email,
-        password: user.password
-      })
+      return UserModel.toEntity(user);
     }catch{
       throw new Error('User not found');
     }
   }
 
-  findByUsernameOrFail(username: string): Promise<UserEntity> {
-    throw new Error('Method not implemented.');
+  async findByUsernameOrFail(username: string): Promise<UserEntity> {
+    try{
+      const user = await UserModel.findOne({ where: { username }, rejectOnEmpty: true });
+      return UserModel.toEntity(user);
+    }catch{
+      throw new Error('User not found');
+    }
   }
 
-  update(entity: UserEntity): Promise<UserEntity> {
-    throw new Error('Method not implemented.');
+  async update(entity: UserEntity): Promise<UserEntity> {
+    const user = await UserModel.findOne({ where: { email: entity.email }, rejectOnEmpty: false });
+    if(!user) throw new Error('User does not exists');
+
+    const [ affectedCount, _ ] = await UserModel.update({
+      name: entity.name,
+      username: entity.username,
+      email: entity.email,
+      password: entity.password
+    }, { where: { uuid: entity.uuid }, returning: false });
+    if(affectedCount === 0) throw new Error('No rows affected');
+
+    return entity;
   }
 
 }
