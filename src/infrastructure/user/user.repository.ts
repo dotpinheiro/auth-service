@@ -69,7 +69,7 @@ export class UserRepository implements UserRepositoryInterface{
     const user = await UserModel.findOne({ where: { email: entity.email }, rejectOnEmpty: false });
     if(!user) throw new Error('User does not exists');
 
-    const [ affectedCount, _ ] = await UserModel.update({
+    const [ affectedCount ] = await UserModel.update({
       name: entity.name,
       username: entity.username,
       email: entity.email,

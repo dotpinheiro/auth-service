@@ -1,6 +1,11 @@
 import {BaseEntity} from "../../@shared/entity/base.entity";
 import {compare, hash} from "bcryptjs";
 import { randomUUID } from 'crypto';
+import {AuthorizationEntity} from "../../authorization/entity/authorization.entity";
+
+type BaseParams = {
+  authorization?: AuthorizationEntity;
+} & Pick<UserEntity, 'uuid' | 'name' | 'username' | 'email' | 'password'>
 
 export class UserEntity extends BaseEntity {
   private _uuid: string;
@@ -8,8 +13,9 @@ export class UserEntity extends BaseEntity {
   private _username: string;
   private _email: string;
   private _password: string;
+  private _authorization: AuthorizationEntity;
 
-  public async create({ name = '', username = '', email = '', password = ''}) {
+  public async create({ name = '', username = '', email = '', password = ''}: BaseParams) {
     this.uuid = randomUUID();
     this.name = name;
     this.username = username;
@@ -20,7 +26,7 @@ export class UserEntity extends BaseEntity {
     return this;
   }
 
-  public static from({ uuid, name, username, email, password }: any): UserEntity {
+  public static from({ uuid, name, username, email, password }: BaseParams): UserEntity {
     const user = new UserEntity();
     user.uuid = uuid;
     user.name = name;
@@ -92,6 +98,14 @@ export class UserEntity extends BaseEntity {
 
   public set password(value: string) {
     this._password = value;
+  }
+
+  public get permissions(): AuthorizationEntity {
+    return this._authorization;
+  }
+
+  public set permissions(value: AuthorizationEntity) {
+    this._authorization = value;
   }
 
 }
