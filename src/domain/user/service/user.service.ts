@@ -2,7 +2,6 @@ import {UserRepository} from "../../../infrastructure/user/user.repository";
 import {UserEntity} from "../entity/user.entity";
 import {AuthorizationRepository} from "../../../infrastructure/authorization/authorization.repository";
 
-
 export class UserService {
     private _userRepository: UserRepository;
     private _authorizationRepository: AuthorizationRepository;

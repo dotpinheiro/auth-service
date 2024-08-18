@@ -5,9 +5,10 @@ const port = process.env.PORT || 3000;
 const host = process.env.HOST || 'localhost';
 
 const databaseHandler = new DatabaseHandler((process.env.DEFAULT_DB_HANDLER as DatabaseHandlers) || DatabaseHandlers.SQLITE);
+const isDev = process.env.NODE_ENV === 'development';
 
 server.listen({ host, port }, async () => {
   console.info(`Server is running on http://${host}:${port}`)
-  await databaseHandler.init();
+  await databaseHandler.handler.sync({ force: isDev })
 })
 

@@ -51,7 +51,7 @@ export class UserRepository implements UserRepositoryInterface{
     try{
       const user = await UserModel.findOne({ where: { email }, rejectOnEmpty: true });
       return UserModel.toEntity(user);
-    }catch{
+    }catch(e){
       throw new Error('User not found');
     }
   }

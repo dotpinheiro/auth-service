@@ -3,8 +3,7 @@ import {UserEntity} from "../../user/entity/user.entity";
 import {faker} from "@faker-js/faker";
 import {UserService} from "../../user/service/user.service";
 import jwt from 'jsonwebtoken';
-
-jest.mock('../../user/service/user.service');
+import {DatabaseHandler, DatabaseHandlers} from "../../../infrastructure/db/database-handler";
 
 describe('AuthenticationService tests', () => {
 
@@ -14,30 +13,33 @@ describe('AuthenticationService tests', () => {
   const userService = new UserService();
 
   const service = new AuthenticationService(userService);
+  const databaseHandler = new DatabaseHandler(DatabaseHandlers.SQLITE).handler;
 
   beforeEach(async () => {
     jest.clearAllMocks();
+  })
+
+  beforeAll(async () => {
+    await databaseHandler.sync({ force: true })
     users = await Promise.all(baseUsers.map((baseUser) => (new UserEntity()).create(baseUser)))
-    jest.spyOn(userService, 'findUserByEmail').mockImplementationOnce(async (email) => {
-      const user = users.find(user => user.email === email);
-      if(!user) throw new Error('User not found');
-      return user;
-    });
+    users = await Promise.all(users.map((user) => userService.createUser(user)))
+  })
+
+  afterAll(async () => {
+    await databaseHandler.close();
   })
 
   describe('Success cases', () => {
-
     it('authenticates a user', async () => {
-      const checkPasswordSpy = jest.spyOn(users[0], 'checkPassword');
       const jwtSpy = jest.spyOn(jwt, 'sign').mockImplementation(() => 'token');
 
       const response = await service.authenticate(baseUsers[0].email, baseUsers[0].password);
-      expect(jwtSpy).toHaveBeenCalledTimes(1);
-      expect(checkPasswordSpy).toHaveBeenCalledTimes(1)
 
-      expect(response.user).toEqual(users[0]);
+      expect(response.user.uuid).toEqual(users[0].uuid);
       expect(response.session).toBeDefined();
       expect(response.session.token).toEqual('token');
+
+      expect(jwtSpy).toHaveBeenCalledTimes(1);
     });
   })
 
@@ -52,5 +54,4 @@ describe('AuthenticationService tests', () => {
       expect(response).rejects.toThrowError('Invalid password');
     });
   })
-
 })

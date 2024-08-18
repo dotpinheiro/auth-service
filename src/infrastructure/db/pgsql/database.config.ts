@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize-typescript";
 import {sharedModels} from "../@shared";
 
 
-const sequelize = new Sequelize({
+export const sequelizePostgres = new Sequelize({
   dialect: 'postgres',
   host: process.env.POSTGRES_DB_HOST,
   username: process.env.POSTGRES_DB_USER,
@@ -10,8 +10,7 @@ const sequelize = new Sequelize({
   database: process.env.POSTGRES_DB_NAME,
   port: process.env.POSTGRES_DB_PORT ? parseInt(process.env.POSTGRES_DB_PORT) : 5432,
 });
-sequelize.addModels([
+
+sequelizePostgres.addModels([
   ...sharedModels
 ])
-
-export default sequelize

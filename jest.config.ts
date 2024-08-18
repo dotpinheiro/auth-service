@@ -5,9 +5,25 @@
 
 export default {
   setupFiles: ["dotenv/config"],
-
+  modulePathIgnorePatterns: ["/dist/"],
   transform: {
-    "^.+\.(t|j)sx?$": ["@swc/jest"],
+    "^.+\.tsx?$": ["@swc/jest", {
+      jsc: {
+        parser: {
+          syntax: "typescript",
+          tsx: true,
+          decorators: true,
+        },
+        transform: {
+          react: {
+            runtime: "automatic",
+          },
+          legacyDecorator: true,
+          decoratorMetadata: true,
+        },
+        target: "es6",
+      },
+    }],
   },
 
   // All imported modules in your tests should be mocked automatically

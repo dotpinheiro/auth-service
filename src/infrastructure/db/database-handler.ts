@@ -1,5 +1,6 @@
-import {SQLiteHandler} from "./sqlite/sqlite-handler";
-import {PostgresHandler} from "./pgsql/postgres-handler";
+import {Sequelize} from "sequelize-typescript";
+import {sequelizeSQLite} from "./sqlite/database.config";
+import {sequelizePostgres} from "./pgsql/database.config";
 
 export enum DatabaseHandlers {
   SQLITE = 'sqlite',
@@ -7,21 +8,23 @@ export enum DatabaseHandlers {
 }
 
 export class DatabaseHandler {
-  private _handler: DatabaseHandlerInterface;
+  private _handler: Sequelize;
+
   constructor(handler = DatabaseHandlers.SQLITE) {
     switch (handler) {
       case DatabaseHandlers.SQLITE:
-        this._handler = new SQLiteHandler();
+        this._handler = sequelizeSQLite
         break;
       case DatabaseHandlers.POSTGRES:
-        this._handler = new PostgresHandler();
+        this._handler = sequelizePostgres
         break;
       default:
         throw new Error('Invalid database handler');
     }
+    console.log(`Database: ${handler} selected.`)
   }
 
-  async init() {
-    await this._handler.init();
+  get handler(){
+    return this._handler;
   }
 }
