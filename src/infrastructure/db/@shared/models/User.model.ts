@@ -30,13 +30,7 @@ export default class UserModel extends Model {
   declare isActive: boolean;
 
   static toEntity(user: UserModel): UserEntity {
-    return UserEntity.from({
-      uuid: user.uuid,
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      password: user.password
-    })
+    return UserEntity.from(user)
   }
 
 }

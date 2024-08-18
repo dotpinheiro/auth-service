@@ -21,4 +21,14 @@ userRouter.post('/', async (req, res) => {
   }
 });
 
+userRouter.get('/:uuid', async (req, res) => {
+  const userService = new UserService();
+  try{
+    const user = await userService.findUserWithPermissions(req.params.uuid);
+    res.send(user);
+  }catch (e: any) {
+    res.status(404).send(e.message);
+  }
+});
+
 export default userRouter;

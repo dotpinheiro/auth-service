@@ -5,7 +5,13 @@ import {AuthorizationEntity} from "../../authorization/entity/authorization.enti
 
 type BaseParams = {
   authorization?: AuthorizationEntity;
-} & Pick<UserEntity, 'uuid' | 'name' | 'username' | 'email' | 'password'>
+} & Partial<UserEntity>
+
+export enum UserEntityErrors {
+  INVALID_EMAIL = 'Invalid email',
+  INVALID_USERNAME = 'Username must be at least 4 characters',
+  INVALID_PASSWORD = 'Password must be at least 8 characters',
+}
 
 export class UserEntity extends BaseEntity {
   private _uuid: string;
@@ -21,8 +27,8 @@ export class UserEntity extends BaseEntity {
     this.username = username;
     this.email = email;
     this.password = password;
-    await this.hashPassword();
     this.validate();
+    await this.hashPassword();
     return this;
   }
 
@@ -38,13 +44,13 @@ export class UserEntity extends BaseEntity {
 
   private validate(){
     if (!this.email.match(/@/)) {
-      throw new Error('Invalid email');
+      throw new Error(UserEntityErrors.INVALID_EMAIL);
     }
     if(this.username.length < 4) {
-      throw new Error('Username must be at least 4 characters');
+      throw new Error(UserEntityErrors.INVALID_USERNAME);
     }
     if(this.password.length < 8) {
-      throw new Error('Password must be at least 8 characters');
+      throw new Error(UserEntityErrors.INVALID_PASSWORD);
     }
   }
 
@@ -100,11 +106,11 @@ export class UserEntity extends BaseEntity {
     this._password = value;
   }
 
-  public get permissions(): AuthorizationEntity {
+  public get authorization(): AuthorizationEntity {
     return this._authorization;
   }
 
-  public set permissions(value: AuthorizationEntity) {
+  public set authorization(value: AuthorizationEntity) {
     this._authorization = value;
   }
 

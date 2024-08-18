@@ -1,3 +1,5 @@
+import RbacPermissionModel from "../../../../infrastructure/db/@shared/models/rbac/RbacPermission.model";
+
 interface PermissionParams {
     id: number;
     name: string;
@@ -18,6 +20,13 @@ export class PermissionEntity {
 
     get name(){
         return this._name;
+    }
+
+    static from(model: RbacPermissionModel): PermissionEntity {
+        return new PermissionEntity({
+            id: model.id,
+            name: model.name
+        });
     }
 
 }

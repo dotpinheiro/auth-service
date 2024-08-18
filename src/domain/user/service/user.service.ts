@@ -9,9 +9,10 @@ export class UserService {
 
     constructor(
       userRepository = new UserRepository(),
-      _authorizationRepository = new AuthorizationRepository(),
+      authorizationRepository = new AuthorizationRepository(),
       ) {
         this._userRepository = userRepository;
+        this._authorizationRepository = authorizationRepository;
     }
 
     async createUser(user: UserEntity): Promise<UserEntity> {
@@ -21,7 +22,7 @@ export class UserService {
 
     async findUserWithPermissions(uuid: string): Promise<UserEntity> {
         const user = await this._userRepository.findOneByUuid(uuid);
-        user.permissions = await this._authorizationRepository.findPermissionsByUserUuid(uuid);
+        user.authorization = await this._authorizationRepository.findPermissionsByUserUuid(uuid);
         return user;
     }
 

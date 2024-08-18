@@ -1,7 +1,8 @@
 import { PermissionEntity } from "./permission.entity";
+import RbacRoleModel from "../../../../infrastructure/db/@shared/models/rbac/RbacRole.model";
 
 interface RoleParams {
-    id: string;
+    id: number;
     name: string;
     permissions: Array<PermissionEntity>
 }
@@ -27,6 +28,21 @@ export class RoleEntity {
 
     get permissions(){
         return this._permissions
+    }
+
+    static from(model: RbacRoleModel): RoleEntity {
+
+      let permissions = model.permissions?.map((rolePermissions) =>
+        rolePermissions?.permissions?.map((permission =>
+            PermissionEntity.from(permission)
+        ))
+      );
+
+      return new RoleEntity({
+          id: model.id,
+          name: model.name,
+          permissions: permissions.reduce((acc, val) => acc.concat(val), [])
+      });
     }
 
 }
