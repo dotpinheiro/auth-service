@@ -1,5 +1,15 @@
 import RbacRoleModel from "./RbacRole.model";
-import {Column, ForeignKey, HasMany, Model, PrimaryKey, Table} from "sequelize-typescript";
+import {
+  AutoIncrement,
+  BelongsTo,
+  BelongsToMany,
+  Column,
+  ForeignKey,
+  HasMany,
+  Model,
+  PrimaryKey,
+  Table
+} from "sequelize-typescript";
 import RbacPermissionModel from "./RbacPermission.model";
 
 @Table({
@@ -8,6 +18,7 @@ import RbacPermissionModel from "./RbacPermission.model";
 })
 export default class RbacRolePermissionModel extends Model {
   @PrimaryKey
+  @AutoIncrement
   @Column
   declare id: number;
 
@@ -25,7 +36,7 @@ export default class RbacRolePermissionModel extends Model {
   @Column({ allowNull: false, defaultValue: new Date() })
   declare updatedAt: Date;
 
-  @HasMany(() => RbacPermissionModel, 'id')
+  @BelongsToMany(() => RbacPermissionModel, () => RbacRolePermissionModel, 'id', 'permissionId')
   declare permissions: RbacPermissionModel[];
 
 }

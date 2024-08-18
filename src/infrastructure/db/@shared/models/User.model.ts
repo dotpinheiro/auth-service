@@ -29,6 +29,12 @@ export default class UserModel extends Model {
   @Column({ allowNull: false, defaultValue: true })
   declare isActive: boolean;
 
+  @Column({ allowNull: false, defaultValue: new Date() })
+  declare createdAt: Date;
+
+  @Column({ allowNull: false, defaultValue: new Date() })
+  declare updatedAt: Date;
+
   static toEntity(user: UserModel): UserEntity {
     return UserEntity.from(user)
   }

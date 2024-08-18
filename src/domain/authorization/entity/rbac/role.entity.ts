@@ -31,9 +31,8 @@ export class RoleEntity {
     }
 
     static from(model: RbacRoleModel): RoleEntity {
-
-      let permissions = model.permissions?.map((rolePermissions) =>
-        rolePermissions?.permissions?.map((permission =>
+      let permissions = model.rolesPermissions?.map((rolePermissions) =>
+        rolePermissions.permissions?.map((permission =>
             PermissionEntity.from(permission)
         ))
       );

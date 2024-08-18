@@ -46,9 +46,17 @@ describe('User Service Test', () => {
         await Promise.all(users.map((user) => service.createUser(user)))
       })
 
-      it('finds a user with permissions', () => {
-        // TODO: write this test after implementation of "add permisions" on authorization service
+      describe('Find user with permissions',  () => {
+        it('throws error when user does not have any permissions', () => {
+          expect(async () => {
+            const user = await service.findUserWithPermissions(users[0].uuid);
+            expect(user).toEqual(users[0]);
+            expect(user.authorization).toBeDefined();
+          }).rejects.toThrowError()
+        })
       })
+
+
 
       describe('Find by email', () => {
         const findUserByEmailSpy = jest.spyOn(userRepository, 'findByEmailOrFail');

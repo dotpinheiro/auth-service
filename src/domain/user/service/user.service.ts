@@ -21,7 +21,7 @@ export class UserService {
 
     async findUserWithPermissions(uuid: string): Promise<UserEntity> {
         const user = await this._userRepository.findOneByUuid(uuid);
-        user.authorization = await this._authorizationRepository.findPermissionsByUserUuid(uuid);
+        user.authorization = await this._authorizationRepository.findPermissionsByUserUuid(uuid).catch(() => undefined);
         return user;
     }
 

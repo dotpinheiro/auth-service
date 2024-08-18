@@ -46,7 +46,7 @@ export class AuthorizationRepository implements AuthorizationRepositoryInterface
           model: RbacRolePermissionModel,
           include: [RbacPermissionModel]
         }]
-      }], rejectOnEmpty: true });
+      }], rejectOnEmpty: false });
     return RbacModel.toEntity(rbac);
   }
 

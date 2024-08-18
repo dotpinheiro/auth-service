@@ -1,4 +1,5 @@
 import {
+  AutoIncrement,
   BelongsToAssociation,
   BelongsToMany,
   Column,
@@ -18,28 +19,26 @@ import RbacRolePermissionModel from "./RbacRolePermission.model";
 })
 export default class RbacRoleModel extends Model {
   @PrimaryKey
-  @Column
+  @AutoIncrement
+  @Column({ allowNull: false, unique: true })
   declare id: number;
-
-  @ForeignKey(() => RbacModel)
-  declare rbacId: number;
 
   @Column({ allowNull: false, unique: true })
   declare name: string;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: true })
   declare description: string;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, defaultValue: true })
   declare isActive: boolean;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, defaultValue: new Date() })
   declare createdAt: Date;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, defaultValue: new Date() })
   declare updatedAt: Date;
 
   @HasMany(() => RbacRolePermissionModel)
-  declare permissions: RbacRolePermissionModel[];
+  declare rolesPermissions: RbacRolePermissionModel[];
 
 }

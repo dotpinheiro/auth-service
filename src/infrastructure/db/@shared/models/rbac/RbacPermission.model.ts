@@ -1,4 +1,4 @@
-import {Column, ForeignKey, Model, PrimaryKey, Table} from "sequelize-typescript";
+import {AutoIncrement, Column, ForeignKey, Model, PrimaryKey, Table} from "sequelize-typescript";
 import RbacRoleModel from "./RbacRole.model";
 
 @Table({
@@ -7,22 +7,23 @@ import RbacRoleModel from "./RbacRole.model";
 })
 export default class RbacPermissionModel extends Model {
   @PrimaryKey
+  @AutoIncrement
   @Column
   declare id: number;
 
   @Column({ allowNull: false, unique: true })
   declare name: string;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: true })
   declare description: string;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, defaultValue: true })
   declare isActive: boolean;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, defaultValue: new Date() })
   declare createdAt: Date;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, defaultValue: new Date() })
   declare updatedAt: Date;
 
 }

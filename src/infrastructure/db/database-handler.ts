@@ -28,3 +28,5 @@ export class DatabaseHandler {
     return this._handler;
   }
 }
+
+export default DatabaseHandler;
