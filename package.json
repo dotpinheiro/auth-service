@@ -12,6 +12,7 @@
     "build": "",
     "dev": "concurrently \"yarn tsc --watch\" \"nodemon -q dist/index.js\"",
     "test": "yarn tsc -- --noEmit && jest",
+    "test:ci": "yarn tsc -- --noEmit && jest -i",
     "lint": "eslint --fix ."
   },
   "dependencies": {
