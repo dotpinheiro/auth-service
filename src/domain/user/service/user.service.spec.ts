@@ -15,7 +15,7 @@ describe('User Service Test', () => {
 
     beforeAll(async () => {
       jest.clearAllMocks();
-      await databaseHandler.sync({ force: true })
+      await databaseHandler.sync()
     })
 
     afterAll(async () => {

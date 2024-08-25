@@ -20,7 +20,7 @@ describe('AuthenticationService tests', () => {
   })
 
   beforeAll(async () => {
-    await databaseHandler.sync({ force: true })
+    await databaseHandler.sync()
     users = await Promise.all(baseUsers.map((baseUser) => (new UserEntity()).create(baseUser)))
     users = await Promise.all(users.map((user) => userService.createUser(user)))
   })
