@@ -24,11 +24,7 @@ describe('AuthenticationService tests', () => {
     users = await Promise.all(baseUsers.map((baseUser) => (new UserEntity()).create(baseUser)))
     users = await Promise.all(users.map((user) => userService.createUser(user)))
   })
-
-  afterAll(async () => {
-    await databaseHandler.close();
-  })
-
+  
   describe('Success cases', () => {
     it('authenticates a user', async () => {
       const jwtSpy = jest.spyOn(jwt, 'sign').mockImplementation(() => 'token');

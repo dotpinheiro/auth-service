@@ -12,12 +12,14 @@ export class DatabaseHandler {
 
   constructor(handler = DatabaseHandlers.SQLITE) {
     switch (handler) {
-      case DatabaseHandlers.SQLITE:
+      case DatabaseHandlers.SQLITE: {
         this._handler = sequelizeSQLite
         break;
-      case DatabaseHandlers.POSTGRES:
+      }
+      case DatabaseHandlers.POSTGRES: {
         this._handler = sequelizePostgres
         break;
+      }
       default:
         throw new Error('Invalid database handler');
     }
