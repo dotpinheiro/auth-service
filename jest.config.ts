@@ -2,9 +2,9 @@
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
  */
+require("dotenv").config({ path: ".env.test" });
 
 export default {
-  setupFiles: ["dotenv/config"],
   modulePathIgnorePatterns: ["/dist/"],
   transform: {
     "^.+\.tsx?$": ["@swc/jest", {

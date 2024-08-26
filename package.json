@@ -11,8 +11,8 @@
     "start": "node dist/index.js",
     "build": "",
     "dev": "concurrently \"yarn tsc --watch\" \"nodemon -q dist/index.js\"",
-    "test": "DOTENV_CONFIG_PATH=.env.test yarn tsc -- --noEmit && jest",
-    "test:ci": "DOTENV_CONFIG_PATH=.env.test yarn tsc -- --noEmit && jest -i --logHeapUsage",
+    "test": "yarn tsc -- --noEmit && jest",
+    "test:ci": "yarn tsc -- --noEmit && jest -i --logHeapUsage",
     "lint": "eslint --fix ."
   },
   "dependencies": {
