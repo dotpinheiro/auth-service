@@ -1,5 +1,6 @@
 import { PermissionEntity } from "./permission.entity";
 import RbacRoleModel from "../../../../infrastructure/db/@shared/models/rbac/RbacRole.model";
+import {BaseEntity} from "../../../@shared/entity/base.entity";
 
 interface RoleParams {
     id: number;
@@ -7,13 +8,14 @@ interface RoleParams {
     permissions: Array<PermissionEntity>
 }
 
-export class RoleEntity {
+export class RoleEntity extends BaseEntity {
     private readonly _id: RoleParams['id'];
     private readonly _name: RoleParams['name'];
     private readonly _permissions: RoleParams['permissions']
 
     constructor(params: RoleParams){
-        this._id = params.id;
+      super();
+      this._id = params.id;
         this._name = params.name;
         this._permissions = params.permissions
     }
