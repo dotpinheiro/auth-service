@@ -10,6 +10,7 @@ export class Sqlite implements DatabaseInterface {
       Sqlite.instance = new Sequelize({
         dialect: 'sqlite',
         storage: process.env.SQLITE_DB_PATH || ':memory:',
+        logging: process.env.NODE_ENV !== 'testing',
       });
 
       Sqlite.instance.addModels([
