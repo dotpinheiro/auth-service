@@ -24,4 +24,8 @@ export class RbacEntity extends BaseEntity {
     });
   }
 
+  checkPermission(permission: string): boolean {
+    return this.roles.some((role) => role.permissions.some((perm) => perm.name === permission));
+  }
+
 }

@@ -1,4 +1,5 @@
 import {AuthorizationRepository} from "../../../infrastructure/authorization/authorization.repository";
+import {RbacEntity} from "../entity/rbac/rbac.entity";
 
 export class AuthorizationService {
 
@@ -8,8 +9,13 @@ export class AuthorizationService {
   }
 
   async checkPermission(userUuid: string, permission: string): Promise<boolean> {
-    const userPermissions = await this._authorizationRepository.findPermissionsByUserUuid(userUuid);
-    const someInvalid = userPermissions.rbac.roles.some((role) => role.permissions.some((perm) => perm.name !== permission));
-    return !someInvalid;
+    const { rbac } = await this._authorizationRepository.findPermissionsByUserUuid(userUuid);
+    return !rbac.checkPermission(permission);
   }
+
+  async checkPolicy(userUuid: string, userAttribute: string, resourceAttribute: string, action: string): Promise<boolean> {
+    const { abac } = await this._authorizationRepository.findPermissionsByUserUuid(userUuid);
+    return !abac.checkPolicy(userAttribute, resourceAttribute, action);
+  }
+
 }

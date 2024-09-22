@@ -1,0 +1,990 @@
+<svg version="1.1" baseProfile="full" width="7255.8" height="692.0" viewbox="0 0 7255.75 692" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events">
+<desc >#.interface: fill=lightblue
+#.enumeration: fill=lightgreen
+#.type: fill=lightgray
+[ConfigEntity|-_sessionValidationType: &quot;jwt&quot;;-_database: AvailableDatabases;-_port: number;-_host: string|]
+[AuthorizationRepository||+create(): Promise&lt;AuthorizationEntity&gt;;+delete(): Promise&lt;boolean&gt;;+findAll(): Promise&lt;AuthorizationEntity\[\]&gt;;+findOne(): Promise&lt;AuthorizationEntity&gt;;+findOneByUuid(): Promise&lt;AuthorizationEntity&gt;;+update(): Promise&lt;AuthorizationEntity&gt;;+findPermissionsByUserUuid(): Promise&lt;AuthorizationEntity&gt;;-static _findRbacPermissionsByUserUuid(): Promise&lt;RbacEntity&gt;]
+[AuthorizationRepositoryInterface]&lt;:--[AuthorizationRepository]
+[DatabaseHandler|-_handler: DatabaseInterface|]
+[&lt;enumeration&gt;DatabaseHandlers|SQLITE;POSTGRES]
+[&lt;interface&gt;DatabaseInterface||+init(): Sequelize]
+[UserRepository||+create(): Promise&lt;UserEntity&gt;;+delete(): Promise&lt;boolean&gt;;+findAll(): Promise&lt;UserEntity\[\]&gt;;+findOne(): Promise&lt;UserEntity&gt;;+findOneByUuid(): Promise&lt;UserEntity&gt;;+findByEmailOrFail(): Promise&lt;UserEntity&gt;;+findByUsernameOrFail(): Promise&lt;UserEntity&gt;;+update(): Promise&lt;UserEntity&gt;]
+[UserRepositoryInterface]&lt;:--[UserRepository]
+[BaseEntity|\#_createdAt: Date;\#_updatedAt: Date;\#_deletedAt: Date;\#_isActive: boolean|]
+[&lt;interface&gt;BaseRepositoryInterface&lt;T&gt;|+create: (entity: T) =&gt; Promise&lt;T&gt;;+update: (entity: T) =&gt; Promise&lt;T&gt;;+delete: (entity: T) =&gt; Promise&lt;boolean&gt;;+findOne: (entity: T) =&gt; Promise&lt;T&gt;;+findOneByUuid: (uuid: string) =&gt; Promise&lt;T&gt;;+findAll: () =&gt; Promise&lt;T\[\]&gt;|]
+[AuthenticationEntity|-_user: UserEntity;-_session: Session|]
+[&lt;interface&gt;AuthenticationEntityConstructor|+user: UserEntity|]
+[&lt;interface&gt;Session|+token: string|]
+[AuthenticationService|-_userService: UserService|+authenticate(): Promise&lt;AuthenticationEntity&gt;]
+[AuthorizationEntity|-_rbac: RbacEntity|]
+[&lt;interface&gt;AuthorizationTypes|+rbac: RbacEntity|]
+[&lt;interface&gt;AuthorizationRepositoryInterface||+findPermissionsByUserUuid(): Promise&lt;AuthorizationEntity&gt;]
+[BaseRepositoryInterface&lt;T&gt;]&lt;:--[AuthorizationRepositoryInterface]
+[AuthorizationService|-_authorizationRepository: AuthorizationRepository|+checkPermission(): Promise&lt;boolean&gt;]
+[UserEntity|-_uuid: string;-_name: string;-_username: string;-_email: string;-_password: string;-_authorization: AuthorizationEntity|+create(): Promise&lt;this&gt;;+static from(): UserEntity;-validate(): void;+checkPassword(): Promise&lt;boolean&gt;;+hashPassword(): Promise&lt;void&gt;]
+[&lt;enumeration&gt;UserEntityErrors|INVALID_EMAIL;INVALID_USERNAME;INVALID_PASSWORD]
+[BaseEntity]&lt;:-[UserEntity]
+[&lt;interface&gt;UserRepositoryInterface|+findByEmailOrFail: (email: string) =&gt; Promise&lt;UserEntity&gt;;+findByUsernameOrFail: (username: string) =&gt; Promise&lt;UserEntity&gt;|]
+[BaseRepositoryInterface&lt;T&gt;]&lt;:--[UserRepositoryInterface]
+[UserService|-_userRepository: UserRepository;-_authorizationRepository: AuthorizationRepository|+createUser(): Promise&lt;UserEntity&gt;;+findUserWithPermissions(): Promise&lt;UserEntity&gt;;+findUserByEmail(): Promise&lt;UserEntity&gt;;+findUserByUsername(): Promise&lt;UserEntity&gt;]
+[Postgres|-static instance: Sequelize|+static getInstance(): Sequelize;+init(): Sequelize]
+[DatabaseInterface]&lt;:--[Postgres]
+[Sqlite|-static instance: Sequelize|+static getInstance(): Sequelize;+init(): Sequelize]
+[DatabaseInterface]&lt;:--[Sqlite]
+[PermissionEntity|-_id: number;-_name: string|+static from(): PermissionEntity]
+[&lt;interface&gt;PermissionParams|+id: number;+name: string|]
+[BaseEntity]&lt;:-[PermissionEntity]
+[RbacEntity|-_roles: RoleEntity\[\]|+static from(): RbacEntity]
+[&lt;interface&gt;RbacParams|+roles: RoleEntity\[\]|]
+[BaseEntity]&lt;:-[RbacEntity]
+[RoleEntity|-_id: number;-_name: string;-_permissions: PermissionEntity\[\]|+static from(): RoleEntity]
+[&lt;interface&gt;RoleParams|+id: number;+name: string;+permissions: PermissionEntity\[\]|]
+[BaseEntity]&lt;:-[RoleEntity]
+[UserModel|+uuid: string;+name: string;+username: string;+email: string;+password: string;+isActive: boolean;+createdAt: Date;+updatedAt: Date|+static toEntity(): UserEntity]
+[Model&lt;TModelAttributes,TCreationAttributes&gt;]&lt;:-[UserModel]
+[RbacModel|+id: number;+name: string;+description: string;+isActive: boolean;+createdAt: Date;+updatedAt: Date;+userUuid: string;+rbacRoleId: number;+roles: RbacRoleModel\[\]|+static toEntity(): RbacEntity]
+[Model&lt;TModelAttributes,TCreationAttributes&gt;]&lt;:-[RbacModel]
+[RbacPermissionModel|+id: number;+name: string;+description: string;+isActive: boolean;+createdAt: Date;+updatedAt: Date|]
+[Model&lt;TModelAttributes,TCreationAttributes&gt;]&lt;:-[RbacPermissionModel]
+[RbacRoleModel|+id: number;+name: string;+description: string;+isActive: boolean;+createdAt: Date;+updatedAt: Date;+rolesPermissions: RbacRolePermissionModel\[\]|]
+[Model&lt;TModelAttributes,TCreationAttributes&gt;]&lt;:-[RbacRoleModel]
+[RbacRolePermissionModel|+id: number;+roleId: number;+permissionId: number;+createdAt: Date;+updatedAt: Date;+permissions: RbacPermissionModel\[\]|]
+[Model&lt;TModelAttributes,TCreationAttributes&gt;]&lt;:-[RbacRolePermissionModel]</desc>
+<g stroke-width="1.0" text-align="left" font="12pt Helvetica, Arial, sans-serif" font-size="12pt" font-family="Helvetica" font-weight="normal" font-style="normal">
+<g font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" stroke="#33322E">
+<g stroke="transparent" fill="transparent">
+<rect x="0.0" y="0.0" height="692.0" width="7255.8" stroke="none"></rect>
+</g>
+<g transform="translate(8, 8)" fill="#33322E">
+<g transform="translate(20, 20)" fill="#eee8d5" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal">
+<g stroke-dasharray="6 6">
+<path d="M710.3 355.3 L710.25 441 L710.25 461 L710.3 461.0 " fill="none"></path>
+</g>
+<path d="M715.6 355.3 L710.3 355.3 L704.9 355.3 L710.3 342.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1275.8 362.8 L1275.75 441 L1275.75 461 L1275.8 461.0 " fill="none"></path>
+</g>
+<path d="M1281.1 362.8 L1275.8 362.8 L1270.4 362.8 L1275.8 349.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M791.4 145.3 L710.25 173 L710.25 272 L710.3 272.0 " fill="none"></path>
+</g>
+<path d="M793.1 150.4 L791.4 145.3 L789.7 140.3 L804.0 141.0 Z"></path>
+<path d="M2713.2 97.7 L2364.25 173 L2364.25 193 L2364.3 193.0 " fill="none"></path>
+<path d="M2714.3 103.0 L2713.2 97.7 L2712.1 92.5 L2726.3 94.9 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1194.6 145.3 L1275.75 173 L1275.75 264.5 L1275.8 264.5 " fill="none"></path>
+</g>
+<path d="M1196.3 140.3 L1194.6 145.3 L1192.9 150.4 L1182.0 141.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1811.5 118.6 L1725.25 173 L1725.25 253 L1725.3 253.0 " fill="none"></path>
+</g>
+<path d="M1814.3 123.1 L1811.5 118.6 L1808.6 114.1 L1822.8 111.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1945.0 118.6 L2031.25 173 L2031.25 253 L2031.3 253.0 " fill="none"></path>
+</g>
+<path d="M1947.9 114.1 L1945.0 118.6 L1942.2 123.1 L1933.7 111.5 Z"></path>
+<path d="M2731.7 142.5 L2694.75 173 L2694.75 253 L2694.8 253.0 " fill="none"></path>
+<path d="M2735.1 146.6 L2731.7 142.5 L2728.4 138.4 L2742.0 134.0 Z"></path>
+<path d="M2910.5 83.8 L4126.25 173 L4126.25 260.5 L4126.3 260.5 " fill="none"></path>
+<path d="M2910.9 78.4 L2910.5 83.8 L2910.2 89.1 L2897.3 82.8 Z"></path>
+<path d="M2910.6 82.5 L4412.75 173 L4412.75 245.5 L4412.8 245.5 " fill="none"></path>
+<path d="M2910.9 77.1 L2910.6 82.5 L2910.2 87.8 L2897.3 81.7 Z"></path>
+<path d="M6311.9 87.2 L4709.25 173 L4709.25 208 L4709.3 208.0 " fill="none"></path>
+<path d="M6312.2 92.5 L6311.9 87.2 L6311.7 81.9 L6325.3 86.5 Z"></path>
+<path d="M6311.9 89.2 L4986.25 173 L4986.25 200.5 L4986.3 200.5 " fill="none"></path>
+<path d="M6312.3 94.5 L6311.9 89.2 L6311.6 83.8 L6325.3 88.3 Z"></path>
+<path d="M6468.4 97.8 L6313.75 173 L6313.75 234.5 L6313.8 234.5 " fill="none"></path>
+<path d="M6470.7 102.6 L6468.4 97.8 L6466.0 93.0 L6480.4 92.0 Z"></path>
+<path d="M6544.6 99.8 L6646.25 173 L6646.25 227 L6646.3 227.0 " fill="none"></path>
+<path d="M6547.7 95.5 L6544.6 99.8 L6541.5 104.1 L6533.8 92.0 Z"></path>
+<path d="M6610.3 94.4 L7041.25 173 L7041.25 234.5 L7041.3 234.5 " fill="none"></path>
+<path d="M6611.3 89.1 L6610.3 94.4 L6609.4 99.6 L6597.2 92.0 Z"></path>
+<g data-name="ConfigEntity">
+<g fill="#eee8d5" stroke="#33322E" data-name="ConfigEntity">
+<rect x="0.0" y="19.0" height="115.0" width="273.0" data-name="ConfigEntity"></rect>
+<path d="M0.0 50.0 L273.0 50.0" fill="none" data-name="ConfigEntity"></path>
+<path d="M0.0 126.0 L273.0 126.0" fill="none" data-name="ConfigEntity"></path>
+</g>
+<g transform="translate(0, 19)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ConfigEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ConfigEntity">
+<a id="src/domain/config/config.entity.ts.ConfigEntity" xlink:href="src/domain/config/config.entity.ts"><text x="128.5" y="13.5" stroke="none" text-anchor="middle" data-name="ConfigEntity">ConfigEntity</text></a>
+
+</g>
+</g>
+<g transform="translate(0, 50)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ConfigEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ConfigEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="ConfigEntity">-_sessionValidationType: &quot;jwt&quot;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="ConfigEntity">-_database: AvailableDatabases</text>
+<text x="0.0" y="43.5" stroke="none" data-name="ConfigEntity">-_port: number</text>
+<text x="0.0" y="58.5" stroke="none" data-name="ConfigEntity">-_host: string</text>
+
+</g>
+</g>
+<g transform="translate(0, 126)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ConfigEntity">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ConfigEntity">
+
+</g>
+</g>
+</g>
+<g data-name="AuthorizationRepository">
+<g fill="#eee8d5" stroke="#33322E" data-name="AuthorizationRepository">
+<rect x="445.8" y="461.0" height="175.0" width="529.0" data-name="AuthorizationRepository"></rect>
+<path d="M445.8 492.0 L974.8 492.0" fill="none" data-name="AuthorizationRepository"></path>
+<path d="M445.8 500.0 L974.8 500.0" fill="none" data-name="AuthorizationRepository"></path>
+</g>
+<g transform="translate(445.75, 461)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthorizationRepository">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthorizationRepository">
+<a id="src/infrastructure/authorization/authorization.repository.ts.AuthorizationRepository" xlink:href="src/infrastructure/authorization/authorization.repository.ts"><text x="256.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthorizationRepository">AuthorizationRepository</text></a>
+
+</g>
+</g>
+<g transform="translate(445.75, 492)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepository">
+<g transform="translate(8, 8)" fill="#33322E" data-name="AuthorizationRepository">
+
+</g>
+</g>
+<g transform="translate(445.75, 500)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepository">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationRepository">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthorizationRepository">+create(): Promise&lt;AuthorizationEntity&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="AuthorizationRepository">+delete(): Promise&lt;boolean&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="AuthorizationRepository">+findAll(): Promise&lt;AuthorizationEntity[]&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="AuthorizationRepository">+findOne(): Promise&lt;AuthorizationEntity&gt;</text>
+<text x="0.0" y="73.5" stroke="none" data-name="AuthorizationRepository">+findOneByUuid(): Promise&lt;AuthorizationEntity&gt;</text>
+<text x="0.0" y="88.5" stroke="none" data-name="AuthorizationRepository">+update(): Promise&lt;AuthorizationEntity&gt;</text>
+<text x="0.0" y="103.5" stroke="none" data-name="AuthorizationRepository">+findPermissionsByUserUuid(): Promise&lt;AuthorizationEntity&gt;</text>
+<text x="0.0" y="118.5" stroke="none" data-name="AuthorizationRepository">-static _findRbacPermissionsByUserUuid(): Promise&lt;RbacEntity&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="AuthorizationRepositoryInterface">
+<g fill="lightblue" stroke="#33322E" data-name="AuthorizationRepositoryInterface">
+<rect x="461.3" y="272.0" height="70.0" width="498.0" data-name="AuthorizationRepositoryInterface"></rect>
+<path d="M461.3 303.0 L959.3 303.0" fill="none" data-name="AuthorizationRepositoryInterface"></path>
+<path d="M461.3 311.0 L959.3 311.0" fill="none" data-name="AuthorizationRepositoryInterface"></path>
+</g>
+<g transform="translate(461.25, 272)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepositoryInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthorizationRepositoryInterface">
+<a id="src/domain/authorization/repository/authorization.repository.interface.ts.AuthorizationRepositoryInterface" xlink:href="src/domain/authorization/repository/authorization.repository.interface.ts"><text x="241.0" y="13.5" stroke="none" text-anchor="middle" data-name="AuthorizationRepositoryInterface">AuthorizationRepositoryInterface</text></a>
+
+</g>
+</g>
+<g transform="translate(461.25, 303)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepositoryInterface">
+<g transform="translate(8, 8)" fill="#33322E" data-name="AuthorizationRepositoryInterface">
+
+</g>
+</g>
+<g transform="translate(461.25, 311)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepositoryInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationRepositoryInterface">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthorizationRepositoryInterface">+findPermissionsByUserUuid(): Promise&lt;AuthorizationEntity&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="DatabaseHandler">
+<g fill="#eee8d5" stroke="#33322E" data-name="DatabaseHandler">
+<rect x="313.0" y="41.5" height="70.0" width="248.0" data-name="DatabaseHandler"></rect>
+<path d="M313.0 72.5 L561.0 72.5" fill="none" data-name="DatabaseHandler"></path>
+<path d="M313.0 103.5 L561.0 103.5" fill="none" data-name="DatabaseHandler"></path>
+</g>
+<g transform="translate(313, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DatabaseHandler">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DatabaseHandler">
+<a id="src/infrastructure/db/database-handler.ts.DatabaseHandler" xlink:href="src/infrastructure/db/database-handler.ts"><text x="116.0" y="13.5" stroke="none" text-anchor="middle" data-name="DatabaseHandler">DatabaseHandler</text></a>
+
+</g>
+</g>
+<g transform="translate(313, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandler">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DatabaseHandler">
+<text x="0.0" y="13.5" stroke="none" data-name="DatabaseHandler">-_handler: DatabaseInterface</text>
+
+</g>
+</g>
+<g transform="translate(313, 103.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandler">
+<g transform="translate(8, 8)" fill="#33322E" data-name="DatabaseHandler">
+
+</g>
+</g>
+</g>
+<g data-name="DatabaseHandlers">
+<g fill="lightgreen" stroke="#33322E" data-name="DatabaseHandlers">
+<rect x="601.0" y="38.0" height="77.0" width="163.0" data-name="DatabaseHandlers"></rect>
+<path d="M601.0 69.0 L764.0 69.0" fill="none" data-name="DatabaseHandlers"></path>
+</g>
+<g transform="translate(601, 38)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandlers">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DatabaseHandlers">
+<a id="src/infrastructure/db/database-handler.ts.DatabaseHandlers" xlink:href="src/infrastructure/db/database-handler.ts"><text x="73.5" y="13.5" stroke="none" text-anchor="middle" data-name="DatabaseHandlers">DatabaseHandlers</text></a>
+
+</g>
+</g>
+<g transform="translate(601, 69)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandlers">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DatabaseHandlers">
+<text x="0.0" y="13.5" stroke="none" data-name="DatabaseHandlers">SQLITE</text>
+<text x="0.0" y="28.5" stroke="none" data-name="DatabaseHandlers">POSTGRES</text>
+
+</g>
+</g>
+</g>
+<g data-name="DatabaseInterface">
+<g fill="lightblue" stroke="#33322E" data-name="DatabaseInterface">
+<rect x="1797.3" y="41.5" height="70.0" width="162.0" data-name="DatabaseInterface"></rect>
+<path d="M1797.3 72.5 L1959.3 72.5" fill="none" data-name="DatabaseInterface"></path>
+<path d="M1797.3 80.5 L1959.3 80.5" fill="none" data-name="DatabaseInterface"></path>
+</g>
+<g transform="translate(1797.25, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DatabaseInterface">
+<a id="src/infrastructure/db/database.interface.ts.DatabaseInterface" xlink:href="src/infrastructure/db/database.interface.ts"><text x="73.0" y="13.5" stroke="none" text-anchor="middle" data-name="DatabaseInterface">DatabaseInterface</text></a>
+
+</g>
+</g>
+<g transform="translate(1797.25, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseInterface">
+<g transform="translate(8, 8)" fill="#33322E" data-name="DatabaseInterface">
+
+</g>
+</g>
+<g transform="translate(1797.25, 80.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DatabaseInterface">
+<text x="0.0" y="13.5" stroke="none" data-name="DatabaseInterface">+init(): Sequelize</text>
+
+</g>
+</g>
+</g>
+<g data-name="UserRepository">
+<g fill="#eee8d5" stroke="#33322E" data-name="UserRepository">
+<rect x="1080.8" y="461.0" height="175.0" width="390.0" data-name="UserRepository"></rect>
+<path d="M1080.8 492.0 L1470.8 492.0" fill="none" data-name="UserRepository"></path>
+<path d="M1080.8 500.0 L1470.8 500.0" fill="none" data-name="UserRepository"></path>
+</g>
+<g transform="translate(1080.75, 461)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserRepository">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserRepository">
+<a id="src/infrastructure/user/user.repository.ts.UserRepository" xlink:href="src/infrastructure/user/user.repository.ts"><text x="187.0" y="13.5" stroke="none" text-anchor="middle" data-name="UserRepository">UserRepository</text></a>
+
+</g>
+</g>
+<g transform="translate(1080.75, 492)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepository">
+<g transform="translate(8, 8)" fill="#33322E" data-name="UserRepository">
+
+</g>
+</g>
+<g transform="translate(1080.75, 500)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepository">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserRepository">
+<text x="0.0" y="13.5" stroke="none" data-name="UserRepository">+create(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="UserRepository">+delete(): Promise&lt;boolean&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="UserRepository">+findAll(): Promise&lt;UserEntity[]&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="UserRepository">+findOne(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="73.5" stroke="none" data-name="UserRepository">+findOneByUuid(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="88.5" stroke="none" data-name="UserRepository">+findByEmailOrFail(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="103.5" stroke="none" data-name="UserRepository">+findByUsernameOrFail(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="118.5" stroke="none" data-name="UserRepository">+update(): Promise&lt;UserEntity&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="UserRepositoryInterface">
+<g fill="lightblue" stroke="#33322E" data-name="UserRepositoryInterface">
+<rect x="999.3" y="264.5" height="85.0" width="553.0" data-name="UserRepositoryInterface"></rect>
+<path d="M999.3 295.5 L1552.3 295.5" fill="none" data-name="UserRepositoryInterface"></path>
+<path d="M999.3 341.5 L1552.3 341.5" fill="none" data-name="UserRepositoryInterface"></path>
+</g>
+<g transform="translate(999.25, 264.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepositoryInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserRepositoryInterface">
+<a id="src/domain/user/repository/user.repository.interface.ts.UserRepositoryInterface" xlink:href="src/domain/user/repository/user.repository.interface.ts"><text x="268.5" y="13.5" stroke="none" text-anchor="middle" data-name="UserRepositoryInterface">UserRepositoryInterface</text></a>
+
+</g>
+</g>
+<g transform="translate(999.25, 295.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepositoryInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserRepositoryInterface">
+<text x="0.0" y="13.5" stroke="none" data-name="UserRepositoryInterface">+findByEmailOrFail: (email: string) =&gt; Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="UserRepositoryInterface">+findByUsernameOrFail: (username: string) =&gt; Promise&lt;UserEntity&gt;</text>
+
+</g>
+</g>
+<g transform="translate(999.25, 341.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepositoryInterface">
+<g transform="translate(8, 8)" fill="#33322E" data-name="UserRepositoryInterface">
+
+</g>
+</g>
+</g>
+<g data-name="BaseEntity">
+<g fill="#eee8d5" stroke="#33322E" data-name="BaseEntity">
+<rect x="2726.3" y="19.0" height="115.0" width="171.0" data-name="BaseEntity"></rect>
+<path d="M2726.3 50.0 L2897.3 50.0" fill="none" data-name="BaseEntity"></path>
+<path d="M2726.3 126.0 L2897.3 126.0" fill="none" data-name="BaseEntity"></path>
+</g>
+<g transform="translate(2726.25, 19)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="BaseEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="BaseEntity">
+<a id="src/domain/@shared/entity/base.entity.ts.BaseEntity" xlink:href="src/domain/@shared/entity/base.entity.ts"><text x="77.5" y="13.5" stroke="none" text-anchor="middle" data-name="BaseEntity">BaseEntity</text></a>
+
+</g>
+</g>
+<g transform="translate(2726.25, 50)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="BaseEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="BaseEntity">#_createdAt: Date</text>
+<text x="0.0" y="28.5" stroke="none" data-name="BaseEntity">#_updatedAt: Date</text>
+<text x="0.0" y="43.5" stroke="none" data-name="BaseEntity">#_deletedAt: Date</text>
+<text x="0.0" y="58.5" stroke="none" data-name="BaseEntity">#_isActive: boolean</text>
+
+</g>
+</g>
+<g transform="translate(2726.25, 126)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseEntity">
+<g transform="translate(8, 8)" fill="#33322E" data-name="BaseEntity">
+
+</g>
+</g>
+</g>
+<g data-name="BaseRepositoryInterface&lt;T&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="BaseRepositoryInterface&lt;T&gt;">
+<rect x="804.0" y="4.0" height="145.0" width="378.0" data-name="BaseRepositoryInterface&lt;T&gt;"></rect>
+<path d="M804.0 35.0 L1182.0 35.0" fill="none" data-name="BaseRepositoryInterface&lt;T&gt;"></path>
+<path d="M804.0 141.0 L1182.0 141.0" fill="none" data-name="BaseRepositoryInterface&lt;T&gt;"></path>
+</g>
+<g transform="translate(804, 4)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseRepositoryInterface&lt;T&gt;">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="BaseRepositoryInterface&lt;T&gt;">
+<a id="src/domain/@shared/repository/base.repository.interface.ts.BaseRepositoryInterface&lt;T&gt;" xlink:href="src/domain/@shared/repository/base.repository.interface.ts"><text x="181.0" y="13.5" stroke="none" text-anchor="middle" data-name="BaseRepositoryInterface&lt;T&gt;">BaseRepositoryInterface&lt;T&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(804, 35)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseRepositoryInterface&lt;T&gt;">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="BaseRepositoryInterface&lt;T&gt;">
+<text x="0.0" y="13.5" stroke="none" data-name="BaseRepositoryInterface&lt;T&gt;">+create: (entity: T) =&gt; Promise&lt;T&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="BaseRepositoryInterface&lt;T&gt;">+update: (entity: T) =&gt; Promise&lt;T&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="BaseRepositoryInterface&lt;T&gt;">+delete: (entity: T) =&gt; Promise&lt;boolean&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="BaseRepositoryInterface&lt;T&gt;">+findOne: (entity: T) =&gt; Promise&lt;T&gt;</text>
+<text x="0.0" y="73.5" stroke="none" data-name="BaseRepositoryInterface&lt;T&gt;">+findOneByUuid: (uuid: string) =&gt; Promise&lt;T&gt;</text>
+<text x="0.0" y="88.5" stroke="none" data-name="BaseRepositoryInterface&lt;T&gt;">+findAll: () =&gt; Promise&lt;T[]&gt;</text>
+
+</g>
+</g>
+<g transform="translate(804, 141)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseRepositoryInterface&lt;T&gt;">
+<g transform="translate(8, 8)" fill="#33322E" data-name="BaseRepositoryInterface&lt;T&gt;">
+
+</g>
+</g>
+</g>
+<g data-name="AuthenticationEntity">
+<g fill="#eee8d5" stroke="#33322E" data-name="AuthenticationEntity">
+<rect x="2937.3" y="34.0" height="85.0" width="173.0" data-name="AuthenticationEntity"></rect>
+<path d="M2937.3 65.0 L3110.3 65.0" fill="none" data-name="AuthenticationEntity"></path>
+<path d="M2937.3 111.0 L3110.3 111.0" fill="none" data-name="AuthenticationEntity"></path>
+</g>
+<g transform="translate(2937.25, 34)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthenticationEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthenticationEntity">
+<a id="src/domain/authentication/entity/authentication.entity.ts.AuthenticationEntity" xlink:href="src/domain/authentication/entity/authentication.entity.ts"><text x="78.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthenticationEntity">AuthenticationEntity</text></a>
+
+</g>
+</g>
+<g transform="translate(2937.25, 65)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthenticationEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthenticationEntity">-_user: UserEntity</text>
+<text x="0.0" y="28.5" stroke="none" data-name="AuthenticationEntity">-_session: Session</text>
+
+</g>
+</g>
+<g transform="translate(2937.25, 111)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntity">
+<g transform="translate(8, 8)" fill="#33322E" data-name="AuthenticationEntity">
+
+</g>
+</g>
+</g>
+<g data-name="AuthenticationEntityConstructor">
+<g fill="lightblue" stroke="#33322E" data-name="AuthenticationEntityConstructor">
+<rect x="3150.3" y="41.5" height="70.0" width="265.0" data-name="AuthenticationEntityConstructor"></rect>
+<path d="M3150.3 72.5 L3415.3 72.5" fill="none" data-name="AuthenticationEntityConstructor"></path>
+<path d="M3150.3 103.5 L3415.3 103.5" fill="none" data-name="AuthenticationEntityConstructor"></path>
+</g>
+<g transform="translate(3150.25, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntityConstructor">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthenticationEntityConstructor">
+<a id="src/domain/authentication/entity/authentication.entity.ts.AuthenticationEntityConstructor" xlink:href="src/domain/authentication/entity/authentication.entity.ts"><text x="124.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthenticationEntityConstructor">AuthenticationEntityConstructor</text></a>
+
+</g>
+</g>
+<g transform="translate(3150.25, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntityConstructor">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthenticationEntityConstructor">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthenticationEntityConstructor">+user: UserEntity</text>
+
+</g>
+</g>
+<g transform="translate(3150.25, 103.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntityConstructor">
+<g transform="translate(8, 8)" fill="#33322E" data-name="AuthenticationEntityConstructor">
+
+</g>
+</g>
+</g>
+<g data-name="Session">
+<g fill="lightblue" stroke="#33322E" data-name="Session">
+<rect x="3455.3" y="41.5" height="70.0" width="124.0" data-name="Session"></rect>
+<path d="M3455.3 72.5 L3579.3 72.5" fill="none" data-name="Session"></path>
+<path d="M3455.3 103.5 L3579.3 103.5" fill="none" data-name="Session"></path>
+</g>
+<g transform="translate(3455.25, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Session">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Session">
+<a id="src/domain/authentication/entity/authentication.entity.ts.Session" xlink:href="src/domain/authentication/entity/authentication.entity.ts"><text x="54.0" y="13.5" stroke="none" text-anchor="middle" data-name="Session">Session</text></a>
+
+</g>
+</g>
+<g transform="translate(3455.25, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Session">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Session">
+<text x="0.0" y="13.5" stroke="none" data-name="Session">+token: string</text>
+
+</g>
+</g>
+<g transform="translate(3455.25, 103.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Session">
+<g transform="translate(8, 8)" fill="#33322E" data-name="Session">
+
+</g>
+</g>
+</g>
+<g data-name="AuthenticationService">
+<g fill="#eee8d5" stroke="#33322E" data-name="AuthenticationService">
+<rect x="3619.3" y="30.0" height="93.0" width="387.0" data-name="AuthenticationService"></rect>
+<path d="M3619.3 61.0 L4006.3 61.0" fill="none" data-name="AuthenticationService"></path>
+<path d="M3619.3 92.0 L4006.3 92.0" fill="none" data-name="AuthenticationService"></path>
+</g>
+<g transform="translate(3619.25, 30)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthenticationService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthenticationService">
+<a id="src/domain/authentication/service/authentication.service.ts.AuthenticationService" xlink:href="src/domain/authentication/service/authentication.service.ts"><text x="185.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthenticationService">AuthenticationService</text></a>
+
+</g>
+</g>
+<g transform="translate(3619.25, 61)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthenticationService">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthenticationService">-_userService: UserService</text>
+
+</g>
+</g>
+<g transform="translate(3619.25, 92)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthenticationService">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthenticationService">+authenticate(): Promise&lt;AuthenticationEntity&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="AuthorizationEntity">
+<g fill="#eee8d5" stroke="#33322E" data-name="AuthorizationEntity">
+<rect x="4046.3" y="41.5" height="70.0" width="164.0" data-name="AuthorizationEntity"></rect>
+<path d="M4046.3 72.5 L4210.3 72.5" fill="none" data-name="AuthorizationEntity"></path>
+<path d="M4046.3 103.5 L4210.3 103.5" fill="none" data-name="AuthorizationEntity"></path>
+</g>
+<g transform="translate(4046.25, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthorizationEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthorizationEntity">
+<a id="src/domain/authorization/entity/authorization.entity.ts.AuthorizationEntity" xlink:href="src/domain/authorization/entity/authorization.entity.ts"><text x="74.0" y="13.5" stroke="none" text-anchor="middle" data-name="AuthorizationEntity">AuthorizationEntity</text></a>
+
+</g>
+</g>
+<g transform="translate(4046.25, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthorizationEntity">-_rbac: RbacEntity</text>
+
+</g>
+</g>
+<g transform="translate(4046.25, 103.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationEntity">
+<g transform="translate(8, 8)" fill="#33322E" data-name="AuthorizationEntity">
+
+</g>
+</g>
+</g>
+<g data-name="AuthorizationTypes">
+<g fill="lightblue" stroke="#33322E" data-name="AuthorizationTypes">
+<rect x="4250.3" y="41.5" height="70.0" width="168.0" data-name="AuthorizationTypes"></rect>
+<path d="M4250.3 72.5 L4418.3 72.5" fill="none" data-name="AuthorizationTypes"></path>
+<path d="M4250.3 103.5 L4418.3 103.5" fill="none" data-name="AuthorizationTypes"></path>
+</g>
+<g transform="translate(4250.25, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationTypes">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthorizationTypes">
+<a id="src/domain/authorization/entity/authorization.entity.ts.AuthorizationTypes" xlink:href="src/domain/authorization/entity/authorization.entity.ts"><text x="76.0" y="13.5" stroke="none" text-anchor="middle" data-name="AuthorizationTypes">AuthorizationTypes</text></a>
+
+</g>
+</g>
+<g transform="translate(4250.25, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationTypes">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationTypes">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthorizationTypes">+rbac: RbacEntity</text>
+
+</g>
+</g>
+<g transform="translate(4250.25, 103.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationTypes">
+<g transform="translate(8, 8)" fill="#33322E" data-name="AuthorizationTypes">
+
+</g>
+</g>
+</g>
+<g data-name="AuthorizationService">
+<g fill="#eee8d5" stroke="#33322E" data-name="AuthorizationService">
+<rect x="4458.3" y="30.0" height="93.0" width="419.0" data-name="AuthorizationService"></rect>
+<path d="M4458.3 61.0 L4877.3 61.0" fill="none" data-name="AuthorizationService"></path>
+<path d="M4458.3 92.0 L4877.3 92.0" fill="none" data-name="AuthorizationService"></path>
+</g>
+<g transform="translate(4458.25, 30)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthorizationService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthorizationService">
+<a id="src/domain/authorization/service/authorization.service.ts.AuthorizationService" xlink:href="src/domain/authorization/service/authorization.service.ts"><text x="201.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthorizationService">AuthorizationService</text></a>
+
+</g>
+</g>
+<g transform="translate(4458.25, 61)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationService">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthorizationService">-_authorizationRepository: AuthorizationRepository</text>
+
+</g>
+</g>
+<g transform="translate(4458.25, 92)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationService">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthorizationService">+checkPermission(): Promise&lt;boolean&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="UserEntity">
+<g fill="#eee8d5" stroke="#33322E" data-name="UserEntity">
+<rect x="2204.3" y="193.0" height="228.0" width="320.0" data-name="UserEntity"></rect>
+<path d="M2204.3 224.0 L2524.3 224.0" fill="none" data-name="UserEntity"></path>
+<path d="M2204.3 330.0 L2524.3 330.0" fill="none" data-name="UserEntity"></path>
+</g>
+<g transform="translate(2204.25, 193)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserEntity">
+<a id="src/domain/user/entity/user.entity.ts.UserEntity" xlink:href="src/domain/user/entity/user.entity.ts"><text x="152.0" y="13.5" stroke="none" text-anchor="middle" data-name="UserEntity">UserEntity</text></a>
+
+</g>
+</g>
+<g transform="translate(2204.25, 224)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="UserEntity">-_uuid: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="UserEntity">-_name: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="UserEntity">-_username: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="UserEntity">-_email: string</text>
+<text x="0.0" y="73.5" stroke="none" data-name="UserEntity">-_password: string</text>
+<text x="0.0" y="88.5" stroke="none" data-name="UserEntity">-_authorization: AuthorizationEntity</text>
+
+</g>
+</g>
+<g transform="translate(2204.25, 330)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="UserEntity">+create(): Promise&lt;this&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="UserEntity">+static from(): UserEntity</text>
+<text x="0.0" y="43.5" stroke="none" data-name="UserEntity">-validate(): void</text>
+<text x="0.0" y="58.5" stroke="none" data-name="UserEntity">+checkPassword(): Promise&lt;boolean&gt;</text>
+<text x="0.0" y="73.5" stroke="none" data-name="UserEntity">+hashPassword(): Promise&lt;void&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="UserEntityErrors">
+<g fill="lightgreen" stroke="#33322E" data-name="UserEntityErrors">
+<rect x="4917.3" y="30.5" height="92.0" width="189.0" data-name="UserEntityErrors"></rect>
+<path d="M4917.3 61.5 L5106.3 61.5" fill="none" data-name="UserEntityErrors"></path>
+</g>
+<g transform="translate(4917.25, 30.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntityErrors">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserEntityErrors">
+<a id="src/domain/user/entity/user.entity.ts.UserEntityErrors" xlink:href="src/domain/user/entity/user.entity.ts"><text x="86.5" y="13.5" stroke="none" text-anchor="middle" data-name="UserEntityErrors">UserEntityErrors</text></a>
+
+</g>
+</g>
+<g transform="translate(4917.25, 61.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntityErrors">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserEntityErrors">
+<text x="0.0" y="13.5" stroke="none" data-name="UserEntityErrors">INVALID_EMAIL</text>
+<text x="0.0" y="28.5" stroke="none" data-name="UserEntityErrors">INVALID_USERNAME</text>
+<text x="0.0" y="43.5" stroke="none" data-name="UserEntityErrors">INVALID_PASSWORD</text>
+
+</g>
+</g>
+</g>
+<g data-name="UserService">
+<g fill="#eee8d5" stroke="#33322E" data-name="UserService">
+<rect x="5146.3" y="0.0" height="153.0" width="419.0" data-name="UserService"></rect>
+<path d="M5146.3 31.0 L5565.3 31.0" fill="none" data-name="UserService"></path>
+<path d="M5146.3 77.0 L5565.3 77.0" fill="none" data-name="UserService"></path>
+</g>
+<g transform="translate(5146.25, 0)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserService">
+<a id="src/domain/user/service/user.service.ts.UserService" xlink:href="src/domain/user/service/user.service.ts"><text x="201.5" y="13.5" stroke="none" text-anchor="middle" data-name="UserService">UserService</text></a>
+
+</g>
+</g>
+<g transform="translate(5146.25, 31)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserService">
+<text x="0.0" y="13.5" stroke="none" data-name="UserService">-_userRepository: UserRepository</text>
+<text x="0.0" y="28.5" stroke="none" data-name="UserService">-_authorizationRepository: AuthorizationRepository</text>
+
+</g>
+</g>
+<g transform="translate(5146.25, 77)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserService">
+<text x="0.0" y="13.5" stroke="none" data-name="UserService">+createUser(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="UserService">+findUserWithPermissions(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="UserService">+findUserByEmail(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="UserService">+findUserByUsername(): Promise&lt;UserEntity&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="Postgres">
+<g fill="#eee8d5" stroke="#33322E" data-name="Postgres">
+<rect x="1592.3" y="253.0" height="108.0" width="266.0" data-name="Postgres"></rect>
+<path d="M1592.3 284.0 L1858.3 284.0" fill="none" data-name="Postgres"></path>
+<path d="M1592.3 315.0 L1858.3 315.0" fill="none" data-name="Postgres"></path>
+</g>
+<g transform="translate(1592.25, 253)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Postgres">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Postgres">
+<a id="src/infrastructure/db/pgsql/database.config.ts.Postgres" xlink:href="src/infrastructure/db/pgsql/database.config.ts"><text x="125.0" y="13.5" stroke="none" text-anchor="middle" data-name="Postgres">Postgres</text></a>
+
+</g>
+</g>
+<g transform="translate(1592.25, 284)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Postgres">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Postgres">
+<text x="0.0" y="13.5" stroke="none" data-name="Postgres">-static instance: Sequelize</text>
+
+</g>
+</g>
+<g transform="translate(1592.25, 315)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Postgres">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Postgres">
+<text x="0.0" y="13.5" stroke="none" data-name="Postgres">+static getInstance(): Sequelize</text>
+<text x="0.0" y="28.5" stroke="none" data-name="Postgres">+init(): Sequelize</text>
+
+</g>
+</g>
+</g>
+<g data-name="Sqlite">
+<g fill="#eee8d5" stroke="#33322E" data-name="Sqlite">
+<rect x="1898.3" y="253.0" height="108.0" width="266.0" data-name="Sqlite"></rect>
+<path d="M1898.3 284.0 L2164.3 284.0" fill="none" data-name="Sqlite"></path>
+<path d="M1898.3 315.0 L2164.3 315.0" fill="none" data-name="Sqlite"></path>
+</g>
+<g transform="translate(1898.25, 253)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Sqlite">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Sqlite">
+<a id="src/infrastructure/db/sqlite/database.config.ts.Sqlite" xlink:href="src/infrastructure/db/sqlite/database.config.ts"><text x="125.0" y="13.5" stroke="none" text-anchor="middle" data-name="Sqlite">Sqlite</text></a>
+
+</g>
+</g>
+<g transform="translate(1898.25, 284)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Sqlite">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Sqlite">
+<text x="0.0" y="13.5" stroke="none" data-name="Sqlite">-static instance: Sequelize</text>
+
+</g>
+</g>
+<g transform="translate(1898.25, 315)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Sqlite">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Sqlite">
+<text x="0.0" y="13.5" stroke="none" data-name="Sqlite">+static getInstance(): Sequelize</text>
+<text x="0.0" y="28.5" stroke="none" data-name="Sqlite">+init(): Sequelize</text>
+
+</g>
+</g>
+</g>
+<g data-name="PermissionEntity">
+<g fill="#eee8d5" stroke="#33322E" data-name="PermissionEntity">
+<rect x="2564.3" y="253.0" height="108.0" width="261.0" data-name="PermissionEntity"></rect>
+<path d="M2564.3 284.0 L2825.3 284.0" fill="none" data-name="PermissionEntity"></path>
+<path d="M2564.3 330.0 L2825.3 330.0" fill="none" data-name="PermissionEntity"></path>
+</g>
+<g transform="translate(2564.25, 253)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="PermissionEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="PermissionEntity">
+<a id="src/domain/authorization/entity/rbac/permission.entity.ts.PermissionEntity" xlink:href="src/domain/authorization/entity/rbac/permission.entity.ts"><text x="122.5" y="13.5" stroke="none" text-anchor="middle" data-name="PermissionEntity">PermissionEntity</text></a>
+
+</g>
+</g>
+<g transform="translate(2564.25, 284)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="PermissionEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="PermissionEntity">-_id: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="PermissionEntity">-_name: string</text>
+
+</g>
+</g>
+<g transform="translate(2564.25, 330)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="PermissionEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="PermissionEntity">+static from(): PermissionEntity</text>
+
+</g>
+</g>
+</g>
+<g data-name="PermissionParams">
+<g fill="lightblue" stroke="#33322E" data-name="PermissionParams">
+<rect x="5605.3" y="34.0" height="85.0" width="163.0" data-name="PermissionParams"></rect>
+<path d="M5605.3 65.0 L5768.3 65.0" fill="none" data-name="PermissionParams"></path>
+<path d="M5605.3 111.0 L5768.3 111.0" fill="none" data-name="PermissionParams"></path>
+</g>
+<g transform="translate(5605.25, 34)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionParams">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="PermissionParams">
+<a id="src/domain/authorization/entity/rbac/permission.entity.ts.PermissionParams" xlink:href="src/domain/authorization/entity/rbac/permission.entity.ts"><text x="73.5" y="13.5" stroke="none" text-anchor="middle" data-name="PermissionParams">PermissionParams</text></a>
+
+</g>
+</g>
+<g transform="translate(5605.25, 65)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionParams">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="PermissionParams">
+<text x="0.0" y="13.5" stroke="none" data-name="PermissionParams">+id: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="PermissionParams">+name: string</text>
+
+</g>
+</g>
+<g transform="translate(5605.25, 111)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionParams">
+<g transform="translate(8, 8)" fill="#33322E" data-name="PermissionParams">
+
+</g>
+</g>
+</g>
+<g data-name="RbacEntity">
+<g fill="#eee8d5" stroke="#33322E" data-name="RbacEntity">
+<rect x="4018.8" y="260.5" height="93.0" width="215.0" data-name="RbacEntity"></rect>
+<path d="M4018.8 291.5 L4233.8 291.5" fill="none" data-name="RbacEntity"></path>
+<path d="M4018.8 322.5 L4233.8 322.5" fill="none" data-name="RbacEntity"></path>
+</g>
+<g transform="translate(4018.75, 260.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacEntity">
+<a id="src/domain/authorization/entity/rbac/rbac.entity.ts.RbacEntity" xlink:href="src/domain/authorization/entity/rbac/rbac.entity.ts"><text x="99.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacEntity">RbacEntity</text></a>
+
+</g>
+</g>
+<g transform="translate(4018.75, 291.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacEntity">-_roles: RoleEntity[]</text>
+
+</g>
+</g>
+<g transform="translate(4018.75, 322.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacEntity">+static from(): RbacEntity</text>
+
+</g>
+</g>
+</g>
+<g data-name="RbacParams">
+<g fill="lightblue" stroke="#33322E" data-name="RbacParams">
+<rect x="5808.3" y="41.5" height="70.0" width="165.0" data-name="RbacParams"></rect>
+<path d="M5808.3 72.5 L5973.3 72.5" fill="none" data-name="RbacParams"></path>
+<path d="M5808.3 103.5 L5973.3 103.5" fill="none" data-name="RbacParams"></path>
+</g>
+<g transform="translate(5808.25, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacParams">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacParams">
+<a id="src/domain/authorization/entity/rbac/rbac.entity.ts.RbacParams" xlink:href="src/domain/authorization/entity/rbac/rbac.entity.ts"><text x="74.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacParams">RbacParams</text></a>
+
+</g>
+</g>
+<g transform="translate(5808.25, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacParams">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacParams">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacParams">+roles: RoleEntity[]</text>
+
+</g>
+</g>
+<g transform="translate(5808.25, 103.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacParams">
+<g transform="translate(8, 8)" fill="#33322E" data-name="RbacParams">
+
+</g>
+</g>
+</g>
+<g data-name="RoleEntity">
+<g fill="#eee8d5" stroke="#33322E" data-name="RoleEntity">
+<rect x="4273.8" y="245.5" height="123.0" width="278.0" data-name="RoleEntity"></rect>
+<path d="M4273.8 276.5 L4551.8 276.5" fill="none" data-name="RoleEntity"></path>
+<path d="M4273.8 337.5 L4551.8 337.5" fill="none" data-name="RoleEntity"></path>
+</g>
+<g transform="translate(4273.75, 245.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RoleEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RoleEntity">
+<a id="src/domain/authorization/entity/rbac/role.entity.ts.RoleEntity" xlink:href="src/domain/authorization/entity/rbac/role.entity.ts"><text x="131.0" y="13.5" stroke="none" text-anchor="middle" data-name="RoleEntity">RoleEntity</text></a>
+
+</g>
+</g>
+<g transform="translate(4273.75, 276.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RoleEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="RoleEntity">-_id: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RoleEntity">-_name: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="RoleEntity">-_permissions: PermissionEntity[]</text>
+
+</g>
+</g>
+<g transform="translate(4273.75, 337.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RoleEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="RoleEntity">+static from(): RoleEntity</text>
+
+</g>
+</g>
+</g>
+<g data-name="RoleParams">
+<g fill="lightblue" stroke="#33322E" data-name="RoleParams">
+<rect x="6013.3" y="26.5" height="100.0" width="272.0" data-name="RoleParams"></rect>
+<path d="M6013.3 57.5 L6285.3 57.5" fill="none" data-name="RoleParams"></path>
+<path d="M6013.3 118.5 L6285.3 118.5" fill="none" data-name="RoleParams"></path>
+</g>
+<g transform="translate(6013.25, 26.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleParams">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RoleParams">
+<a id="src/domain/authorization/entity/rbac/role.entity.ts.RoleParams" xlink:href="src/domain/authorization/entity/rbac/role.entity.ts"><text x="128.0" y="13.5" stroke="none" text-anchor="middle" data-name="RoleParams">RoleParams</text></a>
+
+</g>
+</g>
+<g transform="translate(6013.25, 57.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleParams">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RoleParams">
+<text x="0.0" y="13.5" stroke="none" data-name="RoleParams">+id: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RoleParams">+name: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="RoleParams">+permissions: PermissionEntity[]</text>
+
+</g>
+</g>
+<g transform="translate(6013.25, 118.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleParams">
+<g transform="translate(8, 8)" fill="#33322E" data-name="RoleParams">
+
+</g>
+</g>
+</g>
+<g data-name="UserModel">
+<g fill="#eee8d5" stroke="#33322E" data-name="UserModel">
+<rect x="4591.8" y="208.0" height="198.0" width="235.0" data-name="UserModel"></rect>
+<path d="M4591.8 239.0 L4826.8 239.0" fill="none" data-name="UserModel"></path>
+<path d="M4591.8 375.0 L4826.8 375.0" fill="none" data-name="UserModel"></path>
+</g>
+<g transform="translate(4591.75, 208)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserModel">
+<a id="src/infrastructure/db/@shared/models/User.model.ts.UserModel" xlink:href="src/infrastructure/db/@shared/models/User.model.ts"><text x="109.5" y="13.5" stroke="none" text-anchor="middle" data-name="UserModel">UserModel</text></a>
+
+</g>
+</g>
+<g transform="translate(4591.75, 239)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserModel">
+<text x="0.0" y="13.5" stroke="none" data-name="UserModel">+uuid: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="UserModel">+name: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="UserModel">+username: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="UserModel">+email: string</text>
+<text x="0.0" y="73.5" stroke="none" data-name="UserModel">+password: string</text>
+<text x="0.0" y="88.5" stroke="none" data-name="UserModel">+isActive: boolean</text>
+<text x="0.0" y="103.5" stroke="none" data-name="UserModel">+createdAt: Date</text>
+<text x="0.0" y="118.5" stroke="none" data-name="UserModel">+updatedAt: Date</text>
+
+</g>
+</g>
+<g transform="translate(4591.75, 375)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserModel">
+<text x="0.0" y="13.5" stroke="none" data-name="UserModel">+static toEntity(): UserEntity</text>
+
+</g>
+</g>
+</g>
+<g data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">
+<g fill="#eee8d5" stroke="#33322E" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">
+<rect x="6325.3" y="61.0" height="31.0" width="374.0" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;"></rect>
+</g>
+<g transform="translate(6325.25, 61)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">
+<text x="179.0" y="13.5" stroke="none" text-anchor="middle" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">Model&lt;TModelAttributes,TCreationAttributes&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="RbacModel">
+<g fill="#eee8d5" stroke="#33322E" data-name="RbacModel">
+<rect x="4866.8" y="200.5" height="213.0" width="239.0" data-name="RbacModel"></rect>
+<path d="M4866.8 231.5 L5105.8 231.5" fill="none" data-name="RbacModel"></path>
+<path d="M4866.8 382.5 L5105.8 382.5" fill="none" data-name="RbacModel"></path>
+</g>
+<g transform="translate(4866.75, 200.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacModel">
+<a id="src/infrastructure/db/@shared/models/rbac/Rbac.model.ts.RbacModel" xlink:href="src/infrastructure/db/@shared/models/rbac/Rbac.model.ts"><text x="111.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacModel">RbacModel</text></a>
+
+</g>
+</g>
+<g transform="translate(4866.75, 231.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacModel">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacModel">+id: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RbacModel">+name: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="RbacModel">+description: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="RbacModel">+isActive: boolean</text>
+<text x="0.0" y="73.5" stroke="none" data-name="RbacModel">+createdAt: Date</text>
+<text x="0.0" y="88.5" stroke="none" data-name="RbacModel">+updatedAt: Date</text>
+<text x="0.0" y="103.5" stroke="none" data-name="RbacModel">+userUuid: string</text>
+<text x="0.0" y="118.5" stroke="none" data-name="RbacModel">+rbacRoleId: number</text>
+<text x="0.0" y="133.5" stroke="none" data-name="RbacModel">+roles: RbacRoleModel[]</text>
+
+</g>
+</g>
+<g transform="translate(4866.75, 382.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacModel">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacModel">+static toEntity(): RbacEntity</text>
+
+</g>
+</g>
+</g>
+<g data-name="RbacPermissionModel">
+<g fill="#eee8d5" stroke="#33322E" data-name="RbacPermissionModel">
+<rect x="6217.8" y="234.5" height="145.0" width="192.0" data-name="RbacPermissionModel"></rect>
+<path d="M6217.8 265.5 L6409.8 265.5" fill="none" data-name="RbacPermissionModel"></path>
+<path d="M6217.8 371.5 L6409.8 371.5" fill="none" data-name="RbacPermissionModel"></path>
+</g>
+<g transform="translate(6217.75, 234.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacPermissionModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacPermissionModel">
+<a id="src/infrastructure/db/@shared/models/rbac/RbacPermission.model.ts.RbacPermissionModel" xlink:href="src/infrastructure/db/@shared/models/rbac/RbacPermission.model.ts"><text x="88.0" y="13.5" stroke="none" text-anchor="middle" data-name="RbacPermissionModel">RbacPermissionModel</text></a>
+
+</g>
+</g>
+<g transform="translate(6217.75, 265.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacPermissionModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacPermissionModel">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacPermissionModel">+id: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RbacPermissionModel">+name: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="RbacPermissionModel">+description: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="RbacPermissionModel">+isActive: boolean</text>
+<text x="0.0" y="73.5" stroke="none" data-name="RbacPermissionModel">+createdAt: Date</text>
+<text x="0.0" y="88.5" stroke="none" data-name="RbacPermissionModel">+updatedAt: Date</text>
+
+</g>
+</g>
+<g transform="translate(6217.75, 371.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacPermissionModel">
+<g transform="translate(8, 8)" fill="#33322E" data-name="RbacPermissionModel">
+
+</g>
+</g>
+</g>
+<g data-name="RbacRoleModel">
+<g fill="#eee8d5" stroke="#33322E" data-name="RbacRoleModel">
+<rect x="6449.8" y="227.0" height="160.0" width="393.0" data-name="RbacRoleModel"></rect>
+<path d="M6449.8 258.0 L6842.8 258.0" fill="none" data-name="RbacRoleModel"></path>
+<path d="M6449.8 379.0 L6842.8 379.0" fill="none" data-name="RbacRoleModel"></path>
+</g>
+<g transform="translate(6449.75, 227)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacRoleModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacRoleModel">
+<a id="src/infrastructure/db/@shared/models/rbac/RbacRole.model.ts.RbacRoleModel" xlink:href="src/infrastructure/db/@shared/models/rbac/RbacRole.model.ts"><text x="188.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacRoleModel">RbacRoleModel</text></a>
+
+</g>
+</g>
+<g transform="translate(6449.75, 258)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRoleModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacRoleModel">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacRoleModel">+id: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RbacRoleModel">+name: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="RbacRoleModel">+description: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="RbacRoleModel">+isActive: boolean</text>
+<text x="0.0" y="73.5" stroke="none" data-name="RbacRoleModel">+createdAt: Date</text>
+<text x="0.0" y="88.5" stroke="none" data-name="RbacRoleModel">+updatedAt: Date</text>
+<text x="0.0" y="103.5" stroke="none" data-name="RbacRoleModel">+rolesPermissions: RbacRolePermissionModel[]</text>
+
+</g>
+</g>
+<g transform="translate(6449.75, 379)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRoleModel">
+<g transform="translate(8, 8)" fill="#33322E" data-name="RbacRoleModel">
+
+</g>
+</g>
+</g>
+<g data-name="RbacRolePermissionModel">
+<g fill="#eee8d5" stroke="#33322E" data-name="RbacRolePermissionModel">
+<rect x="6882.8" y="234.5" height="145.0" width="317.0" data-name="RbacRolePermissionModel"></rect>
+<path d="M6882.8 265.5 L7199.8 265.5" fill="none" data-name="RbacRolePermissionModel"></path>
+<path d="M6882.8 371.5 L7199.8 371.5" fill="none" data-name="RbacRolePermissionModel"></path>
+</g>
+<g transform="translate(6882.75, 234.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacRolePermissionModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacRolePermissionModel">
+<a id="src/infrastructure/db/@shared/models/rbac/RbacRolePermission.model.ts.RbacRolePermissionModel" xlink:href="src/infrastructure/db/@shared/models/rbac/RbacRolePermission.model.ts"><text x="150.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacRolePermissionModel">RbacRolePermissionModel</text></a>
+
+</g>
+</g>
+<g transform="translate(6882.75, 265.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRolePermissionModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacRolePermissionModel">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacRolePermissionModel">+id: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RbacRolePermissionModel">+roleId: number</text>
+<text x="0.0" y="43.5" stroke="none" data-name="RbacRolePermissionModel">+permissionId: number</text>
+<text x="0.0" y="58.5" stroke="none" data-name="RbacRolePermissionModel">+createdAt: Date</text>
+<text x="0.0" y="73.5" stroke="none" data-name="RbacRolePermissionModel">+updatedAt: Date</text>
+<text x="0.0" y="88.5" stroke="none" data-name="RbacRolePermissionModel">+permissions: RbacPermissionModel[]</text>
+
+</g>
+</g>
+<g transform="translate(6882.75, 371.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRolePermissionModel">
+<g transform="translate(8, 8)" fill="#33322E" data-name="RbacRolePermissionModel">
+
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
