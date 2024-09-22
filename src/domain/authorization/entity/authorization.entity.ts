@@ -7,7 +7,7 @@ import {AbacEntity} from "./abac/abac.entity";
 * */
 interface AuthorizationTypes {
   rbac: RbacEntity;
-  abac: AbacEntity;
+  abac?: AbacEntity;
 }
 
 /* Authorization entity */
@@ -21,7 +21,6 @@ export class AuthorizationEntity  {
     this._abac = authorizationTypes.abac;
   }
 
-  /* Rbac getter */
   get rbac(){
     return this._rbac;
   }

@@ -1,3 +1,4 @@
+import {AbacActionModel} from "../../../../infrastructure/db/@shared/models/abac/AbacAction.model";
 
 export class ActionEntity {
   private _name: string;
@@ -8,5 +9,9 @@ export class ActionEntity {
 
   get name() {
     return this._name;
+  }
+
+  static from(model: AbacActionModel): ActionEntity {
+    return new ActionEntity(model.name);
   }
 }

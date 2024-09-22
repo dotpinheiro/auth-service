@@ -1,3 +1,7 @@
+import {
+  AbacResourceAttributeModel
+} from "../../../../infrastructure/db/@shared/models/abac/AbacResourceAttribute.model";
+import {AbacUserAttributeModel} from "../../../../infrastructure/db/@shared/models/abac/AbacUserAttribute.model";
 
 
 export class AttributeEntity {
@@ -16,4 +20,7 @@ export class AttributeEntity {
     return this._value;
   }
 
+  static from(model: AbacResourceAttributeModel | AbacUserAttributeModel): AttributeEntity {
+    return new AttributeEntity(model.attributeName);
+  }
 }

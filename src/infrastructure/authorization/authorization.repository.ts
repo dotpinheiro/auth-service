@@ -8,6 +8,10 @@ import RbacRoleModel from "../db/@shared/models/rbac/RbacRole.model";
 import RbacPermissionModel from "../db/@shared/models/rbac/RbacPermission.model";
 import RbacRolePermissionModel from "../db/@shared/models/rbac/RbacRolePermission.model";
 import {AbacEntity} from "../../domain/authorization/entity/abac/abac.entity";
+import {AbacAccessPolicyModel} from "../db/@shared/models/abac/AbacAccessPolicy.model";
+import {AbacUserAttributeModel} from "../db/@shared/models/abac/AbacUserAttribute.model";
+import {AbacResourceAttributeModel} from "../db/@shared/models/abac/AbacResourceAttribute.model";
+import {AbacActionModel} from "../db/@shared/models/abac/AbacAction.model";
 
 export class AuthorizationRepository implements AuthorizationRepositoryInterface{
   create(entity: AuthorizationEntity): Promise<AuthorizationEntity> {
@@ -53,7 +57,12 @@ export class AuthorizationRepository implements AuthorizationRepositoryInterface
   }
 
   private static async _findAbacPermissionsByUserUuid(uuid: string): Promise<AbacEntity> {
-    return undefined;
+    const abac = await AbacAccessPolicyModel.findAll({ where: { userUuid: uuid }, include: [
+        AbacUserAttributeModel,
+        AbacResourceAttributeModel,
+        AbacActionModel
+      ]});
+    return AbacAccessPolicyModel.toEntity(abac);
   }
 
 }

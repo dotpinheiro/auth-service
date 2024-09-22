@@ -1,20 +1,14 @@
-import {AutoIncrement, Column, Model, PrimaryKey} from "sequelize-typescript";
+import {Column, Model, PrimaryKey, Unique} from "sequelize-typescript";
 
 
 export class AbacActionModel extends Model {
   @PrimaryKey
-  @AutoIncrement
-  @Column
-  declare id: number;
-
+  @Unique
   @Column({ allowNull: false })
   declare name: string;
 
   @Column({ allowNull: true })
   declare description: string;
-
-  @Column({ allowNull: false, defaultValue: true })
-  declare isActive: boolean;
 
   @Column({ allowNull: false, defaultValue: new Date() })
   declare createdAt: Date;
