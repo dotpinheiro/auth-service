@@ -13,20 +13,16 @@ describe('AuthenticationService tests', () => {
   const userService = new UserService();
 
   const service = new AuthenticationService(userService);
-  const databaseHandler = new DatabaseHandler(DatabaseHandlers.SQLITE).handler;
+  const databaseHandler = new DatabaseHandler(process.env.DEFAULT_DB_HANDLER as DatabaseHandlers);
 
   beforeEach(async () => {
     jest.clearAllMocks();
   })
 
   beforeAll(async () => {
-    await databaseHandler.sync({ force: true })
+    await databaseHandler.handler.sync()
     users = await Promise.all(baseUsers.map((baseUser) => (new UserEntity()).create(baseUser)))
     users = await Promise.all(users.map((user) => userService.createUser(user)))
-  })
-
-  afterAll(async () => {
-    await databaseHandler.close();
   })
 
   describe('Success cases', () => {

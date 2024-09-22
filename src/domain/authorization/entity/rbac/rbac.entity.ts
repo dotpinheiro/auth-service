@@ -1,14 +1,16 @@
 import {RoleEntity} from "./role.entity";
 import RbacModel from "../../../../infrastructure/db/@shared/models/rbac/Rbac.model";
+import {BaseEntity} from "../../../@shared/entity/base.entity";
 
 interface RbacParams {
   roles: Array<RoleEntity>
 }
 
-export class RbacEntity {
+export class RbacEntity extends BaseEntity {
   private readonly _roles:  RbacParams['roles']
 
   constructor(params: RbacParams){
+    super();
     this._roles = params.roles;
   }
 

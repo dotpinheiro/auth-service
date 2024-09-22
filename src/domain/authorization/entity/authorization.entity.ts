@@ -1,12 +1,17 @@
 import {RbacEntity} from "./rbac/rbac.entity";
 import {AbacEntity} from "./abac/abac.entity";
 
+/* All available authorization types
+*  @rbac - Role Based Access Control
+*  @abac - Attribute Based Access Control
+* */
 interface AuthorizationTypes {
   rbac: RbacEntity;
   abac: AbacEntity;
 }
 
-export class AuthorizationEntity {
+/* Authorization entity */
+export class AuthorizationEntity  {
 
   private readonly _rbac: RbacEntity;
   private readonly _abac: AbacEntity;
@@ -16,6 +21,7 @@ export class AuthorizationEntity {
     this._abac = authorizationTypes.abac;
   }
 
+  /* Rbac getter */
   get rbac(){
     return this._rbac;
   }

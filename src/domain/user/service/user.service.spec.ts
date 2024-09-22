@@ -11,15 +11,15 @@ describe('User Service Test', () => {
     const authorizationRepository = new AuthorizationRepository();
 
     const service = new UserService(userRepository, authorizationRepository)
-    const databaseHandler = new DatabaseHandler(DatabaseHandlers.SQLITE).handler;
+    const databaseHandler = new DatabaseHandler(process.env.DEFAULT_DB_HANDLER as DatabaseHandlers);
 
     beforeAll(async () => {
       jest.clearAllMocks();
-      await databaseHandler.sync({ force: true })
+      await databaseHandler.handler.sync()
     })
 
     afterAll(async () => {
-      await databaseHandler.close();
+      await databaseHandler.handler.close();
     })
 
     describe('User creation', () => {
