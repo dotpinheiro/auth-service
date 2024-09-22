@@ -7,6 +7,7 @@ import RbacModel from "../db/@shared/models/rbac/Rbac.model";
 import RbacRoleModel from "../db/@shared/models/rbac/RbacRole.model";
 import RbacPermissionModel from "../db/@shared/models/rbac/RbacPermission.model";
 import RbacRolePermissionModel from "../db/@shared/models/rbac/RbacRolePermission.model";
+import {AbacEntity} from "../../domain/authorization/entity/abac/abac.entity";
 
 export class AuthorizationRepository implements AuthorizationRepositoryInterface{
   create(entity: AuthorizationEntity): Promise<AuthorizationEntity> {
@@ -35,7 +36,8 @@ export class AuthorizationRepository implements AuthorizationRepositoryInterface
 
   async findPermissionsByUserUuid(uuid: string): Promise<AuthorizationEntity> {
     return new AuthorizationEntity({
-      rbac: await AuthorizationRepository._findRbacPermissionsByUserUuid(uuid)
+      rbac: await AuthorizationRepository._findRbacPermissionsByUserUuid(uuid),
+      abac: await AuthorizationRepository._findAbacPermissionsByUserUuid(uuid)
     });
   }
 
@@ -48,6 +50,10 @@ export class AuthorizationRepository implements AuthorizationRepositoryInterface
         }]
       }], rejectOnEmpty: false });
     return RbacModel.toEntity(rbac);
+  }
+
+  private static async _findAbacPermissionsByUserUuid(uuid: string): Promise<AbacEntity> {
+    return undefined;
   }
 
 }
