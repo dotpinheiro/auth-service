@@ -12,6 +12,7 @@ import {AbacAccessPolicyModel} from "../db/@shared/models/abac/AbacAccessPolicy.
 import {AbacUserAttributeModel} from "../db/@shared/models/abac/AbacUserAttribute.model";
 import {AbacResourceAttributeModel} from "../db/@shared/models/abac/AbacResourceAttribute.model";
 import {AbacActionModel} from "../db/@shared/models/abac/AbacAction.model";
+import {AbacModel} from "../db/@shared/models/abac/Abac.model";
 
 export class AuthorizationRepository implements AuthorizationRepositoryInterface{
   create(entity: AuthorizationEntity): Promise<AuthorizationEntity> {
@@ -57,12 +58,11 @@ export class AuthorizationRepository implements AuthorizationRepositoryInterface
   }
 
   private static async _findAbacPermissionsByUserUuid(uuid: string): Promise<AbacEntity> {
-    const abac = await AbacAccessPolicyModel.findAll({ where: { userUuid: uuid }, include: [
-        AbacUserAttributeModel,
-        AbacResourceAttributeModel,
-        AbacActionModel
-      ]});
-    return AbacAccessPolicyModel.toEntity(abac);
+    const abac = await AbacModel.findOne({ where: { userUuid: uuid }, include: [{
+        model: AbacAccessPolicyModel,
+        include: [AbacActionModel, AbacResourceAttributeModel, AbacUserAttributeModel]
+    }], rejectOnEmpty: false });
+    return AbacModel.toEntity(abac);
   }
 
 }

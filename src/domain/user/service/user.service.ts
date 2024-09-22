@@ -21,7 +21,8 @@ export class UserService {
 
     async findUserWithPermissions(uuid: string): Promise<UserEntity> {
         const user = await this._userRepository.findOneByUuid(uuid);
-        user.authorization = await this._authorizationRepository.findPermissionsByUserUuid(uuid).catch(() => undefined);
+        user.authorization = await this._authorizationRepository.findPermissionsByUserUuid(uuid).catch((err) => undefined) // TODO: log error on sentry
+        console.log(user.authorization)
         return user;
     }
 
@@ -31,6 +32,10 @@ export class UserService {
 
     async findUserByUsername(username: string): Promise<UserEntity> {
         return this._userRepository.findByUsernameOrFail(username);
+    }
+
+    async findAll(): Promise<UserEntity[]> {
+        return this._userRepository.findAll();
     }
 
 }

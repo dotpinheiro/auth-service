@@ -1,10 +1,13 @@
-import {Column, Model, PrimaryKey, Unique} from "sequelize-typescript";
+import {Column, Model, PrimaryKey, Table, Unique} from "sequelize-typescript";
 
+@Table({
+  tableName: "abac_resource_attributes",
+  timestamps: true
+})
 export class AbacResourceAttributeModel extends Model {
-  @PrimaryKey
   @Unique
-  @Column
-  declare attributeName: string;
+  @Column({ allowNull: false , primaryKey: true })
+  declare name: string;
 
   @Column({ allowNull: false })
   declare resourceId: number;

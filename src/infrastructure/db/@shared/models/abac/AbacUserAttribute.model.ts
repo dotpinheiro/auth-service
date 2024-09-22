@@ -1,10 +1,13 @@
-import {Column, Model, PrimaryKey, Unique} from "sequelize-typescript";
+import {Column, Model, PrimaryKey, Table, Unique} from "sequelize-typescript";
 
+@Table({
+  tableName: "abac_user_attributes",
+  timestamps: true
+})
 export class AbacUserAttributeModel extends Model {
-  @PrimaryKey
   @Unique
-  @Column
-  declare attributeName: string;
+  @Column({ allowNull: false , primaryKey: true })
+  declare name: string;
 
   @Column({ allowNull: true })
   declare description: string;

@@ -1,5 +1,10 @@
-import {Column, PrimaryKey, Model, BelongsToMany} from "sequelize-typescript";
+import {Column, PrimaryKey, Model, BelongsToMany, Table} from "sequelize-typescript";
 import {AbacResourceAttributeModel} from "./AbacResourceAttribute.model";
+
+@Table({
+  tableName: "abac_resources",
+  timestamps: true
+})
 
 export class AbacResourceModel extends Model {
   @PrimaryKey

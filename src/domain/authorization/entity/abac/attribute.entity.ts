@@ -21,6 +21,6 @@ export class AttributeEntity {
   }
 
   static from(model: AbacResourceAttributeModel | AbacUserAttributeModel): AttributeEntity {
-    return new AttributeEntity(model.attributeName);
+    return new AttributeEntity(model.name);
   }
 }

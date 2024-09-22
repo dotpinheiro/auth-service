@@ -21,6 +21,13 @@ userRouter.post('/', async (req, res) => {
   }
 });
 
+userRouter.get('/', async (req, res) => {
+  const userService = new UserService();
+  const users = await userService.findAll();
+  await Promise.all(users.map(user => userService.findUserWithPermissions(user.uuid)));
+  res.send(users);
+});
+
 userRouter.get('/:uuid', async (req, res) => {
   const userService = new UserService();
   try{
