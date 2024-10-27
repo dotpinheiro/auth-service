@@ -42,7 +42,7 @@ export class RoleEntity extends BaseEntity {
       return new RoleEntity({
           id: model.id,
           name: model.name,
-          permissions: permissions.reduce((acc, val) => acc.concat(val), [])
+          permissions: permissions?.reduce((acc, val) => acc.concat(val), [])
       });
     }
 

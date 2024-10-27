@@ -1,5 +1,4 @@
 import {AuthorizationRepository} from "../../../infrastructure/authorization/authorization.repository";
-import {RbacEntity} from "../entity/rbac/rbac.entity";
 
 export class AuthorizationService {
 
@@ -17,5 +16,7 @@ export class AuthorizationService {
     const { abac } = await this._authorizationRepository.findPermissionsByUserUuid(userUuid);
     return !abac.checkPolicy(userAttribute, resourceAttribute, action);
   }
+
+
 
 }

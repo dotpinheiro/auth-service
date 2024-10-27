@@ -7,6 +7,18 @@ export abstract class BaseEntity {
   protected _deletedAt: Date | null = null;
   protected _isActive: boolean = true;
 
+  toJSON() {
+    return Object.entries(this)
+      ?.map(([key, value]) => [
+        key.startsWith('_') ? key.substring(1) : key,
+        value
+      ])
+      ?.reduce((acc, [key, value]: any) => {
+        acc[key] = value;
+        return acc;
+      }, {});
+  }
+
   /* Date when the entity was created */
   get createdAt() {
     return this._createdAt;

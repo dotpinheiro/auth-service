@@ -12,6 +12,7 @@ import {
 import RbacPermissionModel from "./RbacPermission.model";
 import RbacModel from "./Rbac.model";
 import RbacRolePermissionModel from "./RbacRolePermission.model";
+import {RoleEntity} from "../../../../../domain/authorization/entity/rbac/role.entity";
 
 @Table({
   tableName: "rbac_roles",
@@ -40,5 +41,9 @@ export default class RbacRoleModel extends Model {
 
   @HasMany(() => RbacRolePermissionModel)
   declare rolesPermissions: RbacRolePermissionModel[];
+
+  static toEntity = (model: RbacRoleModel): RoleEntity => {
+    return RoleEntity.from(model);
+  }
 
 }

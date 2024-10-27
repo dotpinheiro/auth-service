@@ -7,10 +7,10 @@ module.exports = {
       { id: 1, name: 'ADMIN' }
     ])
     const permissions = await queryInterface.bulkInsert('rbac_permissions', [
-      { id: 1, name: 'LIST_USERS' },
-      { id: 2, name: 'CREATE_USERS' },
-      { id: 3, name: 'UPDATE_USERS' },
-      { id: 4, name: 'DELETE_USERS' }
+      { id: 1, name: 'USERS.LIST' },
+      { id: 2, name: 'USERS.CREATE' },
+      { id: 3, name: 'USERS.UPDATE' },
+      { id: 4, name: 'USERS.DELETE' }
     ])
     await queryInterface.bulkInsert('rbac_role_permissions', [
       { roleId: 1, permissionId: 1 },

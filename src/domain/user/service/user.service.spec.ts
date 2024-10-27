@@ -46,8 +46,8 @@ describe('User Service Test', () => {
         await Promise.all(users.map((user) => service.createUser(user)))
       })
 
-      describe('Find user with permissions',  () => {
-        it('throws error when user does not have any permissions', () => {
+      describe('Find user with rbac',  () => {
+        it('throws error when user does not have any rbac', () => {
           expect(async () => {
             const user = await service.findUserWithPermissions(users[0].uuid);
             expect(user).toEqual(users[0]);

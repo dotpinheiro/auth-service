@@ -1,5 +1,5 @@
-import {AutoIncrement, Column, ForeignKey, Model, PrimaryKey, Table} from "sequelize-typescript";
-import RbacRoleModel from "./RbacRole.model";
+import {AutoIncrement, Column, Model, PrimaryKey, Table} from "sequelize-typescript";
+import {PermissionEntity} from "../../../../../domain/authorization/entity/rbac/permission.entity";
 
 @Table({
   tableName: "rbac_permissions",
@@ -25,5 +25,9 @@ export default class RbacPermissionModel extends Model {
 
   @Column({ allowNull: false, defaultValue: new Date() })
   declare updatedAt: Date;
+
+  static toEntity(permission: RbacPermissionModel): PermissionEntity {
+    return PermissionEntity.from(permission);
+  }
 
 }
