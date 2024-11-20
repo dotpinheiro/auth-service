@@ -17,6 +17,12 @@ export const UserModal = ({ open, handleModal, selectedUser }) => {
   async function onFinish(values) {
     setLoading(true);
     try {
+      if(selectedUser){
+        await userService.updateUser(selectedUser.uuid, values);
+        handleModal(false);
+        notification.success({ message: 'Success', description: 'User updated successfully!' });
+        return;
+      }
       await userService.createUser(values);
       handleModal(false);
       notification.success({ message: 'Success', description: 'User created successfully!' });

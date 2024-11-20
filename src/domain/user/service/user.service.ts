@@ -19,6 +19,11 @@ export class UserService {
         return user;
     }
 
+    async updateUser(user: UserEntity): Promise<UserEntity> {
+        await this._userRepository.update(user);
+        return user;
+    }
+
     async findUserWithPermissions(uuid: string): Promise<UserEntity> {
         const user = await this._userRepository.findOneByUuid(uuid);
         user.authorization = await this._authorizationRepository.findPermissionsByUserUuid(uuid).catch((err) => undefined) // TODO: log error on sentry
@@ -35,6 +40,10 @@ export class UserService {
 
     async findAll(): Promise<UserEntity[]> {
         return this._userRepository.findAll();
+    }
+
+    async findByUuid(uuid: string): Promise<UserEntity> {
+        return this._userRepository.findOneByUuid(uuid);
     }
 
 }

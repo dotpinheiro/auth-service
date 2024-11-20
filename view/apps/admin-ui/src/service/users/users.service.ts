@@ -10,8 +10,13 @@ export function useUserService(){
     return await api.post('/user', user);
   }
 
+  async function updateUser(uuid, user){
+    return await api.put(`/user/${uuid}`, user);
+  }
+
   return {
     getUsers,
-    createUser
+    createUser,
+    updateUser
   }
 }

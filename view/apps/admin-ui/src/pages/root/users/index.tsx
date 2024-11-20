@@ -16,7 +16,7 @@ const Users = () => {
         }
 
         fetchUsers();
-    },[]);
+    },[addUserModalVisible]);
 
       const columns = [
         {

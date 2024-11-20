@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import {UserService} from "../../../domain/user/service/user.service";
 import {UserEntity} from "../../../domain/user/entity/user.entity";
-import {authMiddleware} from "../../../middlewares/auth.middleware";
 
 const userRouter = Router();
 
@@ -22,7 +21,24 @@ userRouter.post('/', async (req, res) => {
   }
 });
 
-userRouter.get('/', authMiddleware(['USERS.LIST']), async (req, res) => {
+userRouter.put('/:uuid', async (req, res) => {
+  const userService = new UserService();
+  const user = await userService.findByUuid(req.params.uuid);
+  try{
+    user.name = req.body.name;
+    user.username = req.body.username;
+    user.email = req.body.email;
+    user.password = req.body.password;
+
+    const updatedUser = await userService.updateUser(user);
+
+    res.send(updatedUser);
+  }catch (e: any) {
+    res.status(400).send(e.message);
+  }
+});
+
+userRouter.get('/', async (req, res) => {
 
   const userService = new UserService();
   const users = await userService.findAll();
