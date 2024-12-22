@@ -1,4 +1,6 @@
 import {RbacRepository} from "../../../infrastructure/authorization/rbac.repository";
+import {RoleEntity} from "../entity/rbac/role.entity";
+import {PermissionEntity} from "../entity/rbac/permission.entity";
 
 export class RbacService {
   private _rbacRepository: RbacRepository;
@@ -15,11 +17,11 @@ export class RbacService {
     return await this._rbacRepository.getRoles();
   }
 
-  async createRole(role) {
+  async createRole(role: RoleEntity) {
     return await this._rbacRepository.createRole(role);
   }
 
-  async createPermission(permission) {
+  async createPermission(permission: PermissionEntity) {
     return await this._rbacRepository.createPermission(permission);
   }
 

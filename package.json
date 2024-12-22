@@ -16,6 +16,8 @@
     "lint": "eslint --fix ."
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.12.4",
+    "@grpc/proto-loader": "^0.7.13",
     "@swc/cli": "^0.3.10",
     "@swc/core": "^1.4.11",
     "@swc/jest": "^0.2.36",

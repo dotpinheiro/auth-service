@@ -13,7 +13,7 @@ export abstract class BaseEntity {
         key.startsWith('_') ? key.substring(1) : key,
         value
       ])
-      ?.reduce((acc, [key, value]: any) => {
+      ?.reduce((acc: Record<string, unknown>, [key, value]) => {
         acc[key] = value;
         return acc;
       }, {});

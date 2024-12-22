@@ -3,6 +3,7 @@ import RbacPermissionModel from "../db/@shared/models/rbac/RbacPermission.model"
 import RbacRoleModel from "../db/@shared/models/rbac/RbacRole.model";
 import {PermissionEntity} from "../../domain/authorization/entity/rbac/permission.entity";
 import {RoleEntity} from "../../domain/authorization/entity/rbac/role.entity";
+import { Optional } from "sequelize";
 
 export class RbacRepository implements RbacRepositoryInterface {
   async getPermissions(): Promise<PermissionEntity[]> {
@@ -40,12 +41,12 @@ export class RbacRepository implements RbacRepositoryInterface {
   }
 
   async createRole(role: RoleEntity): Promise<RoleEntity> {
-    const newRole = await RbacRoleModel.create(role);
+    const newRole = await RbacRoleModel.create(role as unknown as Optional<any, string>);
     return RbacRoleModel.toEntity(newRole);
   }
 
   async createPermission(permission: PermissionEntity): Promise<PermissionEntity> {
-    const newPermission = await RbacPermissionModel.create(permission);
+    const newPermission = await RbacPermissionModel.create(permission as unknown as Optional<any, string>);
     return RbacPermissionModel.toEntity(newPermission);
   }
 }

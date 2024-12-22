@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package auth;
+
+service AuthService {
+  rpc checkPermissions(PermissionInput) returns (CheckPermissionsResponse) {}
+}
+
+message PermissionInput {
+  string userId = 1;
+  repeated string requiredPermissions = 2;
+}
+
+message CheckPermissionsResponse {
+  bool allowed = 1;
+}

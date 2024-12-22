@@ -1,5 +1,6 @@
-import server from './server'
+import server, {grpcServer} from './server'
 import {DatabaseHandler, DatabaseHandlers} from "./infrastructure/db/database-handler";
+import * as grpc from '@grpc/grpc-js';
 
 const port = process.env.PORT || 3000;
 const host = process.env.HOST || 'localhost';
@@ -12,3 +13,11 @@ server.listen({ host, port }, async () => {
   await databaseHandler.handler.sync({ force: false })
 })
 
+const grpcPort = process.env.GRPC_PORT || 'localhost:50051';
+grpcServer.bindAsync(grpcPort, grpc.ServerCredentials.createInsecure(), (err, port) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  console.log(`gRPC server is running on port ${port}`);
+});
