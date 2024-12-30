@@ -17,7 +17,7 @@ message AuthenticateResponse {
 }
 
 message PermissionInput {
-  string userId = 1;
+  string token = 1;
   repeated string requiredPermissions = 2;
 }
 

@@ -20,7 +20,7 @@ export const authMiddleware = (requiredPermissions: Array<string> = []) => async
   const userService = new UserService();
   const user = await userService.findUserWithPermissions(req.body.user.id);
 
-  const reject = requiredPermissions?.some((role: string) => !user.authorization.rbac.checkPermission(role));
+  const reject = requiredPermissions?.some((role: string) => !user.authorization?.rbac?.checkPermission(role));
   if (reject) {
     return res.status(403).send('Forbidden');
   }

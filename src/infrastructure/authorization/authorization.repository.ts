@@ -13,8 +13,12 @@ import {AbacUserAttributeModel} from "../db/@shared/models/abac/AbacUserAttribut
 import {AbacResourceAttributeModel} from "../db/@shared/models/abac/AbacResourceAttribute.model";
 import {AbacActionModel} from "../db/@shared/models/abac/AbacAction.model";
 import {AbacModel} from "../db/@shared/models/abac/Abac.model";
+import {CacheManager} from "../cache/cache-manager";
 
 export class AuthorizationRepository implements AuthorizationRepositoryInterface{
+
+  private _cacheManager = (new CacheManager()).client;
+
   create(entity: AuthorizationEntity): Promise<AuthorizationEntity> {
     return Promise.resolve(undefined);
   }
@@ -47,6 +51,11 @@ export class AuthorizationRepository implements AuthorizationRepositoryInterface
   }
 
   private static async _findRbacPermissionsByUserUuid(uuid: string): Promise<RbacEntity> {
+    const cacheManager = (new CacheManager()).client;
+    const cached = await cacheManager.get(`rbac:${uuid}`);
+    if(cached) {
+      return RbacModel.toEntity(JSON.parse(cached));
+    }
     const rbac = await RbacModel.findOne({ where: { userUuid: uuid }, include: [{
         model: RbacRoleModel,
         include: [{
@@ -54,14 +63,21 @@ export class AuthorizationRepository implements AuthorizationRepositoryInterface
           include: [RbacPermissionModel]
         }]
       }], rejectOnEmpty: false });
+    await cacheManager.set(`rbac:${uuid}`, JSON.stringify(rbac), 60);
     return RbacModel.toEntity(rbac);
   }
 
   private static async _findAbacPermissionsByUserUuid(uuid: string): Promise<AbacEntity> {
+    const cacheManager = (new CacheManager()).client;
+    const cached = await cacheManager.get(`abac:${uuid}`);
+    if(cached) {
+      return AbacModel.toEntity(JSON.parse(cached));
+    }
     const abac = await AbacModel.findOne({ where: { userUuid: uuid }, include: [{
         model: AbacAccessPolicyModel,
         include: [AbacActionModel, AbacResourceAttributeModel, AbacUserAttributeModel]
     }], rejectOnEmpty: false });
+    await cacheManager.set(`abac:${uuid}`, JSON.stringify(abac), 60);
     return AbacModel.toEntity(abac);
   }
 

@@ -6,6 +6,7 @@ import * as protoLoader from "@grpc/proto-loader";
 import path from "path";
 import * as grpc from "@grpc/grpc-js";
 import {checkPermissions} from "./app/grpc/auth/check-permissions";
+import { authenticate } from './app/grpc/auth/authenticate';
 
 dotenv.config();
 
@@ -32,7 +33,8 @@ const routeGuide = grpc.loadPackageDefinition(packageDefinition);
 export const grpcServer = new grpc.Server();
 
 grpcServer.addService((routeGuide.auth as any).AuthService.service as any, {
-  checkPermissions
+  checkPermissions,
+  authenticate
 })
 
 export default app;
