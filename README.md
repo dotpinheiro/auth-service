@@ -3,8 +3,408 @@
 This project consists of an identity service developed in Node.js. The identity service is responsible for managing user authentication and authorization in web applications, ensuring security and reliability.
 
 ## Class Diagram
-[![](https://mermaid.ink/img/pako:eNrNWv9T2zYU_1d8Lj-0F-CgFMh8rL0Uso2Nb0vS9m7LjhO2SDQcOZVtOkrJ3z5Jtmx9sx2n6bpyVyLpSe-9z3t6X0QeXT8KoOu5Y-yHII5PEJgQMBtj9sNnnOMI36JJHycoeXgcY0f6t3UdwzhGEX4PQhSAhH4aPcyh54zdvz8lY3ro1jWdBjcgppO9e4BCcBPCk3wqZuvziCSeg9PZDSRsPI1iOo4TgvBE5VaOnoRsvTSZRgR95qwHcB7FKImIKaYP_Ck8BxhMIPGcYzY6xQkkt8CHKm3HJxAk8PkL54pEMxTDhcIjg2Exxp0AhlChu4miEALM1m4RDnphWH_In38J0ku8BL-c8O3DuxQFzeTpPFhKDXbsFSSUhNkxpsfHkCzFYuua7R3cAL9pP6PJt22Ifb0l9vWUfZLxK8xemPToy_Z2BY3wHCZTpcNoLjGBiSSqJGA5K5uUkg-oK8iEbCyTGE6milMo0t7RKg6qcrYavlUOV7PFcLoa2gwCBowVp5KkBLkG-YXiHxVsmVuoS0WMk-KDGTxCBHFSHzYssUkld7Rjj46QWHr9usn7qOIAU2E7Mf98H6FAdox87FOvIMXQkEdE3V8ADkKLmtNs3isIl1dVOzqWlT06gjS4Q8Lvoazq8Pez01F_jK8uh6OfB_2hWDFOXQOGCCMG3BB-TGGIPkOLDmfRpAIZhOMEYJ9mMGqEDdM6p_k6ZUAPKaTdsDNZRZtOGE085_mMJlvqoSI7bjohvIfhGzF-4fy4EL6A8G1k7pApICERqSVpMDoL2MtGUCPesc2r5tJyb1VUU0-vCmQm1duH_ozWKJfkJ_p_AyWbw2AGG4iNkKgsS6CqcCoxS10S-L-lV8NalT27zuAOegm_zNTbn11ncihTGerKFIp7foLuqTfkFtDsmES_Di8vqDYD6EckWAhHTPEdjj7hhcVNmJi2FDBatLkAmUbUXSHX2HNG3FEFqKMS6nqaTOdKGs3vqNfUH6e4FiVN-S_pJhnU1JUpnbrG3XiJSpcJ4ktFmBHC05jF79LDWLGVV-geDX78w0qcaA9AlUp9asI2VjPlaeCdy9iGRxLdQdyqYSiVG0Jyj3xoxTFfy8TPBxprUB6mV9o6gIum5qXCooSWK55TFtDMooDP9aS5Nl0Sa9DiNgCbInSYBG9WF8ESDlZP7as3MJKQ1UGqppWQ6iNbT7Ge0s_eeNBCpKLTyFaWVq1CZKvZqm4LsMPjOZUtmBrap9C_sxb5UjTOiKIQ-Q9WAsPhmGJVAhNFac_Re4L_pPn7Np1PWZpVpQgpQ7FgwkoYeZzmZY08B1lRJE_MKZNPNP_Lc4oXeLbg1lQTJlMU8zRJx3S6VII9GtxnL0xyu8NdIpfE7jVTEE8tFOyAetj6rDhero05vXjfOzs9ue6f907PxlgM3w37g4veeb-cueoNhx8uBydSn1OWcEdftrbkPGkrsVfqHIyylhU0sj2VUqS50GVFjuYi1SdUJoX6oFShtoxKXeaWr7ZeOn99tOJey45tKPlrSRiybOYDSqb26GKnzy25BJ2wWi1pc19V3zSZURcGKD7m7yWVzyicRkc1f7oQXMbu5W9j19oaZi_FeaiV5jNfXGiPJJKE6nsMT36ltEKBqyhOJgTG1W8AxRtC_UuATFb__GA8czDRhBxFYfwxRAn83lJlUhTFQVH-Gbaes0yNYExvle_Tmj7L3MK5rAWAyO1F4ynyQMlmw4ghZfCUa9FcPIOzWbn47K5zKeV3eZEHewn1qZs04XqIzzIRNVCUEh82ELbS1pDa9o4ky2topaZvNRsIJuV26_GqDg0ctq5pck6bWKpHbliDR4Zma7UsZ-lVknEaq4LKPzo1Q6YfuFHL9AoQMGvVZcnydJZUVb0BuoRyJVzVXbJKlUZkqUC1az-Q76ClYjdei5Q6vD0ajYLV4DAwIkF5TCs3oGGsTM2eY9b7FVgV3KxOTlfX6h2dVkLW4VbILRda5xHNwI_6u47SROgCmS1ER-sgOmYD0bE8PXaMd8yO8YypvQVlCujdg6Qz12cx4r_KsL05OmasKGzl3ELU5JxWTnpWTBQTpfkbhKQfkAL7qUwr5Up6thz_OR9mwWWAKJRnb_pso1fKyit0ax41fKIlPgULGR9Dh0asilMvVL8xEqy2niVw62SBJxuUSFpTNu__tflyi1EKUPJ38tw67GRgltmsrhpYh-0MtqodC-x0C2r3O4CxT9A8a_2L2ZbX9-t1KcSVtRCWrfTEqjhmV2rFONUBSzvcOjFRlLehorJvMLO4PEr8WitM30J3VUUZBPMWr-Tn_wNdTU3kAqw5CH9T17dkQ_4ES89QPElUffma9ULIOX5Q0Rm2xG-g5zD1O03fF7wq3ev7kRUQ0BRW_qYhjPH9XIi7xpVc6QrBNLl5GjZTrKIGT63WMv1rr6LCRoewjUsR_W6UVb4yvQx2cx02C2TrBkBj4W66E4IC10tICjfdGV0FbOhyEMZuMoUzOHbZF0cDQO7YN0ef6J45wH9E0UxsI1E6mbreLQhjOsoUzb-wWswSiANIjqMUJ663t7PDD3G9R_cf19vd_WH7ZXd_Z_9w5-Cwe7i7u-k-uN5Wd297d_9Vd3f_4HCv-7K7-_Jp0_3M2e5vH7w66HZ3ut1XBzuH-3uvNl0YsFfh8-xLs_y7s0__AgiXja4?type=png)](https://mermaid.live/edit#pako:eNrNWv9T2zYU_1d8Lj-0F-CgFMh8rL0Uso2Nb0vS9m7LjhO2SDQcOZVtOkrJ3z5Jtmx9sx2n6bpyVyLpSe-9z3t6X0QeXT8KoOu5Y-yHII5PEJgQMBtj9sNnnOMI36JJHycoeXgcY0f6t3UdwzhGEX4PQhSAhH4aPcyh54zdvz8lY3ro1jWdBjcgppO9e4BCcBPCk3wqZuvziCSeg9PZDSRsPI1iOo4TgvBE5VaOnoRsvTSZRgR95qwHcB7FKImIKaYP_Ck8BxhMIPGcYzY6xQkkt8CHKm3HJxAk8PkL54pEMxTDhcIjg2Exxp0AhlChu4miEALM1m4RDnphWH_In38J0ku8BL-c8O3DuxQFzeTpPFhKDXbsFSSUhNkxpsfHkCzFYuua7R3cAL9pP6PJt22Ifb0l9vWUfZLxK8xemPToy_Z2BY3wHCZTpcNoLjGBiSSqJGA5K5uUkg-oK8iEbCyTGE6milMo0t7RKg6qcrYavlUOV7PFcLoa2gwCBowVp5KkBLkG-YXiHxVsmVuoS0WMk-KDGTxCBHFSHzYssUkld7Rjj46QWHr9usn7qOIAU2E7Mf98H6FAdox87FOvIMXQkEdE3V8ADkKLmtNs3isIl1dVOzqWlT06gjS4Q8Lvoazq8Pez01F_jK8uh6OfB_2hWDFOXQOGCCMG3BB-TGGIPkOLDmfRpAIZhOMEYJ9mMGqEDdM6p_k6ZUAPKaTdsDNZRZtOGE085_mMJlvqoSI7bjohvIfhGzF-4fy4EL6A8G1k7pApICERqSVpMDoL2MtGUCPesc2r5tJyb1VUU0-vCmQm1duH_ozWKJfkJ_p_AyWbw2AGG4iNkKgsS6CqcCoxS10S-L-lV8NalT27zuAOegm_zNTbn11ncihTGerKFIp7foLuqTfkFtDsmES_Di8vqDYD6EckWAhHTPEdjj7hhcVNmJi2FDBatLkAmUbUXSHX2HNG3FEFqKMS6nqaTOdKGs3vqNfUH6e4FiVN-S_pJhnU1JUpnbrG3XiJSpcJ4ktFmBHC05jF79LDWLGVV-geDX78w0qcaA9AlUp9asI2VjPlaeCdy9iGRxLdQdyqYSiVG0Jyj3xoxTFfy8TPBxprUB6mV9o6gIum5qXCooSWK55TFtDMooDP9aS5Nl0Sa9DiNgCbInSYBG9WF8ESDlZP7as3MJKQ1UGqppWQ6iNbT7Ge0s_eeNBCpKLTyFaWVq1CZKvZqm4LsMPjOZUtmBrap9C_sxb5UjTOiKIQ-Q9WAsPhmGJVAhNFac_Re4L_pPn7Np1PWZpVpQgpQ7FgwkoYeZzmZY08B1lRJE_MKZNPNP_Lc4oXeLbg1lQTJlMU8zRJx3S6VII9GtxnL0xyu8NdIpfE7jVTEE8tFOyAetj6rDhero05vXjfOzs9ue6f907PxlgM3w37g4veeb-cueoNhx8uBydSn1OWcEdftrbkPGkrsVfqHIyylhU0sj2VUqS50GVFjuYi1SdUJoX6oFShtoxKXeaWr7ZeOn99tOJey45tKPlrSRiybOYDSqb26GKnzy25BJ2wWi1pc19V3zSZURcGKD7m7yWVzyicRkc1f7oQXMbu5W9j19oaZi_FeaiV5jNfXGiPJJKE6nsMT36ltEKBqyhOJgTG1W8AxRtC_UuATFb__GA8czDRhBxFYfwxRAn83lJlUhTFQVH-Gbaes0yNYExvle_Tmj7L3MK5rAWAyO1F4ynyQMlmw4ghZfCUa9FcPIOzWbn47K5zKeV3eZEHewn1qZs04XqIzzIRNVCUEh82ELbS1pDa9o4ky2topaZvNRsIJuV26_GqDg0ctq5pck6bWKpHbliDR4Zma7UsZ-lVknEaq4LKPzo1Q6YfuFHL9AoQMGvVZcnydJZUVb0BuoRyJVzVXbJKlUZkqUC1az-Q76ClYjdei5Q6vD0ajYLV4DAwIkF5TCs3oGGsTM2eY9b7FVgV3KxOTlfX6h2dVkLW4VbILRda5xHNwI_6u47SROgCmS1ER-sgOmYD0bE8PXaMd8yO8YypvQVlCujdg6Qz12cx4r_KsL05OmasKGzl3ELU5JxWTnpWTBQTpfkbhKQfkAL7qUwr5Up6thz_OR9mwWWAKJRnb_pso1fKyit0ax41fKIlPgULGR9Dh0asilMvVL8xEqy2niVw62SBJxuUSFpTNu__tflyi1EKUPJ38tw67GRgltmsrhpYh-0MtqodC-x0C2r3O4CxT9A8a_2L2ZbX9-t1KcSVtRCWrfTEqjhmV2rFONUBSzvcOjFRlLehorJvMLO4PEr8WitM30J3VUUZBPMWr-Tn_wNdTU3kAqw5CH9T17dkQ_4ES89QPElUffma9ULIOX5Q0Rm2xG-g5zD1O03fF7wq3ev7kRUQ0BRW_qYhjPH9XIi7xpVc6QrBNLl5GjZTrKIGT63WMv1rr6LCRoewjUsR_W6UVb4yvQx2cx02C2TrBkBj4W66E4IC10tICjfdGV0FbOhyEMZuMoUzOHbZF0cDQO7YN0ef6J45wH9E0UxsI1E6mbreLQhjOsoUzb-wWswSiANIjqMUJ663t7PDD3G9R_cf19vd_WH7ZXd_Z_9w5-Cwe7i7u-k-uN5Wd297d_9Vd3f_4HCv-7K7-_Jp0_3M2e5vH7w66HZ3ut1XBzuH-3uvNl0YsFfh8-xLs_y7s0__AgiXja4)
+```mermaid
 
+classDiagram
+
+
+class ConfigEntity{
+            -_sessionValidationType: "jwt"
+-_database: AvailableDatabases
+-_port: number
+-_host: string
+
+        }
+class AuthorizationRepository{
+            -_cacheManager: CacheInterface
+            +create() Promise~AuthorizationEntity~
++delete() Promise~boolean~
++findAll() Promise~AuthorizationEntity[]~
++findOne() Promise~AuthorizationEntity~
++findOneByUuid() Promise~AuthorizationEntity~
++update() Promise~AuthorizationEntity~
++findPermissionsByUserUuid() Promise~AuthorizationEntity~
+-_findRbacPermissionsByUserUuid() Promise~RbacEntity~$
+-_findAbacPermissionsByUserUuid() Promise~AbacEntity~$
+        }
+AuthorizationRepositoryInterface<|..AuthorizationRepository
+class RbacRepository{
+
+            +getPermissions() Promise~PermissionEntity[]~
++getRoles() Promise~RoleEntity[]~
++create() Promise~RbacRepositoryInterface~
++delete() Promise~boolean~
++findAll() Promise~RbacRepositoryInterface[]~
++findOne() Promise~RbacRepositoryInterface~
++findOneByUuid() Promise~RbacRepositoryInterface~
++update() Promise~RbacRepositoryInterface~
++createRole() Promise~RoleEntity~
++createPermission() Promise~PermissionEntity~
+        }
+RbacRepositoryInterface<|..RbacRepository
+class CacheManager{
+            -_client: CacheInterface
+
+        }
+class CacheInterface {
+            <<interface>>
+
+            +get() any
++set() void
++delete() void
++clear() void
+        }
+class DatabaseHandler{
+            -_handler: DatabaseInterface
+
+        }
+class DatabaseHandlers {
+        <<enumeration>>
+        SQLITE
+POSTGRES
+      }
+class DatabaseInterface {
+            <<interface>>
+
+            +init() Sequelize
+        }
+class LogHandler{
+            -instance: any$
+            +getInstance() LogInterface$
+        }
+class LogInterface {
+            <<interface>>
+            +log: (message: string, level?: string) =~ void
++info: (message: string) =~ void
++error: (message: string) =~ void
+
+        }
+class UserRepository{
+
+            +create() Promise~UserEntity~
++delete() Promise~boolean~
++findAll() Promise~UserEntity[]~
++findOne() Promise~UserEntity~
++findOneByUuid() Promise~UserEntity~
++findByEmailOrFail() Promise~UserEntity~
++findByUsernameOrFail() Promise~UserEntity~
++update() Promise~UserEntity~
+        }
+UserRepositoryInterface<|..UserRepository
+class BaseEntity{
+            #_createdAt: Date
+#_updatedAt: Date
+#_deletedAt: Date
+#_isActive: boolean
+            +toJSON() Record~string, unknown~
+        }
+class BaseRepositoryInterface~T~ {
+            <<interface>>
+            +create: (entity: T) =~ Promise~T~
++update: (entity: T) =~ Promise~T~
++delete: (entity: T) =~ Promise~boolean~
++findOne: (entity: T) =~ Promise~T~
++findOneByUuid: (uuid: string) =~ Promise~T~
++findAll: () =~ Promise~T[]~
+
+        }
+class AuthenticationEntity{
+            -_user: UserEntity
+-_session: Session
+
+        }
+class AuthenticationEntityConstructor {
+            <<interface>>
+            +user: UserEntity
+
+        }
+class Session {
+            <<interface>>
+            +token: string
+
+        }
+class AuthenticationService{
+            -_userService: UserService
+            +authenticate() Promise~AuthenticationEntity~
+        }
+class AuthorizationEntity{
+            -_rbac: RbacEntity
+-_abac: AbacEntity
+
+        }
+class AuthorizationTypes {
+            <<interface>>
+            +rbac: RbacEntity
++abac?: AbacEntity
+
+        }
+class AuthorizationRepositoryInterface {
+            <<interface>>
+
+            +findPermissionsByUserUuid() Promise~AuthorizationEntity~
+        }
+BaseRepositoryInterface~T~<|..AuthorizationRepositoryInterface
+class RbacRepositoryInterface {
+            <<interface>>
+
+            +getPermissions() Promise~any~
++getRoles() Promise~any~
+        }
+BaseRepositoryInterface~T~<|..RbacRepositoryInterface
+class AuthorizationService{
+            -_authorizationRepository: AuthorizationRepository
+            +checkPermission() Promise~boolean~
++checkPolicy() Promise~boolean~
+        }
+class RbacService{
+            -_rbacRepository: RbacRepository
+            +getPermissions() Promise~PermissionEntity[]~
++getRoles() Promise~RoleEntity[]~
++createRole() Promise~RoleEntity~
++createPermission() Promise~PermissionEntity~
+        }
+class UserEntity{
+            -_uuid: string
+-_name: string
+-_username: string
+-_email: string
+-_password: string
+-_authorization: AuthorizationEntity
+            +create() Promise~this~
++from() UserEntity$
+-validate() void
++checkPassword() Promise~boolean~
++hashPassword() Promise~void~
+        }
+class UserEntityErrors {
+        <<enumeration>>
+        INVALID_EMAIL
+INVALID_USERNAME
+INVALID_PASSWORD
+      }
+BaseEntity<|--UserEntity
+class UserRepositoryInterface {
+            <<interface>>
+            +findByEmailOrFail: (email: string) =~ Promise~UserEntity~
++findByUsernameOrFail: (username: string) =~ Promise~UserEntity~
+
+        }
+BaseRepositoryInterface~T~<|..UserRepositoryInterface
+class UserService{
+            -_userRepository: UserRepository
+-_authorizationRepository: AuthorizationRepository
+            +createUser() Promise~UserEntity~
++updateUser() Promise~UserEntity~
++findUserWithPermissions() Promise~UserEntity~
++findUserByEmail() Promise~UserEntity~
++findUserByUsername() Promise~UserEntity~
++findAll() Promise~UserEntity[]~
++findByUuid() Promise~UserEntity~
+        }
+class RedisClient{
+            -_client: Redis
+            +clear() Promise~"OK"~
++delete() Promise~number~
++get() Promise~string~
++set() void
+        }
+CacheInterface<|..RedisClient
+class Postgres{
+            -instance: Sequelize$
+            +getInstance() Sequelize$
++init() Sequelize
+        }
+DatabaseInterface<|..Postgres
+class Sqlite{
+            -instance: Sequelize$
+            +getInstance() Sequelize$
++init() Sequelize
+        }
+DatabaseInterface<|..Sqlite
+class AbacEntity{
+            -_policies: AccessPolicyEntity[]
+            +checkPolicy() boolean
++from() AbacEntity$
+        }
+BaseEntity<|--AbacEntity
+class AccessPolicyEntity{
+            -_actions: ActionEntity[]
+-_userAttributes: AttributeEntity[]
+-_resourceAttributes: AttributeEntity[]
+            +checkPolicy() boolean
++from() AccessPolicyEntity$
+        }
+class ActionEntity{
+            -_name: string
+            +from() ActionEntity$
+        }
+class AttributeEntity{
+            -_name: string
+-_value: string
+            +from() AttributeEntity$
+        }
+class ResourceEntity{
+            -_name: string
+
+        }
+class PermissionEntity{
+            -_id: number
+-_name: string
+            +from() PermissionEntity$
+        }
+class PermissionParams {
+            <<interface>>
+            +id: number
++name: string
+
+        }
+BaseEntity<|--PermissionEntity
+class RbacEntity{
+            -_roles: RoleEntity[]
+            +from() RbacEntity$
++checkPermission() boolean
+        }
+class RbacParams {
+            <<interface>>
+            +roles: RoleEntity[]
+
+        }
+BaseEntity<|--RbacEntity
+class RoleEntity{
+            -_id: number
+-_name: string
+-_permissions: PermissionEntity[]
+            +from() RoleEntity$
+        }
+class RoleParams {
+            <<interface>>
+            +id: number
++name: string
++permissions: PermissionEntity[]
+
+        }
+BaseEntity<|--RoleEntity
+class UserModel{
+            +uuid: string
++name: string
++username: string
++email: string
++password: string
++isActive: boolean
++createdAt: Date
++updatedAt: Date
+            +toEntity() UserEntity$
+        }
+Model~TModelAttributes,TCreationAttributes~<|--UserModel
+class AbacModel{
+            +id: number
++userUuid: string
++accessPolicyId: number
++policies: AbacAccessPolicyModel[]
++createdAt: Date
++updatedAt: Date
++toEntity: (model: AbacModel) =~ AbacEntity$
+
+        }
+Model~TModelAttributes,TCreationAttributes~<|--AbacModel
+class AbacAccessPolicyModel{
+            +id: number
++userAttributeName: string
++resourceAttributeName: string
++actionName: string
++actions: AbacActionModel[]
++resourceAttributes: AbacResourceAttributeModel[]
++userAttributes: AbacUserAttributeModel[]
++createdAt: Date
++updatedAt: Date
++toEntity: (model: AbacAccessPolicyModel) =~ AccessPolicyEntity$
+
+        }
+Model~TModelAttributes,TCreationAttributes~<|--AbacAccessPolicyModel
+class AbacActionModel{
+            +name: string
++description: string
++createdAt: Date
++updatedAt: Date
+
+        }
+Model~TModelAttributes,TCreationAttributes~<|--AbacActionModel
+class AbacResourceModel{
+            +id: string
++name: string
++description: string
++isActive: boolean
++createdAt: Date
++updatedAt: Date
++attributes: AbacResourceAttributeModel[]
+
+        }
+Model~TModelAttributes,TCreationAttributes~<|--AbacResourceModel
+class AbacResourceAttributeModel{
+            +name: string
++resourceId: number
++description: string
++isActive: boolean
++createdAt: Date
++updatedAt: Date
+
+        }
+Model~TModelAttributes,TCreationAttributes~<|--AbacResourceAttributeModel
+class AbacUserAttributeModel{
+            +name: string
++description: string
++isActive: boolean
++createdAt: Date
++updatedAt: Date
+
+        }
+Model~TModelAttributes,TCreationAttributes~<|--AbacUserAttributeModel
+class RbacModel{
+            +id: number
++name: string
++description: string
++isActive: boolean
++createdAt: Date
++updatedAt: Date
++userUuid: string
++rbacRoleId: number
++roles: RbacRoleModel[]
+            +toEntity() RbacEntity$
+        }
+Model~TModelAttributes,TCreationAttributes~<|--RbacModel
+class RbacPermissionModel{
+            +id: number
++name: string
++description: string
++isActive: boolean
++createdAt: Date
++updatedAt: Date
+            +toEntity() PermissionEntity$
+        }
+Model~TModelAttributes,TCreationAttributes~<|--RbacPermissionModel
+class RbacRoleModel{
+            +id: number
++name: string
++description: string
++isActive: boolean
++createdAt: Date
++updatedAt: Date
++rolesPermissions: RbacRolePermissionModel[]
++toEntity: (model: RbacRoleModel) =~ RoleEntity$
+
+        }
+Model~TModelAttributes,TCreationAttributes~<|--RbacRoleModel
+class RbacRolePermissionModel{
+            +id: number
++roleId: number
++permissionId: number
++createdAt: Date
++updatedAt: Date
++permissions: RbacPermissionModel[]
+
+        }
+Model~TModelAttributes,TCreationAttributes~<|--RbacRolePermissionModel
+```
 
 ## Features
 
