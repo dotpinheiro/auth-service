@@ -1,16 +1,23 @@
-<svg version="1.1" baseProfile="full" width="9031.8" height="722.0" viewbox="0 0 9031.75 722" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events">
+<svg version="1.1" baseProfile="full" width="10528.8" height="775.0" viewbox="0 0 10528.75 775" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events">
 <desc >#.interface: fill=lightblue
 #.enumeration: fill=lightgreen
 #.type: fill=lightgray
+
 [ConfigEntity|-_sessionValidationType: &quot;jwt&quot;;-_database: AvailableDatabases;-_port: number;-_host: string|]
-[AuthorizationRepository||+create(): Promise&lt;AuthorizationEntity&gt;;+delete(): Promise&lt;boolean&gt;;+findAll(): Promise&lt;AuthorizationEntity\[\]&gt;;+findOne(): Promise&lt;AuthorizationEntity&gt;;+findOneByUuid(): Promise&lt;AuthorizationEntity&gt;;+update(): Promise&lt;AuthorizationEntity&gt;;+findPermissionsByUserUuid(): Promise&lt;AuthorizationEntity&gt;;-static _findRbacPermissionsByUserUuid(): Promise&lt;RbacEntity&gt;;-static _findAbacPermissionsByUserUuid(): Promise&lt;AbacEntity&gt;]
+[AuthorizationRepository|-_cacheManager: CacheInterface|+create(): Promise&lt;AuthorizationEntity&gt;;+delete(): Promise&lt;boolean&gt;;+findAll(): Promise&lt;AuthorizationEntity\[\]&gt;;+findOne(): Promise&lt;AuthorizationEntity&gt;;+findOneByUuid(): Promise&lt;AuthorizationEntity&gt;;+update(): Promise&lt;AuthorizationEntity&gt;;+findPermissionsByUserUuid(): Promise&lt;AuthorizationEntity&gt;;-static _findRbacPermissionsByUserUuid(): Promise&lt;RbacEntity&gt;;-static _findAbacPermissionsByUserUuid(): Promise&lt;AbacEntity&gt;]
 [AuthorizationRepositoryInterface]&lt;:--[AuthorizationRepository]
+[RbacRepository||+getPermissions(): Promise&lt;PermissionEntity\[\]&gt;;+getRoles(): Promise&lt;RoleEntity\[\]&gt;;+create(): Promise&lt;RbacRepositoryInterface&gt;;+delete(): Promise&lt;boolean&gt;;+findAll(): Promise&lt;RbacRepositoryInterface\[\]&gt;;+findOne(): Promise&lt;RbacRepositoryInterface&gt;;+findOneByUuid(): Promise&lt;RbacRepositoryInterface&gt;;+update(): Promise&lt;RbacRepositoryInterface&gt;;+createRole(): Promise&lt;RoleEntity&gt;;+createPermission(): Promise&lt;PermissionEntity&gt;]
+[RbacRepositoryInterface]&lt;:--[RbacRepository]
+[CacheManager|-_client: CacheInterface|]
+[&lt;interface&gt;CacheInterface||+get(): any;+set(): void;+delete(): void;+clear(): void]
 [DatabaseHandler|-_handler: DatabaseInterface|]
 [&lt;enumeration&gt;DatabaseHandlers|SQLITE;POSTGRES]
 [&lt;interface&gt;DatabaseInterface||+init(): Sequelize]
+[LogHandler|-static instance: any|+static getInstance(): LogInterface]
+[&lt;interface&gt;LogInterface|+log: (message: string, level?: string) =&gt; void;+info: (message: string) =&gt; void;+error: (message: string) =&gt; void|]
 [UserRepository||+create(): Promise&lt;UserEntity&gt;;+delete(): Promise&lt;boolean&gt;;+findAll(): Promise&lt;UserEntity\[\]&gt;;+findOne(): Promise&lt;UserEntity&gt;;+findOneByUuid(): Promise&lt;UserEntity&gt;;+findByEmailOrFail(): Promise&lt;UserEntity&gt;;+findByUsernameOrFail(): Promise&lt;UserEntity&gt;;+update(): Promise&lt;UserEntity&gt;]
 [UserRepositoryInterface]&lt;:--[UserRepository]
-[BaseEntity|\#_createdAt: Date;\#_updatedAt: Date;\#_deletedAt: Date;\#_isActive: boolean|]
+[BaseEntity|\#_createdAt: Date;\#_updatedAt: Date;\#_deletedAt: Date;\#_isActive: boolean|+toJSON(): Record&lt;string, unknown&gt;]
 [&lt;interface&gt;BaseRepositoryInterface&lt;T&gt;|+create: (entity: T) =&gt; Promise&lt;T&gt;;+update: (entity: T) =&gt; Promise&lt;T&gt;;+delete: (entity: T) =&gt; Promise&lt;boolean&gt;;+findOne: (entity: T) =&gt; Promise&lt;T&gt;;+findOneByUuid: (uuid: string) =&gt; Promise&lt;T&gt;;+findAll: () =&gt; Promise&lt;T\[\]&gt;|]
 [AuthenticationEntity|-_user: UserEntity;-_session: Session|]
 [&lt;interface&gt;AuthenticationEntityConstructor|+user: UserEntity|]
@@ -20,13 +27,18 @@
 [&lt;interface&gt;AuthorizationTypes|+rbac: RbacEntity;+abac?: AbacEntity|]
 [&lt;interface&gt;AuthorizationRepositoryInterface||+findPermissionsByUserUuid(): Promise&lt;AuthorizationEntity&gt;]
 [BaseRepositoryInterface&lt;T&gt;]&lt;:--[AuthorizationRepositoryInterface]
+[&lt;interface&gt;RbacRepositoryInterface||+getPermissions(): Promise&lt;any&gt;;+getRoles(): Promise&lt;any&gt;]
+[BaseRepositoryInterface&lt;T&gt;]&lt;:--[RbacRepositoryInterface]
 [AuthorizationService|-_authorizationRepository: AuthorizationRepository|+checkPermission(): Promise&lt;boolean&gt;;+checkPolicy(): Promise&lt;boolean&gt;]
+[RbacService|-_rbacRepository: RbacRepository|+getPermissions(): Promise&lt;PermissionEntity\[\]&gt;;+getRoles(): Promise&lt;RoleEntity\[\]&gt;;+createRole(): Promise&lt;RoleEntity&gt;;+createPermission(): Promise&lt;PermissionEntity&gt;]
 [UserEntity|-_uuid: string;-_name: string;-_username: string;-_email: string;-_password: string;-_authorization: AuthorizationEntity|+create(): Promise&lt;this&gt;;+static from(): UserEntity;-validate(): void;+checkPassword(): Promise&lt;boolean&gt;;+hashPassword(): Promise&lt;void&gt;]
 [&lt;enumeration&gt;UserEntityErrors|INVALID_EMAIL;INVALID_USERNAME;INVALID_PASSWORD]
 [BaseEntity]&lt;:-[UserEntity]
 [&lt;interface&gt;UserRepositoryInterface|+findByEmailOrFail: (email: string) =&gt; Promise&lt;UserEntity&gt;;+findByUsernameOrFail: (username: string) =&gt; Promise&lt;UserEntity&gt;|]
 [BaseRepositoryInterface&lt;T&gt;]&lt;:--[UserRepositoryInterface]
-[UserService|-_userRepository: UserRepository;-_authorizationRepository: AuthorizationRepository|+createUser(): Promise&lt;UserEntity&gt;;+findUserWithPermissions(): Promise&lt;UserEntity&gt;;+findUserByEmail(): Promise&lt;UserEntity&gt;;+findUserByUsername(): Promise&lt;UserEntity&gt;;+findAll(): Promise&lt;UserEntity\[\]&gt;]
+[UserService|-_userRepository: UserRepository;-_authorizationRepository: AuthorizationRepository|+createUser(): Promise&lt;UserEntity&gt;;+updateUser(): Promise&lt;UserEntity&gt;;+findUserWithPermissions(): Promise&lt;UserEntity&gt;;+findUserByEmail(): Promise&lt;UserEntity&gt;;+findUserByUsername(): Promise&lt;UserEntity&gt;;+findAll(): Promise&lt;UserEntity\[\]&gt;;+findByUuid(): Promise&lt;UserEntity&gt;]
+[RedisClient|-_client: Redis|+clear(): Promise&lt;&quot;OK&quot;&gt;;+delete(): Promise&lt;number&gt;;+get(): Promise&lt;string&gt;;+set(): void]
+[CacheInterface]&lt;:--[RedisClient]
 [Postgres|-static instance: Sequelize|+static getInstance(): Sequelize;+init(): Sequelize]
 [DatabaseInterface]&lt;:--[Postgres]
 [Sqlite|-static instance: Sequelize|+static getInstance(): Sequelize;+init(): Sequelize]
@@ -62,88 +74,100 @@
 [Model&lt;TModelAttributes,TCreationAttributes&gt;]&lt;:-[AbacUserAttributeModel]
 [RbacModel|+id: number;+name: string;+description: string;+isActive: boolean;+createdAt: Date;+updatedAt: Date;+userUuid: string;+rbacRoleId: number;+roles: RbacRoleModel\[\]|+static toEntity(): RbacEntity]
 [Model&lt;TModelAttributes,TCreationAttributes&gt;]&lt;:-[RbacModel]
-[RbacPermissionModel|+id: number;+name: string;+description: string;+isActive: boolean;+createdAt: Date;+updatedAt: Date|]
+[RbacPermissionModel|+id: number;+name: string;+description: string;+isActive: boolean;+createdAt: Date;+updatedAt: Date|+static toEntity(): PermissionEntity]
 [Model&lt;TModelAttributes,TCreationAttributes&gt;]&lt;:-[RbacPermissionModel]
-[RbacRoleModel|+id: number;+name: string;+description: string;+isActive: boolean;+createdAt: Date;+updatedAt: Date;+rolesPermissions: RbacRolePermissionModel\[\]|]
+[RbacRoleModel|+id: number;+name: string;+description: string;+isActive: boolean;+createdAt: Date;+updatedAt: Date;+rolesPermissions: RbacRolePermissionModel\[\];+static toEntity: (model: RbacRoleModel) =&gt; RoleEntity|]
 [Model&lt;TModelAttributes,TCreationAttributes&gt;]&lt;:-[RbacRoleModel]
 [RbacRolePermissionModel|+id: number;+roleId: number;+permissionId: number;+createdAt: Date;+updatedAt: Date;+permissions: RbacPermissionModel\[\]|]
 [Model&lt;TModelAttributes,TCreationAttributes&gt;]&lt;:-[RbacRolePermissionModel]</desc>
 <g stroke-width="1.0" text-align="left" font="12pt Helvetica, Arial, sans-serif" font-size="12pt" font-family="Helvetica" font-weight="normal" font-style="normal">
 <g font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" stroke="#33322E">
 <g stroke="transparent" fill="transparent">
-<rect x="0.0" y="0.0" height="722.0" width="9031.8" stroke="none"></rect>
+<rect x="0.0" y="0.0" height="775.0" width="10528.8" stroke="none"></rect>
 </g>
 <g transform="translate(8, 8)" fill="#33322E">
 <g transform="translate(20, 20)" fill="#eee8d5" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal">
 <g stroke-dasharray="6 6">
-<path d="M710.3 370.3 L710.25 456 L710.25 476 L710.3 476.0 " fill="none"></path>
+<path d="M264.5 400.3 L264.5 486 L264.5 506 L264.5 506.0 " fill="none"></path>
 </g>
-<path d="M715.6 370.3 L710.3 370.3 L704.9 370.3 L710.3 357.0 Z"></path>
+<path d="M269.8 400.3 L264.5 400.3 L259.2 400.3 L264.5 387.0 Z"></path>
 <g stroke-dasharray="6 6">
-<path d="M1275.8 377.8 L1275.75 456 L1275.75 483.5 L1275.8 483.5 " fill="none"></path>
+<path d="M792.0 407.8 L792 486 L792 510 L792.0 510.0 " fill="none"></path>
 </g>
-<path d="M1281.1 377.8 L1275.8 377.8 L1270.4 377.8 L1275.8 364.5 Z"></path>
+<path d="M797.3 407.8 L792.0 407.8 L786.7 407.8 L792.0 394.5 Z"></path>
 <g stroke-dasharray="6 6">
-<path d="M791.5 158.1 L710.25 188 L710.25 287 L710.3 287.0 " fill="none"></path>
+<path d="M1250.0 407.8 L1250 486 L1250 525 L1250.0 525.0 " fill="none"></path>
 </g>
-<path d="M793.3 163.1 L791.5 158.1 L789.6 153.1 L804.0 153.5 Z"></path>
-<path d="M2863.6 101.2 L2364.25 188 L2364.25 208 L2364.3 208.0 " fill="none"></path>
-<path d="M2864.5 106.4 L2863.6 101.2 L2862.7 95.9 L2876.8 98.9 Z"></path>
+<path d="M1255.3 407.8 L1250.0 407.8 L1244.7 407.8 L1250.0 394.5 Z"></path>
 <g stroke-dasharray="6 6">
-<path d="M1194.5 158.1 L1275.75 188 L1275.75 279.5 L1275.8 279.5 " fill="none"></path>
+<path d="M631.4 141.3 L264.5 218 L264.5 317 L264.5 317.0 " fill="none"></path>
 </g>
-<path d="M1196.4 153.1 L1194.5 158.1 L1192.7 163.1 L1182.0 153.5 Z"></path>
+<path d="M632.5 146.5 L631.4 141.3 L630.4 136.0 L644.5 138.5 Z"></path>
 <g stroke-dasharray="6 6">
-<path d="M1815.7 126.5 L1725.25 188 L1725.25 268 L1725.3 268.0 " fill="none"></path>
+<path d="M803.8 184.1 L792 218 L792 309.5 L792.0 309.5 " fill="none"></path>
 </g>
-<path d="M1818.7 130.9 L1815.7 126.5 L1812.7 122.1 L1826.8 119.0 Z"></path>
+<path d="M808.9 185.8 L803.8 184.1 L798.8 182.3 L808.2 171.5 Z"></path>
+<path d="M3707.9 132.5 L3278.25 218 L3278.25 238 L3278.3 238.0 " fill="none"></path>
+<path d="M3709.0 137.7 L3707.9 132.5 L3706.9 127.2 L3721.0 129.9 Z"></path>
 <g stroke-dasharray="6 6">
-<path d="M1940.8 126.5 L2031.25 188 L2031.25 268 L2031.3 268.0 " fill="none"></path>
+<path d="M1035.3 156.7 L1250 218 L1250 309.5 L1250.0 309.5 " fill="none"></path>
 </g>
-<path d="M1943.8 122.1 L1940.8 126.5 L1937.8 130.9 L1929.7 119.0 Z"></path>
-<path d="M2864.3 122.0 L2694.25 188 L2694.25 268 L2694.3 268.0 " fill="none"></path>
-<path d="M2866.2 127.0 L2864.3 122.0 L2862.4 117.0 L2876.8 117.2 Z"></path>
-<path d="M2984.2 154.2 L2994.75 188 L2994.75 268 L2994.8 268.0 " fill="none"></path>
-<path d="M2989.3 152.6 L2984.2 154.2 L2979.1 155.8 L2980.2 141.5 Z"></path>
-<path d="M3061.0 92.0 L4249.75 188 L4249.75 268 L4249.8 268.0 " fill="none"></path>
-<path d="M3061.5 86.7 L3061.0 92.0 L3060.6 97.3 L3047.8 90.9 Z"></path>
-<path d="M3061.1 90.5 L4551.75 188 L4551.75 260.5 L4551.8 260.5 " fill="none"></path>
-<path d="M3061.4 85.1 L3061.1 90.5 L3060.7 95.8 L3047.8 89.6 Z"></path>
-<path d="M7530.4 91.2 L4848.25 188 L4848.25 223 L4848.3 223.0 " fill="none"></path>
-<path d="M7530.6 96.6 L7530.4 91.2 L7530.2 85.9 L7543.8 90.7 Z"></path>
-<path d="M7530.4 92.3 L5212.75 188 L5212.75 242 L5212.8 242.0 " fill="none"></path>
-<path d="M7530.6 97.6 L7530.4 92.3 L7530.2 86.9 L7543.8 91.7 Z"></path>
-<path d="M7530.4 94.5 L5750.75 188 L5750.75 219.5 L5750.8 219.5 " fill="none"></path>
-<path d="M7530.7 99.8 L7530.4 94.5 L7530.2 89.2 L7543.8 93.8 Z"></path>
-<path d="M7530.4 97.3 L6165.25 188 L6165.25 264.5 L6165.3 264.5 " fill="none"></path>
-<path d="M7530.8 102.6 L7530.4 97.3 L7530.1 92.0 L7543.8 96.4 Z"></path>
-<path d="M7530.5 100.4 L6463.75 188 L6463.75 242 L6463.8 242.0 " fill="none"></path>
-<path d="M7530.9 105.8 L7530.5 100.4 L7530.0 95.1 L7543.8 99.3 Z"></path>
-<path d="M7654.3 102.7 L7304.75 188 L7304.75 249.5 L7304.8 249.5 " fill="none"></path>
-<path d="M7655.6 107.8 L7654.3 102.7 L7653.0 97.5 L7667.3 99.5 Z"></path>
-<path d="M7695.8 106.8 L7571.25 188 L7571.25 257 L7571.3 257.0 " fill="none"></path>
-<path d="M7698.7 111.3 L7695.8 106.8 L7692.9 102.3 L7707.0 99.5 Z"></path>
-<path d="M7755.6 109.0 L7834.25 188 L7834.25 215.5 L7834.3 215.5 " fill="none"></path>
-<path d="M7759.4 105.2 L7755.6 109.0 L7751.8 112.7 L7746.2 99.5 Z"></path>
-<path d="M7797.1 103.2 L8089.75 188 L8089.75 249.5 L8089.8 249.5 " fill="none"></path>
-<path d="M7798.5 98.1 L7797.1 103.2 L7795.6 108.3 L7784.3 99.5 Z"></path>
-<path d="M7847.0 101.5 L8422.25 188 L8422.25 242 L8422.3 242.0 " fill="none"></path>
-<path d="M7847.8 96.2 L7847.0 101.5 L7846.2 106.8 L7833.8 99.5 Z"></path>
-<path d="M7906.0 100.8 L8817.25 188 L8817.25 249.5 L8817.3 249.5 " fill="none"></path>
-<path d="M7906.5 95.5 L7906.0 100.8 L7905.4 106.1 L7892.7 99.5 Z"></path>
+<path d="M1036.8 151.5 L1035.3 156.7 L1033.9 161.8 L1022.5 153.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1862.8 169.8 L1862.75 218 L1862.75 283 L1862.8 283.0 " fill="none"></path>
+</g>
+<path d="M1868.1 169.8 L1862.8 169.8 L1857.4 169.8 L1862.8 156.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M2698.8 134.0 L2474.25 218 L2474.25 298 L2474.3 298.0 " fill="none"></path>
+</g>
+<path d="M2700.6 139.0 L2698.8 134.0 L2696.9 129.0 L2711.3 129.3 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M2847.8 142.2 L2945.25 218 L2945.25 298 L2945.3 298.0 " fill="none"></path>
+</g>
+<path d="M2851.0 138.0 L2847.8 142.2 L2844.5 146.4 L2837.3 134.0 Z"></path>
+<path d="M3708.8 173.3 L3608.25 218 L3608.25 298 L3608.3 298.0 " fill="none"></path>
+<path d="M3711.0 178.2 L3708.8 173.3 L3706.6 168.4 L3721.0 167.9 Z"></path>
+<path d="M3898.5 180.9 L3908.75 218 L3908.75 298 L3908.8 298.0 " fill="none"></path>
+<path d="M3903.7 179.4 L3898.5 180.9 L3893.4 182.3 L3895.0 168.0 Z"></path>
+<path d="M4044.3 112.0 L5418.5 218 L5418.5 298 L5418.5 298.0 " fill="none"></path>
+<path d="M4044.7 106.7 L4044.3 112.0 L4043.9 117.3 L4031.0 111.0 Z"></path>
+<path d="M4044.3 109.9 L5720.5 218 L5720.5 290.5 L5720.5 290.5 " fill="none"></path>
+<path d="M4044.6 104.5 L4044.3 109.9 L4044.0 115.2 L4031.0 109.0 Z"></path>
+<path d="M8953.7 106.6 L6017 218 L6017 253 L6017.0 253.0 " fill="none"></path>
+<path d="M8953.9 111.9 L8953.7 106.6 L8953.5 101.3 L8967.0 106.1 Z"></path>
+<path d="M8953.7 107.6 L6381.5 218 L6381.5 272 L6381.5 272.0 " fill="none"></path>
+<path d="M8953.9 112.9 L8953.7 107.6 L8953.5 102.3 L8967.0 107.0 Z"></path>
+<path d="M8953.7 109.7 L6919.5 218 L6919.5 249.5 L6919.5 249.5 " fill="none"></path>
+<path d="M8954.0 115.0 L8953.7 109.7 L8953.4 104.3 L8967.0 109.0 Z"></path>
+<path d="M8953.7 112.1 L7334 218 L7334 294.5 L7334.0 294.5 " fill="none"></path>
+<path d="M8954.0 117.4 L8953.7 112.1 L8953.3 106.8 L8967.0 111.2 Z"></path>
+<path d="M8953.7 114.7 L7632.5 218 L7632.5 272 L7632.5 272.0 " fill="none"></path>
+<path d="M8954.1 120.0 L8953.7 114.7 L8953.3 109.3 L8967.0 113.6 Z"></path>
+<path d="M9076.0 117.6 L8654.75 218 L8654.75 279.5 L8654.8 279.5 " fill="none"></path>
+<path d="M9077.2 122.8 L9076.0 117.6 L9074.8 112.4 L9089.0 114.5 Z"></path>
+<path d="M9111.8 120.6 L8921.25 218 L8921.25 287 L8921.3 287.0 " fill="none"></path>
+<path d="M9114.2 125.3 L9111.8 120.6 L9109.4 115.8 L9123.7 114.5 Z"></path>
+<path d="M9161.2 127.4 L9184.25 218 L9184.25 245.5 L9184.3 245.5 " fill="none"></path>
+<path d="M9166.4 126.1 L9161.2 127.4 L9156.1 128.7 L9157.9 114.5 Z"></path>
+<path d="M9209.8 119.0 L9486.25 218 L9486.25 268 L9486.3 268.0 " fill="none"></path>
+<path d="M9211.6 114.0 L9209.8 119.0 L9208.0 124.0 L9197.3 114.5 Z"></path>
+<path d="M9263.3 116.6 L9892.25 218 L9892.25 264.5 L9892.3 264.5 " fill="none"></path>
+<path d="M9264.2 111.4 L9263.3 116.6 L9262.5 121.9 L9250.2 114.5 Z"></path>
+<path d="M9318.4 115.9 L10314.25 218 L10314.25 279.5 L10314.3 279.5 " fill="none"></path>
+<path d="M9318.9 110.6 L9318.4 115.9 L9317.8 121.2 L9305.1 114.5 Z"></path>
 <g data-name="ConfigEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="ConfigEntity">
-<rect x="0.0" y="26.5" height="115.0" width="273.0" data-name="ConfigEntity"></rect>
-<path d="M0.0 57.5 L273.0 57.5" fill="none" data-name="ConfigEntity"></path>
-<path d="M0.0 133.5 L273.0 133.5" fill="none" data-name="ConfigEntity"></path>
+<rect x="86.5" y="41.5" height="115.0" width="273.0" data-name="ConfigEntity"></rect>
+<path d="M86.5 72.5 L359.5 72.5" fill="none" data-name="ConfigEntity"></path>
+<path d="M86.5 148.5 L359.5 148.5" fill="none" data-name="ConfigEntity"></path>
 </g>
-<g transform="translate(0, 26.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ConfigEntity">
+<g transform="translate(86.5, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ConfigEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ConfigEntity">
 <a id="src/domain/config/config.entity.ts.ConfigEntity" xlink:href="src/domain/config/config.entity.ts"><text x="128.5" y="13.5" stroke="none" text-anchor="middle" data-name="ConfigEntity">ConfigEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(0, 57.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ConfigEntity">
+<g transform="translate(86.5, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ConfigEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ConfigEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="ConfigEntity">-_sessionValidationType: &quot;jwt&quot;</text>
 <text x="0.0" y="28.5" stroke="none" data-name="ConfigEntity">-_database: AvailableDatabases</text>
@@ -152,7 +176,7 @@
 
 </g>
 </g>
-<g transform="translate(0, 133.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ConfigEntity">
+<g transform="translate(86.5, 148.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ConfigEntity">
 <g transform="translate(8, 8)" fill="#33322E" data-name="ConfigEntity">
 
 </g>
@@ -160,22 +184,23 @@
 </g>
 <g data-name="AuthorizationRepository">
 <g fill="#eee8d5" stroke="#33322E" data-name="AuthorizationRepository">
-<rect x="445.8" y="476.0" height="190.0" width="529.0" data-name="AuthorizationRepository"></rect>
-<path d="M445.8 507.0 L974.8 507.0" fill="none" data-name="AuthorizationRepository"></path>
-<path d="M445.8 515.0 L974.8 515.0" fill="none" data-name="AuthorizationRepository"></path>
+<rect x="0.0" y="506.0" height="213.0" width="529.0" data-name="AuthorizationRepository"></rect>
+<path d="M0.0 537.0 L529.0 537.0" fill="none" data-name="AuthorizationRepository"></path>
+<path d="M0.0 568.0 L529.0 568.0" fill="none" data-name="AuthorizationRepository"></path>
 </g>
-<g transform="translate(445.75, 476)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthorizationRepository">
+<g transform="translate(0, 506)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthorizationRepository">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthorizationRepository">
 <a id="src/infrastructure/authorization/authorization.repository.ts.AuthorizationRepository" xlink:href="src/infrastructure/authorization/authorization.repository.ts"><text x="256.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthorizationRepository">AuthorizationRepository</text></a>
 
 </g>
 </g>
-<g transform="translate(445.75, 507)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepository">
-<g transform="translate(8, 8)" fill="#33322E" data-name="AuthorizationRepository">
+<g transform="translate(0, 537)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepository">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationRepository">
+<text x="0.0" y="13.5" stroke="none" data-name="AuthorizationRepository">-_cacheManager: CacheInterface</text>
 
 </g>
 </g>
-<g transform="translate(445.75, 515)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepository">
+<g transform="translate(0, 568)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepository">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationRepository">
 <text x="0.0" y="13.5" stroke="none" data-name="AuthorizationRepository">+create(): Promise&lt;AuthorizationEntity&gt;</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AuthorizationRepository">+delete(): Promise&lt;boolean&gt;</text>
@@ -192,47 +217,156 @@
 </g>
 <g data-name="AuthorizationRepositoryInterface">
 <g fill="lightblue" stroke="#33322E" data-name="AuthorizationRepositoryInterface">
-<rect x="461.3" y="287.0" height="70.0" width="498.0" data-name="AuthorizationRepositoryInterface"></rect>
-<path d="M461.3 318.0 L959.3 318.0" fill="none" data-name="AuthorizationRepositoryInterface"></path>
-<path d="M461.3 326.0 L959.3 326.0" fill="none" data-name="AuthorizationRepositoryInterface"></path>
+<rect x="15.5" y="317.0" height="70.0" width="498.0" data-name="AuthorizationRepositoryInterface"></rect>
+<path d="M15.5 348.0 L513.5 348.0" fill="none" data-name="AuthorizationRepositoryInterface"></path>
+<path d="M15.5 356.0 L513.5 356.0" fill="none" data-name="AuthorizationRepositoryInterface"></path>
 </g>
-<g transform="translate(461.25, 287)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepositoryInterface">
+<g transform="translate(15.5, 317)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepositoryInterface">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthorizationRepositoryInterface">
 <a id="src/domain/authorization/repository/authorization.repository.interface.ts.AuthorizationRepositoryInterface" xlink:href="src/domain/authorization/repository/authorization.repository.interface.ts"><text x="241.0" y="13.5" stroke="none" text-anchor="middle" data-name="AuthorizationRepositoryInterface">AuthorizationRepositoryInterface</text></a>
 
 </g>
 </g>
-<g transform="translate(461.25, 318)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepositoryInterface">
+<g transform="translate(15.5, 348)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepositoryInterface">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AuthorizationRepositoryInterface">
 
 </g>
 </g>
-<g transform="translate(461.25, 326)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepositoryInterface">
+<g transform="translate(15.5, 356)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationRepositoryInterface">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationRepositoryInterface">
 <text x="0.0" y="13.5" stroke="none" data-name="AuthorizationRepositoryInterface">+findPermissionsByUserUuid(): Promise&lt;AuthorizationEntity&gt;</text>
 
 </g>
 </g>
 </g>
+<g data-name="RbacRepository">
+<g fill="#eee8d5" stroke="#33322E" data-name="RbacRepository">
+<rect x="569.0" y="510.0" height="205.0" width="446.0" data-name="RbacRepository"></rect>
+<path d="M569.0 541.0 L1015.0 541.0" fill="none" data-name="RbacRepository"></path>
+<path d="M569.0 549.0 L1015.0 549.0" fill="none" data-name="RbacRepository"></path>
+</g>
+<g transform="translate(569, 510)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacRepository">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacRepository">
+<a id="src/infrastructure/authorization/rbac.repository.ts.RbacRepository" xlink:href="src/infrastructure/authorization/rbac.repository.ts"><text x="215.0" y="13.5" stroke="none" text-anchor="middle" data-name="RbacRepository">RbacRepository</text></a>
+
+</g>
+</g>
+<g transform="translate(569, 541)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRepository">
+<g transform="translate(8, 8)" fill="#33322E" data-name="RbacRepository">
+
+</g>
+</g>
+<g transform="translate(569, 549)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRepository">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacRepository">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacRepository">+getPermissions(): Promise&lt;PermissionEntity[]&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RbacRepository">+getRoles(): Promise&lt;RoleEntity[]&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="RbacRepository">+create(): Promise&lt;RbacRepositoryInterface&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="RbacRepository">+delete(): Promise&lt;boolean&gt;</text>
+<text x="0.0" y="73.5" stroke="none" data-name="RbacRepository">+findAll(): Promise&lt;RbacRepositoryInterface[]&gt;</text>
+<text x="0.0" y="88.5" stroke="none" data-name="RbacRepository">+findOne(): Promise&lt;RbacRepositoryInterface&gt;</text>
+<text x="0.0" y="103.5" stroke="none" data-name="RbacRepository">+findOneByUuid(): Promise&lt;RbacRepositoryInterface&gt;</text>
+<text x="0.0" y="118.5" stroke="none" data-name="RbacRepository">+update(): Promise&lt;RbacRepositoryInterface&gt;</text>
+<text x="0.0" y="133.5" stroke="none" data-name="RbacRepository">+createRole(): Promise&lt;RoleEntity&gt;</text>
+<text x="0.0" y="148.5" stroke="none" data-name="RbacRepository">+createPermission(): Promise&lt;PermissionEntity&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="RbacRepositoryInterface">
+<g fill="lightblue" stroke="#33322E" data-name="RbacRepositoryInterface">
+<rect x="651.0" y="309.5" height="85.0" width="282.0" data-name="RbacRepositoryInterface"></rect>
+<path d="M651.0 340.5 L933.0 340.5" fill="none" data-name="RbacRepositoryInterface"></path>
+<path d="M651.0 348.5 L933.0 348.5" fill="none" data-name="RbacRepositoryInterface"></path>
+</g>
+<g transform="translate(651, 309.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRepositoryInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacRepositoryInterface">
+<a id="src/domain/authorization/repository/rbac.repository.interface.ts.RbacRepositoryInterface" xlink:href="src/domain/authorization/repository/rbac.repository.interface.ts"><text x="133.0" y="13.5" stroke="none" text-anchor="middle" data-name="RbacRepositoryInterface">RbacRepositoryInterface</text></a>
+
+</g>
+</g>
+<g transform="translate(651, 340.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRepositoryInterface">
+<g transform="translate(8, 8)" fill="#33322E" data-name="RbacRepositoryInterface">
+
+</g>
+</g>
+<g transform="translate(651, 348.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRepositoryInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacRepositoryInterface">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacRepositoryInterface">+getPermissions(): Promise&lt;any&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RbacRepositoryInterface">+getRoles(): Promise&lt;any&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="CacheManager">
+<g fill="#eee8d5" stroke="#33322E" data-name="CacheManager">
+<rect x="399.5" y="64.0" height="70.0" width="205.0" data-name="CacheManager"></rect>
+<path d="M399.5 95.0 L604.5 95.0" fill="none" data-name="CacheManager"></path>
+<path d="M399.5 126.0 L604.5 126.0" fill="none" data-name="CacheManager"></path>
+</g>
+<g transform="translate(399.5, 64)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="CacheManager">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="CacheManager">
+<a id="src/infrastructure/cache/cache-manager.ts.CacheManager" xlink:href="src/infrastructure/cache/cache-manager.ts"><text x="94.5" y="13.5" stroke="none" text-anchor="middle" data-name="CacheManager">CacheManager</text></a>
+
+</g>
+</g>
+<g transform="translate(399.5, 95)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CacheManager">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CacheManager">
+<text x="0.0" y="13.5" stroke="none" data-name="CacheManager">-_client: CacheInterface</text>
+
+</g>
+</g>
+<g transform="translate(399.5, 126)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CacheManager">
+<g transform="translate(8, 8)" fill="#33322E" data-name="CacheManager">
+
+</g>
+</g>
+</g>
+<g data-name="CacheInterface">
+<g fill="lightblue" stroke="#33322E" data-name="CacheInterface">
+<rect x="1794.3" y="41.5" height="115.0" width="137.0" data-name="CacheInterface"></rect>
+<path d="M1794.3 72.5 L1931.3 72.5" fill="none" data-name="CacheInterface"></path>
+<path d="M1794.3 80.5 L1931.3 80.5" fill="none" data-name="CacheInterface"></path>
+</g>
+<g transform="translate(1794.25, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CacheInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="CacheInterface">
+<a id="src/infrastructure/cache/cache.interface.ts.CacheInterface" xlink:href="src/infrastructure/cache/cache.interface.ts"><text x="60.5" y="13.5" stroke="none" text-anchor="middle" data-name="CacheInterface">CacheInterface</text></a>
+
+</g>
+</g>
+<g transform="translate(1794.25, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CacheInterface">
+<g transform="translate(8, 8)" fill="#33322E" data-name="CacheInterface">
+
+</g>
+</g>
+<g transform="translate(1794.25, 80.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CacheInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CacheInterface">
+<text x="0.0" y="13.5" stroke="none" data-name="CacheInterface">+get(): any</text>
+<text x="0.0" y="28.5" stroke="none" data-name="CacheInterface">+set(): void</text>
+<text x="0.0" y="43.5" stroke="none" data-name="CacheInterface">+delete(): void</text>
+<text x="0.0" y="58.5" stroke="none" data-name="CacheInterface">+clear(): void</text>
+
+</g>
+</g>
+</g>
 <g data-name="DatabaseHandler">
 <g fill="#eee8d5" stroke="#33322E" data-name="DatabaseHandler">
-<rect x="313.0" y="49.0" height="70.0" width="248.0" data-name="DatabaseHandler"></rect>
-<path d="M313.0 80.0 L561.0 80.0" fill="none" data-name="DatabaseHandler"></path>
-<path d="M313.0 111.0 L561.0 111.0" fill="none" data-name="DatabaseHandler"></path>
+<rect x="1303.3" y="64.0" height="70.0" width="248.0" data-name="DatabaseHandler"></rect>
+<path d="M1303.3 95.0 L1551.3 95.0" fill="none" data-name="DatabaseHandler"></path>
+<path d="M1303.3 126.0 L1551.3 126.0" fill="none" data-name="DatabaseHandler"></path>
 </g>
-<g transform="translate(313, 49)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DatabaseHandler">
+<g transform="translate(1303.25, 64)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DatabaseHandler">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DatabaseHandler">
 <a id="src/infrastructure/db/database-handler.ts.DatabaseHandler" xlink:href="src/infrastructure/db/database-handler.ts"><text x="116.0" y="13.5" stroke="none" text-anchor="middle" data-name="DatabaseHandler">DatabaseHandler</text></a>
 
 </g>
 </g>
-<g transform="translate(313, 80)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandler">
+<g transform="translate(1303.25, 95)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandler">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DatabaseHandler">
 <text x="0.0" y="13.5" stroke="none" data-name="DatabaseHandler">-_handler: DatabaseInterface</text>
 
 </g>
 </g>
-<g transform="translate(313, 111)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandler">
+<g transform="translate(1303.25, 126)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandler">
 <g transform="translate(8, 8)" fill="#33322E" data-name="DatabaseHandler">
 
 </g>
@@ -240,16 +374,16 @@
 </g>
 <g data-name="DatabaseHandlers">
 <g fill="lightgreen" stroke="#33322E" data-name="DatabaseHandlers">
-<rect x="601.0" y="45.5" height="77.0" width="163.0" data-name="DatabaseHandlers"></rect>
-<path d="M601.0 76.5 L764.0 76.5" fill="none" data-name="DatabaseHandlers"></path>
+<rect x="1591.3" y="60.5" height="77.0" width="163.0" data-name="DatabaseHandlers"></rect>
+<path d="M1591.3 91.5 L1754.3 91.5" fill="none" data-name="DatabaseHandlers"></path>
 </g>
-<g transform="translate(601, 45.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandlers">
+<g transform="translate(1591.25, 60.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandlers">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DatabaseHandlers">
 <a id="src/infrastructure/db/database-handler.ts.DatabaseHandlers" xlink:href="src/infrastructure/db/database-handler.ts"><text x="73.5" y="13.5" stroke="none" text-anchor="middle" data-name="DatabaseHandlers">DatabaseHandlers</text></a>
 
 </g>
 </g>
-<g transform="translate(601, 76.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandlers">
+<g transform="translate(1591.25, 91.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseHandlers">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DatabaseHandlers">
 <text x="0.0" y="13.5" stroke="none" data-name="DatabaseHandlers">SQLITE</text>
 <text x="0.0" y="28.5" stroke="none" data-name="DatabaseHandlers">POSTGRES</text>
@@ -259,46 +393,97 @@
 </g>
 <g data-name="DatabaseInterface">
 <g fill="lightblue" stroke="#33322E" data-name="DatabaseInterface">
-<rect x="1797.3" y="49.0" height="70.0" width="162.0" data-name="DatabaseInterface"></rect>
-<path d="M1797.3 80.0 L1959.3 80.0" fill="none" data-name="DatabaseInterface"></path>
-<path d="M1797.3 88.0 L1959.3 88.0" fill="none" data-name="DatabaseInterface"></path>
+<rect x="2711.3" y="64.0" height="70.0" width="162.0" data-name="DatabaseInterface"></rect>
+<path d="M2711.3 95.0 L2873.3 95.0" fill="none" data-name="DatabaseInterface"></path>
+<path d="M2711.3 103.0 L2873.3 103.0" fill="none" data-name="DatabaseInterface"></path>
 </g>
-<g transform="translate(1797.25, 49)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseInterface">
+<g transform="translate(2711.25, 64)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseInterface">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DatabaseInterface">
 <a id="src/infrastructure/db/database.interface.ts.DatabaseInterface" xlink:href="src/infrastructure/db/database.interface.ts"><text x="73.0" y="13.5" stroke="none" text-anchor="middle" data-name="DatabaseInterface">DatabaseInterface</text></a>
 
 </g>
 </g>
-<g transform="translate(1797.25, 80)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseInterface">
+<g transform="translate(2711.25, 95)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseInterface">
 <g transform="translate(8, 8)" fill="#33322E" data-name="DatabaseInterface">
 
 </g>
 </g>
-<g transform="translate(1797.25, 88)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseInterface">
+<g transform="translate(2711.25, 103)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DatabaseInterface">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DatabaseInterface">
 <text x="0.0" y="13.5" stroke="none" data-name="DatabaseInterface">+init(): Sequelize</text>
 
 </g>
 </g>
 </g>
+<g data-name="LogHandler">
+<g fill="#eee8d5" stroke="#33322E" data-name="LogHandler">
+<rect x="1971.3" y="52.5" height="93.0" width="288.0" data-name="LogHandler"></rect>
+<path d="M1971.3 83.5 L2259.3 83.5" fill="none" data-name="LogHandler"></path>
+<path d="M1971.3 114.5 L2259.3 114.5" fill="none" data-name="LogHandler"></path>
+</g>
+<g transform="translate(1971.25, 52.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="LogHandler">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="LogHandler">
+<a id="src/infrastructure/log/log-handler.ts.LogHandler" xlink:href="src/infrastructure/log/log-handler.ts"><text x="136.0" y="13.5" stroke="none" text-anchor="middle" data-name="LogHandler">LogHandler</text></a>
+
+</g>
+</g>
+<g transform="translate(1971.25, 83.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LogHandler">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="LogHandler">
+<text x="0.0" y="13.5" stroke="none" data-name="LogHandler">-static instance: any</text>
+
+</g>
+</g>
+<g transform="translate(1971.25, 114.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LogHandler">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="LogHandler">
+<text x="0.0" y="13.5" stroke="none" data-name="LogHandler">+static getInstance(): LogInterface</text>
+
+</g>
+</g>
+</g>
+<g data-name="LogInterface">
+<g fill="lightblue" stroke="#33322E" data-name="LogInterface">
+<rect x="2299.3" y="49.0" height="100.0" width="372.0" data-name="LogInterface"></rect>
+<path d="M2299.3 80.0 L2671.3 80.0" fill="none" data-name="LogInterface"></path>
+<path d="M2299.3 141.0 L2671.3 141.0" fill="none" data-name="LogInterface"></path>
+</g>
+<g transform="translate(2299.25, 49)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LogInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="LogInterface">
+<a id="src/infrastructure/log/log.interface.ts.LogInterface" xlink:href="src/infrastructure/log/log.interface.ts"><text x="178.0" y="13.5" stroke="none" text-anchor="middle" data-name="LogInterface">LogInterface</text></a>
+
+</g>
+</g>
+<g transform="translate(2299.25, 80)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LogInterface">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="LogInterface">
+<text x="0.0" y="13.5" stroke="none" data-name="LogInterface">+log: (message: string, level?: string) =&gt; void</text>
+<text x="0.0" y="28.5" stroke="none" data-name="LogInterface">+info: (message: string) =&gt; void</text>
+<text x="0.0" y="43.5" stroke="none" data-name="LogInterface">+error: (message: string) =&gt; void</text>
+
+</g>
+</g>
+<g transform="translate(2299.25, 141)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LogInterface">
+<g transform="translate(8, 8)" fill="#33322E" data-name="LogInterface">
+
+</g>
+</g>
+</g>
 <g data-name="UserRepository">
 <g fill="#eee8d5" stroke="#33322E" data-name="UserRepository">
-<rect x="1080.8" y="483.5" height="175.0" width="390.0" data-name="UserRepository"></rect>
-<path d="M1080.8 514.5 L1470.8 514.5" fill="none" data-name="UserRepository"></path>
-<path d="M1080.8 522.5 L1470.8 522.5" fill="none" data-name="UserRepository"></path>
+<rect x="1055.0" y="525.0" height="175.0" width="390.0" data-name="UserRepository"></rect>
+<path d="M1055.0 556.0 L1445.0 556.0" fill="none" data-name="UserRepository"></path>
+<path d="M1055.0 564.0 L1445.0 564.0" fill="none" data-name="UserRepository"></path>
 </g>
-<g transform="translate(1080.75, 483.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserRepository">
+<g transform="translate(1055, 525)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserRepository">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserRepository">
 <a id="src/infrastructure/user/user.repository.ts.UserRepository" xlink:href="src/infrastructure/user/user.repository.ts"><text x="187.0" y="13.5" stroke="none" text-anchor="middle" data-name="UserRepository">UserRepository</text></a>
 
 </g>
 </g>
-<g transform="translate(1080.75, 514.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepository">
+<g transform="translate(1055, 556)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepository">
 <g transform="translate(8, 8)" fill="#33322E" data-name="UserRepository">
 
 </g>
 </g>
-<g transform="translate(1080.75, 522.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepository">
+<g transform="translate(1055, 564)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepository">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserRepository">
 <text x="0.0" y="13.5" stroke="none" data-name="UserRepository">+create(): Promise&lt;UserEntity&gt;</text>
 <text x="0.0" y="28.5" stroke="none" data-name="UserRepository">+delete(): Promise&lt;boolean&gt;</text>
@@ -314,24 +499,24 @@
 </g>
 <g data-name="UserRepositoryInterface">
 <g fill="lightblue" stroke="#33322E" data-name="UserRepositoryInterface">
-<rect x="999.3" y="279.5" height="85.0" width="553.0" data-name="UserRepositoryInterface"></rect>
-<path d="M999.3 310.5 L1552.3 310.5" fill="none" data-name="UserRepositoryInterface"></path>
-<path d="M999.3 356.5 L1552.3 356.5" fill="none" data-name="UserRepositoryInterface"></path>
+<rect x="973.5" y="309.5" height="85.0" width="553.0" data-name="UserRepositoryInterface"></rect>
+<path d="M973.5 340.5 L1526.5 340.5" fill="none" data-name="UserRepositoryInterface"></path>
+<path d="M973.5 386.5 L1526.5 386.5" fill="none" data-name="UserRepositoryInterface"></path>
 </g>
-<g transform="translate(999.25, 279.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepositoryInterface">
+<g transform="translate(973.5, 309.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepositoryInterface">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserRepositoryInterface">
 <a id="src/domain/user/repository/user.repository.interface.ts.UserRepositoryInterface" xlink:href="src/domain/user/repository/user.repository.interface.ts"><text x="268.5" y="13.5" stroke="none" text-anchor="middle" data-name="UserRepositoryInterface">UserRepositoryInterface</text></a>
 
 </g>
 </g>
-<g transform="translate(999.25, 310.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepositoryInterface">
+<g transform="translate(973.5, 340.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepositoryInterface">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserRepositoryInterface">
 <text x="0.0" y="13.5" stroke="none" data-name="UserRepositoryInterface">+findByEmailOrFail: (email: string) =&gt; Promise&lt;UserEntity&gt;</text>
 <text x="0.0" y="28.5" stroke="none" data-name="UserRepositoryInterface">+findByUsernameOrFail: (username: string) =&gt; Promise&lt;UserEntity&gt;</text>
 
 </g>
 </g>
-<g transform="translate(999.25, 356.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepositoryInterface">
+<g transform="translate(973.5, 386.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRepositoryInterface">
 <g transform="translate(8, 8)" fill="#33322E" data-name="UserRepositoryInterface">
 
 </g>
@@ -339,17 +524,17 @@
 </g>
 <g data-name="BaseEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="BaseEntity">
-<rect x="2876.8" y="26.5" height="115.0" width="171.0" data-name="BaseEntity"></rect>
-<path d="M2876.8 57.5 L3047.8 57.5" fill="none" data-name="BaseEntity"></path>
-<path d="M2876.8 133.5 L3047.8 133.5" fill="none" data-name="BaseEntity"></path>
+<rect x="3721.0" y="30.0" height="138.0" width="310.0" data-name="BaseEntity"></rect>
+<path d="M3721.0 61.0 L4031.0 61.0" fill="none" data-name="BaseEntity"></path>
+<path d="M3721.0 137.0 L4031.0 137.0" fill="none" data-name="BaseEntity"></path>
 </g>
-<g transform="translate(2876.75, 26.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="BaseEntity">
+<g transform="translate(3721, 30)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="BaseEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="BaseEntity">
-<a id="src/domain/@shared/entity/base.entity.ts.BaseEntity" xlink:href="src/domain/@shared/entity/base.entity.ts"><text x="77.5" y="13.5" stroke="none" text-anchor="middle" data-name="BaseEntity">BaseEntity</text></a>
+<a id="src/domain/@shared/entity/base.entity.ts.BaseEntity" xlink:href="src/domain/@shared/entity/base.entity.ts"><text x="147.0" y="13.5" stroke="none" text-anchor="middle" data-name="BaseEntity">BaseEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(2876.75, 57.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseEntity">
+<g transform="translate(3721, 61)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="BaseEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="BaseEntity">#_createdAt: Date</text>
 <text x="0.0" y="28.5" stroke="none" data-name="BaseEntity">#_updatedAt: Date</text>
@@ -358,25 +543,26 @@
 
 </g>
 </g>
-<g transform="translate(2876.75, 133.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseEntity">
-<g transform="translate(8, 8)" fill="#33322E" data-name="BaseEntity">
+<g transform="translate(3721, 137)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="BaseEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="BaseEntity">+toJSON(): Record&lt;string, unknown&gt;</text>
 
 </g>
 </g>
 </g>
 <g data-name="BaseRepositoryInterface&lt;T&gt;">
 <g fill="lightblue" stroke="#33322E" data-name="BaseRepositoryInterface&lt;T&gt;">
-<rect x="804.0" y="11.5" height="145.0" width="378.0" data-name="BaseRepositoryInterface&lt;T&gt;"></rect>
-<path d="M804.0 42.5 L1182.0 42.5" fill="none" data-name="BaseRepositoryInterface&lt;T&gt;"></path>
-<path d="M804.0 148.5 L1182.0 148.5" fill="none" data-name="BaseRepositoryInterface&lt;T&gt;"></path>
+<rect x="644.5" y="26.5" height="145.0" width="378.0" data-name="BaseRepositoryInterface&lt;T&gt;"></rect>
+<path d="M644.5 57.5 L1022.5 57.5" fill="none" data-name="BaseRepositoryInterface&lt;T&gt;"></path>
+<path d="M644.5 163.5 L1022.5 163.5" fill="none" data-name="BaseRepositoryInterface&lt;T&gt;"></path>
 </g>
-<g transform="translate(804, 11.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseRepositoryInterface&lt;T&gt;">
+<g transform="translate(644.5, 26.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseRepositoryInterface&lt;T&gt;">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="BaseRepositoryInterface&lt;T&gt;">
 <a id="src/domain/@shared/repository/base.repository.interface.ts.BaseRepositoryInterface&lt;T&gt;" xlink:href="src/domain/@shared/repository/base.repository.interface.ts"><text x="181.0" y="13.5" stroke="none" text-anchor="middle" data-name="BaseRepositoryInterface&lt;T&gt;">BaseRepositoryInterface&lt;T&gt;</text></a>
 
 </g>
 </g>
-<g transform="translate(804, 42.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseRepositoryInterface&lt;T&gt;">
+<g transform="translate(644.5, 57.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseRepositoryInterface&lt;T&gt;">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="BaseRepositoryInterface&lt;T&gt;">
 <text x="0.0" y="13.5" stroke="none" data-name="BaseRepositoryInterface&lt;T&gt;">+create: (entity: T) =&gt; Promise&lt;T&gt;</text>
 <text x="0.0" y="28.5" stroke="none" data-name="BaseRepositoryInterface&lt;T&gt;">+update: (entity: T) =&gt; Promise&lt;T&gt;</text>
@@ -387,7 +573,7 @@
 
 </g>
 </g>
-<g transform="translate(804, 148.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseRepositoryInterface&lt;T&gt;">
+<g transform="translate(644.5, 163.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseRepositoryInterface&lt;T&gt;">
 <g transform="translate(8, 8)" fill="#33322E" data-name="BaseRepositoryInterface&lt;T&gt;">
 
 </g>
@@ -395,24 +581,24 @@
 </g>
 <g data-name="AuthenticationEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="AuthenticationEntity">
-<rect x="3087.8" y="41.5" height="85.0" width="173.0" data-name="AuthenticationEntity"></rect>
-<path d="M3087.8 72.5 L3260.8 72.5" fill="none" data-name="AuthenticationEntity"></path>
-<path d="M3087.8 118.5 L3260.8 118.5" fill="none" data-name="AuthenticationEntity"></path>
+<rect x="4071.0" y="56.5" height="85.0" width="173.0" data-name="AuthenticationEntity"></rect>
+<path d="M4071.0 87.5 L4244.0 87.5" fill="none" data-name="AuthenticationEntity"></path>
+<path d="M4071.0 133.5 L4244.0 133.5" fill="none" data-name="AuthenticationEntity"></path>
 </g>
-<g transform="translate(3087.75, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthenticationEntity">
+<g transform="translate(4071, 56.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthenticationEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthenticationEntity">
 <a id="src/domain/authentication/entity/authentication.entity.ts.AuthenticationEntity" xlink:href="src/domain/authentication/entity/authentication.entity.ts"><text x="78.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthenticationEntity">AuthenticationEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(3087.75, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntity">
+<g transform="translate(4071, 87.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthenticationEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="AuthenticationEntity">-_user: UserEntity</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AuthenticationEntity">-_session: Session</text>
 
 </g>
 </g>
-<g transform="translate(3087.75, 118.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntity">
+<g transform="translate(4071, 133.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntity">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AuthenticationEntity">
 
 </g>
@@ -420,23 +606,23 @@
 </g>
 <g data-name="AuthenticationEntityConstructor">
 <g fill="lightblue" stroke="#33322E" data-name="AuthenticationEntityConstructor">
-<rect x="3300.8" y="49.0" height="70.0" width="265.0" data-name="AuthenticationEntityConstructor"></rect>
-<path d="M3300.8 80.0 L3565.8 80.0" fill="none" data-name="AuthenticationEntityConstructor"></path>
-<path d="M3300.8 111.0 L3565.8 111.0" fill="none" data-name="AuthenticationEntityConstructor"></path>
+<rect x="4284.0" y="64.0" height="70.0" width="265.0" data-name="AuthenticationEntityConstructor"></rect>
+<path d="M4284.0 95.0 L4549.0 95.0" fill="none" data-name="AuthenticationEntityConstructor"></path>
+<path d="M4284.0 126.0 L4549.0 126.0" fill="none" data-name="AuthenticationEntityConstructor"></path>
 </g>
-<g transform="translate(3300.75, 49)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntityConstructor">
+<g transform="translate(4284, 64)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntityConstructor">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthenticationEntityConstructor">
 <a id="src/domain/authentication/entity/authentication.entity.ts.AuthenticationEntityConstructor" xlink:href="src/domain/authentication/entity/authentication.entity.ts"><text x="124.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthenticationEntityConstructor">AuthenticationEntityConstructor</text></a>
 
 </g>
 </g>
-<g transform="translate(3300.75, 80)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntityConstructor">
+<g transform="translate(4284, 95)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntityConstructor">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthenticationEntityConstructor">
 <text x="0.0" y="13.5" stroke="none" data-name="AuthenticationEntityConstructor">+user: UserEntity</text>
 
 </g>
 </g>
-<g transform="translate(3300.75, 111)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntityConstructor">
+<g transform="translate(4284, 126)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationEntityConstructor">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AuthenticationEntityConstructor">
 
 </g>
@@ -444,23 +630,23 @@
 </g>
 <g data-name="Session">
 <g fill="lightblue" stroke="#33322E" data-name="Session">
-<rect x="3605.8" y="49.0" height="70.0" width="124.0" data-name="Session"></rect>
-<path d="M3605.8 80.0 L3729.8 80.0" fill="none" data-name="Session"></path>
-<path d="M3605.8 111.0 L3729.8 111.0" fill="none" data-name="Session"></path>
+<rect x="4589.0" y="64.0" height="70.0" width="124.0" data-name="Session"></rect>
+<path d="M4589.0 95.0 L4713.0 95.0" fill="none" data-name="Session"></path>
+<path d="M4589.0 126.0 L4713.0 126.0" fill="none" data-name="Session"></path>
 </g>
-<g transform="translate(3605.75, 49)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Session">
+<g transform="translate(4589, 64)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Session">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Session">
 <a id="src/domain/authentication/entity/authentication.entity.ts.Session" xlink:href="src/domain/authentication/entity/authentication.entity.ts"><text x="54.0" y="13.5" stroke="none" text-anchor="middle" data-name="Session">Session</text></a>
 
 </g>
 </g>
-<g transform="translate(3605.75, 80)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Session">
+<g transform="translate(4589, 95)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Session">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Session">
 <text x="0.0" y="13.5" stroke="none" data-name="Session">+token: string</text>
 
 </g>
 </g>
-<g transform="translate(3605.75, 111)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Session">
+<g transform="translate(4589, 126)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Session">
 <g transform="translate(8, 8)" fill="#33322E" data-name="Session">
 
 </g>
@@ -468,23 +654,23 @@
 </g>
 <g data-name="AuthenticationService">
 <g fill="#eee8d5" stroke="#33322E" data-name="AuthenticationService">
-<rect x="3769.8" y="37.5" height="93.0" width="387.0" data-name="AuthenticationService"></rect>
-<path d="M3769.8 68.5 L4156.8 68.5" fill="none" data-name="AuthenticationService"></path>
-<path d="M3769.8 99.5 L4156.8 99.5" fill="none" data-name="AuthenticationService"></path>
+<rect x="4753.0" y="52.5" height="93.0" width="387.0" data-name="AuthenticationService"></rect>
+<path d="M4753.0 83.5 L5140.0 83.5" fill="none" data-name="AuthenticationService"></path>
+<path d="M4753.0 114.5 L5140.0 114.5" fill="none" data-name="AuthenticationService"></path>
 </g>
-<g transform="translate(3769.75, 37.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthenticationService">
+<g transform="translate(4753, 52.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthenticationService">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthenticationService">
 <a id="src/domain/authentication/service/authentication.service.ts.AuthenticationService" xlink:href="src/domain/authentication/service/authentication.service.ts"><text x="185.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthenticationService">AuthenticationService</text></a>
 
 </g>
 </g>
-<g transform="translate(3769.75, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationService">
+<g transform="translate(4753, 83.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationService">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthenticationService">
 <text x="0.0" y="13.5" stroke="none" data-name="AuthenticationService">-_userService: UserService</text>
 
 </g>
 </g>
-<g transform="translate(3769.75, 99.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationService">
+<g transform="translate(4753, 114.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthenticationService">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthenticationService">
 <text x="0.0" y="13.5" stroke="none" data-name="AuthenticationService">+authenticate(): Promise&lt;AuthenticationEntity&gt;</text>
 
@@ -493,24 +679,24 @@
 </g>
 <g data-name="AuthorizationEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="AuthorizationEntity">
-<rect x="4196.8" y="41.5" height="85.0" width="165.0" data-name="AuthorizationEntity"></rect>
-<path d="M4196.8 72.5 L4361.8 72.5" fill="none" data-name="AuthorizationEntity"></path>
-<path d="M4196.8 118.5 L4361.8 118.5" fill="none" data-name="AuthorizationEntity"></path>
+<rect x="5180.0" y="56.5" height="85.0" width="165.0" data-name="AuthorizationEntity"></rect>
+<path d="M5180.0 87.5 L5345.0 87.5" fill="none" data-name="AuthorizationEntity"></path>
+<path d="M5180.0 133.5 L5345.0 133.5" fill="none" data-name="AuthorizationEntity"></path>
 </g>
-<g transform="translate(4196.75, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthorizationEntity">
+<g transform="translate(5180, 56.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthorizationEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthorizationEntity">
 <a id="src/domain/authorization/entity/authorization.entity.ts.AuthorizationEntity" xlink:href="src/domain/authorization/entity/authorization.entity.ts"><text x="74.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthorizationEntity">AuthorizationEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(4196.75, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationEntity">
+<g transform="translate(5180, 87.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="AuthorizationEntity">-_rbac: RbacEntity</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AuthorizationEntity">-_abac: AbacEntity</text>
 
 </g>
 </g>
-<g transform="translate(4196.75, 118.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationEntity">
+<g transform="translate(5180, 133.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationEntity">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AuthorizationEntity">
 
 </g>
@@ -518,24 +704,24 @@
 </g>
 <g data-name="AuthorizationTypes">
 <g fill="lightblue" stroke="#33322E" data-name="AuthorizationTypes">
-<rect x="4401.8" y="41.5" height="85.0" width="169.0" data-name="AuthorizationTypes"></rect>
-<path d="M4401.8 72.5 L4570.8 72.5" fill="none" data-name="AuthorizationTypes"></path>
-<path d="M4401.8 118.5 L4570.8 118.5" fill="none" data-name="AuthorizationTypes"></path>
+<rect x="5385.0" y="56.5" height="85.0" width="169.0" data-name="AuthorizationTypes"></rect>
+<path d="M5385.0 87.5 L5554.0 87.5" fill="none" data-name="AuthorizationTypes"></path>
+<path d="M5385.0 133.5 L5554.0 133.5" fill="none" data-name="AuthorizationTypes"></path>
 </g>
-<g transform="translate(4401.75, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationTypes">
+<g transform="translate(5385, 56.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationTypes">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthorizationTypes">
 <a id="src/domain/authorization/entity/authorization.entity.ts.AuthorizationTypes" xlink:href="src/domain/authorization/entity/authorization.entity.ts"><text x="76.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthorizationTypes">AuthorizationTypes</text></a>
 
 </g>
 </g>
-<g transform="translate(4401.75, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationTypes">
+<g transform="translate(5385, 87.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationTypes">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationTypes">
 <text x="0.0" y="13.5" stroke="none" data-name="AuthorizationTypes">+rbac: RbacEntity</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AuthorizationTypes">+abac?: AbacEntity</text>
 
 </g>
 </g>
-<g transform="translate(4401.75, 118.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationTypes">
+<g transform="translate(5385, 133.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationTypes">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AuthorizationTypes">
 
 </g>
@@ -543,23 +729,23 @@
 </g>
 <g data-name="AuthorizationService">
 <g fill="#eee8d5" stroke="#33322E" data-name="AuthorizationService">
-<rect x="4610.8" y="30.0" height="108.0" width="419.0" data-name="AuthorizationService"></rect>
-<path d="M4610.8 61.0 L5029.8 61.0" fill="none" data-name="AuthorizationService"></path>
-<path d="M4610.8 92.0 L5029.8 92.0" fill="none" data-name="AuthorizationService"></path>
+<rect x="5594.0" y="45.0" height="108.0" width="419.0" data-name="AuthorizationService"></rect>
+<path d="M5594.0 76.0 L6013.0 76.0" fill="none" data-name="AuthorizationService"></path>
+<path d="M5594.0 107.0 L6013.0 107.0" fill="none" data-name="AuthorizationService"></path>
 </g>
-<g transform="translate(4610.75, 30)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthorizationService">
+<g transform="translate(5594, 45)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AuthorizationService">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AuthorizationService">
 <a id="src/domain/authorization/service/authorization.service.ts.AuthorizationService" xlink:href="src/domain/authorization/service/authorization.service.ts"><text x="201.5" y="13.5" stroke="none" text-anchor="middle" data-name="AuthorizationService">AuthorizationService</text></a>
 
 </g>
 </g>
-<g transform="translate(4610.75, 61)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationService">
+<g transform="translate(5594, 76)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationService">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationService">
 <text x="0.0" y="13.5" stroke="none" data-name="AuthorizationService">-_authorizationRepository: AuthorizationRepository</text>
 
 </g>
 </g>
-<g transform="translate(4610.75, 92)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationService">
+<g transform="translate(5594, 107)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AuthorizationService">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AuthorizationService">
 <text x="0.0" y="13.5" stroke="none" data-name="AuthorizationService">+checkPermission(): Promise&lt;boolean&gt;</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AuthorizationService">+checkPolicy(): Promise&lt;boolean&gt;</text>
@@ -567,19 +753,47 @@
 </g>
 </g>
 </g>
+<g data-name="RbacService">
+<g fill="#eee8d5" stroke="#33322E" data-name="RbacService">
+<rect x="6053.0" y="30.0" height="138.0" width="400.0" data-name="RbacService"></rect>
+<path d="M6053.0 61.0 L6453.0 61.0" fill="none" data-name="RbacService"></path>
+<path d="M6053.0 92.0 L6453.0 92.0" fill="none" data-name="RbacService"></path>
+</g>
+<g transform="translate(6053, 30)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacService">
+<a id="src/domain/authorization/service/rbac.service.ts.RbacService" xlink:href="src/domain/authorization/service/rbac.service.ts"><text x="192.0" y="13.5" stroke="none" text-anchor="middle" data-name="RbacService">RbacService</text></a>
+
+</g>
+</g>
+<g transform="translate(6053, 61)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacService">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacService">-_rbacRepository: RbacRepository</text>
+
+</g>
+</g>
+<g transform="translate(6053, 92)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacService">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacService">+getPermissions(): Promise&lt;PermissionEntity[]&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RbacService">+getRoles(): Promise&lt;RoleEntity[]&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="RbacService">+createRole(): Promise&lt;RoleEntity&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="RbacService">+createPermission(): Promise&lt;PermissionEntity&gt;</text>
+
+</g>
+</g>
+</g>
 <g data-name="UserEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="UserEntity">
-<rect x="2204.3" y="208.0" height="228.0" width="320.0" data-name="UserEntity"></rect>
-<path d="M2204.3 239.0 L2524.3 239.0" fill="none" data-name="UserEntity"></path>
-<path d="M2204.3 345.0 L2524.3 345.0" fill="none" data-name="UserEntity"></path>
+<rect x="3118.3" y="238.0" height="228.0" width="320.0" data-name="UserEntity"></rect>
+<path d="M3118.3 269.0 L3438.3 269.0" fill="none" data-name="UserEntity"></path>
+<path d="M3118.3 375.0 L3438.3 375.0" fill="none" data-name="UserEntity"></path>
 </g>
-<g transform="translate(2204.25, 208)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserEntity">
+<g transform="translate(3118.25, 238)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserEntity">
 <a id="src/domain/user/entity/user.entity.ts.UserEntity" xlink:href="src/domain/user/entity/user.entity.ts"><text x="152.0" y="13.5" stroke="none" text-anchor="middle" data-name="UserEntity">UserEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(2204.25, 239)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntity">
+<g transform="translate(3118.25, 269)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="UserEntity">-_uuid: string</text>
 <text x="0.0" y="28.5" stroke="none" data-name="UserEntity">-_name: string</text>
@@ -590,7 +804,7 @@
 
 </g>
 </g>
-<g transform="translate(2204.25, 345)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntity">
+<g transform="translate(3118.25, 375)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="UserEntity">+create(): Promise&lt;this&gt;</text>
 <text x="0.0" y="28.5" stroke="none" data-name="UserEntity">+static from(): UserEntity</text>
@@ -603,16 +817,16 @@
 </g>
 <g data-name="UserEntityErrors">
 <g fill="lightgreen" stroke="#33322E" data-name="UserEntityErrors">
-<rect x="5069.8" y="38.0" height="92.0" width="189.0" data-name="UserEntityErrors"></rect>
-<path d="M5069.8 69.0 L5258.8 69.0" fill="none" data-name="UserEntityErrors"></path>
+<rect x="6493.0" y="53.0" height="92.0" width="189.0" data-name="UserEntityErrors"></rect>
+<path d="M6493.0 84.0 L6682.0 84.0" fill="none" data-name="UserEntityErrors"></path>
 </g>
-<g transform="translate(5069.75, 38)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntityErrors">
+<g transform="translate(6493, 53)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntityErrors">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserEntityErrors">
 <a id="src/domain/user/entity/user.entity.ts.UserEntityErrors" xlink:href="src/domain/user/entity/user.entity.ts"><text x="86.5" y="13.5" stroke="none" text-anchor="middle" data-name="UserEntityErrors">UserEntityErrors</text></a>
 
 </g>
 </g>
-<g transform="translate(5069.75, 69)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntityErrors">
+<g transform="translate(6493, 84)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserEntityErrors">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserEntityErrors">
 <text x="0.0" y="13.5" stroke="none" data-name="UserEntityErrors">INVALID_EMAIL</text>
 <text x="0.0" y="28.5" stroke="none" data-name="UserEntityErrors">INVALID_USERNAME</text>
@@ -623,53 +837,83 @@
 </g>
 <g data-name="UserService">
 <g fill="#eee8d5" stroke="#33322E" data-name="UserService">
-<rect x="5298.8" y="0.0" height="168.0" width="419.0" data-name="UserService"></rect>
-<path d="M5298.8 31.0 L5717.8 31.0" fill="none" data-name="UserService"></path>
-<path d="M5298.8 77.0 L5717.8 77.0" fill="none" data-name="UserService"></path>
+<rect x="6722.0" y="0.0" height="198.0" width="419.0" data-name="UserService"></rect>
+<path d="M6722.0 31.0 L7141.0 31.0" fill="none" data-name="UserService"></path>
+<path d="M6722.0 77.0 L7141.0 77.0" fill="none" data-name="UserService"></path>
 </g>
-<g transform="translate(5298.75, 0)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserService">
+<g transform="translate(6722, 0)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserService">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserService">
 <a id="src/domain/user/service/user.service.ts.UserService" xlink:href="src/domain/user/service/user.service.ts"><text x="201.5" y="13.5" stroke="none" text-anchor="middle" data-name="UserService">UserService</text></a>
 
 </g>
 </g>
-<g transform="translate(5298.75, 31)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserService">
+<g transform="translate(6722, 31)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserService">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserService">
 <text x="0.0" y="13.5" stroke="none" data-name="UserService">-_userRepository: UserRepository</text>
 <text x="0.0" y="28.5" stroke="none" data-name="UserService">-_authorizationRepository: AuthorizationRepository</text>
 
 </g>
 </g>
-<g transform="translate(5298.75, 77)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserService">
+<g transform="translate(6722, 77)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserService">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserService">
 <text x="0.0" y="13.5" stroke="none" data-name="UserService">+createUser(): Promise&lt;UserEntity&gt;</text>
-<text x="0.0" y="28.5" stroke="none" data-name="UserService">+findUserWithPermissions(): Promise&lt;UserEntity&gt;</text>
-<text x="0.0" y="43.5" stroke="none" data-name="UserService">+findUserByEmail(): Promise&lt;UserEntity&gt;</text>
-<text x="0.0" y="58.5" stroke="none" data-name="UserService">+findUserByUsername(): Promise&lt;UserEntity&gt;</text>
-<text x="0.0" y="73.5" stroke="none" data-name="UserService">+findAll(): Promise&lt;UserEntity[]&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="UserService">+updateUser(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="UserService">+findUserWithPermissions(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="UserService">+findUserByEmail(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="73.5" stroke="none" data-name="UserService">+findUserByUsername(): Promise&lt;UserEntity&gt;</text>
+<text x="0.0" y="88.5" stroke="none" data-name="UserService">+findAll(): Promise&lt;UserEntity[]&gt;</text>
+<text x="0.0" y="103.5" stroke="none" data-name="UserService">+findByUuid(): Promise&lt;UserEntity&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="RedisClient">
+<g fill="#eee8d5" stroke="#33322E" data-name="RedisClient">
+<rect x="1742.3" y="283.0" height="138.0" width="241.0" data-name="RedisClient"></rect>
+<path d="M1742.3 314.0 L1983.3 314.0" fill="none" data-name="RedisClient"></path>
+<path d="M1742.3 345.0 L1983.3 345.0" fill="none" data-name="RedisClient"></path>
+</g>
+<g transform="translate(1742.25, 283)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RedisClient">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RedisClient">
+<a id="src/infrastructure/cache/redis/redis.client.ts.RedisClient" xlink:href="src/infrastructure/cache/redis/redis.client.ts"><text x="112.5" y="13.5" stroke="none" text-anchor="middle" data-name="RedisClient">RedisClient</text></a>
+
+</g>
+</g>
+<g transform="translate(1742.25, 314)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RedisClient">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RedisClient">
+<text x="0.0" y="13.5" stroke="none" data-name="RedisClient">-_client: Redis</text>
+
+</g>
+</g>
+<g transform="translate(1742.25, 345)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RedisClient">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RedisClient">
+<text x="0.0" y="13.5" stroke="none" data-name="RedisClient">+clear(): Promise&lt;&quot;OK&quot;&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RedisClient">+delete(): Promise&lt;number&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="RedisClient">+get(): Promise&lt;string&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="RedisClient">+set(): void</text>
 
 </g>
 </g>
 </g>
 <g data-name="Postgres">
 <g fill="#eee8d5" stroke="#33322E" data-name="Postgres">
-<rect x="1592.3" y="268.0" height="108.0" width="266.0" data-name="Postgres"></rect>
-<path d="M1592.3 299.0 L1858.3 299.0" fill="none" data-name="Postgres"></path>
-<path d="M1592.3 330.0 L1858.3 330.0" fill="none" data-name="Postgres"></path>
+<rect x="2341.3" y="298.0" height="108.0" width="266.0" data-name="Postgres"></rect>
+<path d="M2341.3 329.0 L2607.3 329.0" fill="none" data-name="Postgres"></path>
+<path d="M2341.3 360.0 L2607.3 360.0" fill="none" data-name="Postgres"></path>
 </g>
-<g transform="translate(1592.25, 268)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Postgres">
+<g transform="translate(2341.25, 298)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Postgres">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Postgres">
 <a id="src/infrastructure/db/pgsql/database.config.ts.Postgres" xlink:href="src/infrastructure/db/pgsql/database.config.ts"><text x="125.0" y="13.5" stroke="none" text-anchor="middle" data-name="Postgres">Postgres</text></a>
 
 </g>
 </g>
-<g transform="translate(1592.25, 299)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Postgres">
+<g transform="translate(2341.25, 329)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Postgres">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Postgres">
 <text x="0.0" y="13.5" stroke="none" data-name="Postgres">-static instance: Sequelize</text>
 
 </g>
 </g>
-<g transform="translate(1592.25, 330)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Postgres">
+<g transform="translate(2341.25, 360)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Postgres">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Postgres">
 <text x="0.0" y="13.5" stroke="none" data-name="Postgres">+static getInstance(): Sequelize</text>
 <text x="0.0" y="28.5" stroke="none" data-name="Postgres">+init(): Sequelize</text>
@@ -679,23 +923,23 @@
 </g>
 <g data-name="Sqlite">
 <g fill="#eee8d5" stroke="#33322E" data-name="Sqlite">
-<rect x="1898.3" y="268.0" height="108.0" width="266.0" data-name="Sqlite"></rect>
-<path d="M1898.3 299.0 L2164.3 299.0" fill="none" data-name="Sqlite"></path>
-<path d="M1898.3 330.0 L2164.3 330.0" fill="none" data-name="Sqlite"></path>
+<rect x="2812.3" y="298.0" height="108.0" width="266.0" data-name="Sqlite"></rect>
+<path d="M2812.3 329.0 L3078.3 329.0" fill="none" data-name="Sqlite"></path>
+<path d="M2812.3 360.0 L3078.3 360.0" fill="none" data-name="Sqlite"></path>
 </g>
-<g transform="translate(1898.25, 268)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Sqlite">
+<g transform="translate(2812.25, 298)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Sqlite">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Sqlite">
 <a id="src/infrastructure/db/sqlite/database.config.ts.Sqlite" xlink:href="src/infrastructure/db/sqlite/database.config.ts"><text x="125.0" y="13.5" stroke="none" text-anchor="middle" data-name="Sqlite">Sqlite</text></a>
 
 </g>
 </g>
-<g transform="translate(1898.25, 299)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Sqlite">
+<g transform="translate(2812.25, 329)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Sqlite">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Sqlite">
 <text x="0.0" y="13.5" stroke="none" data-name="Sqlite">-static instance: Sequelize</text>
 
 </g>
 </g>
-<g transform="translate(1898.25, 330)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Sqlite">
+<g transform="translate(2812.25, 360)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Sqlite">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Sqlite">
 <text x="0.0" y="13.5" stroke="none" data-name="Sqlite">+static getInstance(): Sequelize</text>
 <text x="0.0" y="28.5" stroke="none" data-name="Sqlite">+init(): Sequelize</text>
@@ -705,23 +949,23 @@
 </g>
 <g data-name="AbacEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="AbacEntity">
-<rect x="2564.3" y="268.0" height="108.0" width="260.0" data-name="AbacEntity"></rect>
-<path d="M2564.3 299.0 L2824.3 299.0" fill="none" data-name="AbacEntity"></path>
-<path d="M2564.3 330.0 L2824.3 330.0" fill="none" data-name="AbacEntity"></path>
+<rect x="3478.3" y="298.0" height="108.0" width="260.0" data-name="AbacEntity"></rect>
+<path d="M3478.3 329.0 L3738.3 329.0" fill="none" data-name="AbacEntity"></path>
+<path d="M3478.3 360.0 L3738.3 360.0" fill="none" data-name="AbacEntity"></path>
 </g>
-<g transform="translate(2564.25, 268)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacEntity">
+<g transform="translate(3478.25, 298)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AbacEntity">
 <a id="src/domain/authorization/entity/abac/abac.entity.ts.AbacEntity" xlink:href="src/domain/authorization/entity/abac/abac.entity.ts"><text x="122.0" y="13.5" stroke="none" text-anchor="middle" data-name="AbacEntity">AbacEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(2564.25, 299)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacEntity">
+<g transform="translate(3478.25, 329)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AbacEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="AbacEntity">-_policies: AccessPolicyEntity[]</text>
 
 </g>
 </g>
-<g transform="translate(2564.25, 330)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacEntity">
+<g transform="translate(3478.25, 360)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AbacEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="AbacEntity">+checkPolicy(): boolean</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AbacEntity">+static from(): AbacEntity</text>
@@ -731,17 +975,17 @@
 </g>
 <g data-name="AccessPolicyEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="AccessPolicyEntity">
-<rect x="5757.8" y="15.0" height="138.0" width="307.0" data-name="AccessPolicyEntity"></rect>
-<path d="M5757.8 46.0 L6064.8 46.0" fill="none" data-name="AccessPolicyEntity"></path>
-<path d="M5757.8 107.0 L6064.8 107.0" fill="none" data-name="AccessPolicyEntity"></path>
+<rect x="7181.0" y="30.0" height="138.0" width="307.0" data-name="AccessPolicyEntity"></rect>
+<path d="M7181.0 61.0 L7488.0 61.0" fill="none" data-name="AccessPolicyEntity"></path>
+<path d="M7181.0 122.0 L7488.0 122.0" fill="none" data-name="AccessPolicyEntity"></path>
 </g>
-<g transform="translate(5757.75, 15)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AccessPolicyEntity">
+<g transform="translate(7181, 30)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AccessPolicyEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AccessPolicyEntity">
 <a id="src/domain/authorization/entity/abac/access-policy.entity.ts.AccessPolicyEntity" xlink:href="src/domain/authorization/entity/abac/access-policy.entity.ts"><text x="145.5" y="13.5" stroke="none" text-anchor="middle" data-name="AccessPolicyEntity">AccessPolicyEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(5757.75, 46)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AccessPolicyEntity">
+<g transform="translate(7181, 61)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AccessPolicyEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AccessPolicyEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="AccessPolicyEntity">-_actions: ActionEntity[]</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AccessPolicyEntity">-_userAttributes: AttributeEntity[]</text>
@@ -749,7 +993,7 @@
 
 </g>
 </g>
-<g transform="translate(5757.75, 107)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AccessPolicyEntity">
+<g transform="translate(7181, 122)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AccessPolicyEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AccessPolicyEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="AccessPolicyEntity">+checkPolicy(): boolean</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AccessPolicyEntity">+static from(): AccessPolicyEntity</text>
@@ -759,23 +1003,23 @@
 </g>
 <g data-name="ActionEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="ActionEntity">
-<rect x="6104.8" y="37.5" height="93.0" width="223.0" data-name="ActionEntity"></rect>
-<path d="M6104.8 68.5 L6327.8 68.5" fill="none" data-name="ActionEntity"></path>
-<path d="M6104.8 99.5 L6327.8 99.5" fill="none" data-name="ActionEntity"></path>
+<rect x="7528.0" y="52.5" height="93.0" width="223.0" data-name="ActionEntity"></rect>
+<path d="M7528.0 83.5 L7751.0 83.5" fill="none" data-name="ActionEntity"></path>
+<path d="M7528.0 114.5 L7751.0 114.5" fill="none" data-name="ActionEntity"></path>
 </g>
-<g transform="translate(6104.75, 37.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ActionEntity">
+<g transform="translate(7528, 52.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ActionEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ActionEntity">
 <a id="src/domain/authorization/entity/abac/action.entity.ts.ActionEntity" xlink:href="src/domain/authorization/entity/abac/action.entity.ts"><text x="103.5" y="13.5" stroke="none" text-anchor="middle" data-name="ActionEntity">ActionEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(6104.75, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ActionEntity">
+<g transform="translate(7528, 83.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ActionEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ActionEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="ActionEntity">-_name: string</text>
 
 </g>
 </g>
-<g transform="translate(6104.75, 99.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ActionEntity">
+<g transform="translate(7528, 114.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ActionEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ActionEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="ActionEntity">+static from(): ActionEntity</text>
 
@@ -784,24 +1028,24 @@
 </g>
 <g data-name="AttributeEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="AttributeEntity">
-<rect x="6367.8" y="30.0" height="108.0" width="240.0" data-name="AttributeEntity"></rect>
-<path d="M6367.8 61.0 L6607.8 61.0" fill="none" data-name="AttributeEntity"></path>
-<path d="M6367.8 107.0 L6607.8 107.0" fill="none" data-name="AttributeEntity"></path>
+<rect x="7791.0" y="45.0" height="108.0" width="240.0" data-name="AttributeEntity"></rect>
+<path d="M7791.0 76.0 L8031.0 76.0" fill="none" data-name="AttributeEntity"></path>
+<path d="M7791.0 122.0 L8031.0 122.0" fill="none" data-name="AttributeEntity"></path>
 </g>
-<g transform="translate(6367.75, 30)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AttributeEntity">
+<g transform="translate(7791, 45)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AttributeEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AttributeEntity">
 <a id="src/domain/authorization/entity/abac/attribute.entity.ts.AttributeEntity" xlink:href="src/domain/authorization/entity/abac/attribute.entity.ts"><text x="112.0" y="13.5" stroke="none" text-anchor="middle" data-name="AttributeEntity">AttributeEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(6367.75, 61)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AttributeEntity">
+<g transform="translate(7791, 76)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AttributeEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AttributeEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="AttributeEntity">-_name: string</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AttributeEntity">-_value: string</text>
 
 </g>
 </g>
-<g transform="translate(6367.75, 107)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AttributeEntity">
+<g transform="translate(7791, 122)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AttributeEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AttributeEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="AttributeEntity">+static from(): AttributeEntity</text>
 
@@ -810,23 +1054,23 @@
 </g>
 <g data-name="ResourceEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="ResourceEntity">
-<rect x="6647.8" y="49.0" height="70.0" width="136.0" data-name="ResourceEntity"></rect>
-<path d="M6647.8 80.0 L6783.8 80.0" fill="none" data-name="ResourceEntity"></path>
-<path d="M6647.8 111.0 L6783.8 111.0" fill="none" data-name="ResourceEntity"></path>
+<rect x="8071.0" y="64.0" height="70.0" width="136.0" data-name="ResourceEntity"></rect>
+<path d="M8071.0 95.0 L8207.0 95.0" fill="none" data-name="ResourceEntity"></path>
+<path d="M8071.0 126.0 L8207.0 126.0" fill="none" data-name="ResourceEntity"></path>
 </g>
-<g transform="translate(6647.75, 49)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ResourceEntity">
+<g transform="translate(8071, 64)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ResourceEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ResourceEntity">
 <a id="src/domain/authorization/entity/abac/resource.entity.ts.ResourceEntity" xlink:href="src/domain/authorization/entity/abac/resource.entity.ts"><text x="60.0" y="13.5" stroke="none" text-anchor="middle" data-name="ResourceEntity">ResourceEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(6647.75, 80)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ResourceEntity">
+<g transform="translate(8071, 95)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ResourceEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ResourceEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="ResourceEntity">-_name: string</text>
 
 </g>
 </g>
-<g transform="translate(6647.75, 111)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ResourceEntity">
+<g transform="translate(8071, 126)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ResourceEntity">
 <g transform="translate(8, 8)" fill="#33322E" data-name="ResourceEntity">
 
 </g>
@@ -834,24 +1078,24 @@
 </g>
 <g data-name="PermissionEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="PermissionEntity">
-<rect x="2864.3" y="268.0" height="108.0" width="261.0" data-name="PermissionEntity"></rect>
-<path d="M2864.3 299.0 L3125.3 299.0" fill="none" data-name="PermissionEntity"></path>
-<path d="M2864.3 345.0 L3125.3 345.0" fill="none" data-name="PermissionEntity"></path>
+<rect x="3778.3" y="298.0" height="108.0" width="261.0" data-name="PermissionEntity"></rect>
+<path d="M3778.3 329.0 L4039.3 329.0" fill="none" data-name="PermissionEntity"></path>
+<path d="M3778.3 375.0 L4039.3 375.0" fill="none" data-name="PermissionEntity"></path>
 </g>
-<g transform="translate(2864.25, 268)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="PermissionEntity">
+<g transform="translate(3778.25, 298)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="PermissionEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="PermissionEntity">
 <a id="src/domain/authorization/entity/rbac/permission.entity.ts.PermissionEntity" xlink:href="src/domain/authorization/entity/rbac/permission.entity.ts"><text x="122.5" y="13.5" stroke="none" text-anchor="middle" data-name="PermissionEntity">PermissionEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(2864.25, 299)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionEntity">
+<g transform="translate(3778.25, 329)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="PermissionEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="PermissionEntity">-_id: number</text>
 <text x="0.0" y="28.5" stroke="none" data-name="PermissionEntity">-_name: string</text>
 
 </g>
 </g>
-<g transform="translate(2864.25, 345)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionEntity">
+<g transform="translate(3778.25, 375)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="PermissionEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="PermissionEntity">+static from(): PermissionEntity</text>
 
@@ -860,24 +1104,24 @@
 </g>
 <g data-name="PermissionParams">
 <g fill="lightblue" stroke="#33322E" data-name="PermissionParams">
-<rect x="6823.8" y="41.5" height="85.0" width="163.0" data-name="PermissionParams"></rect>
-<path d="M6823.8 72.5 L6986.8 72.5" fill="none" data-name="PermissionParams"></path>
-<path d="M6823.8 118.5 L6986.8 118.5" fill="none" data-name="PermissionParams"></path>
+<rect x="8247.0" y="56.5" height="85.0" width="163.0" data-name="PermissionParams"></rect>
+<path d="M8247.0 87.5 L8410.0 87.5" fill="none" data-name="PermissionParams"></path>
+<path d="M8247.0 133.5 L8410.0 133.5" fill="none" data-name="PermissionParams"></path>
 </g>
-<g transform="translate(6823.75, 41.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionParams">
+<g transform="translate(8247, 56.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionParams">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="PermissionParams">
 <a id="src/domain/authorization/entity/rbac/permission.entity.ts.PermissionParams" xlink:href="src/domain/authorization/entity/rbac/permission.entity.ts"><text x="73.5" y="13.5" stroke="none" text-anchor="middle" data-name="PermissionParams">PermissionParams</text></a>
 
 </g>
 </g>
-<g transform="translate(6823.75, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionParams">
+<g transform="translate(8247, 87.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionParams">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="PermissionParams">
 <text x="0.0" y="13.5" stroke="none" data-name="PermissionParams">+id: number</text>
 <text x="0.0" y="28.5" stroke="none" data-name="PermissionParams">+name: string</text>
 
 </g>
 </g>
-<g transform="translate(6823.75, 118.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionParams">
+<g transform="translate(8247, 133.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PermissionParams">
 <g transform="translate(8, 8)" fill="#33322E" data-name="PermissionParams">
 
 </g>
@@ -885,23 +1129,23 @@
 </g>
 <g data-name="RbacEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="RbacEntity">
-<rect x="4126.8" y="268.0" height="108.0" width="246.0" data-name="RbacEntity"></rect>
-<path d="M4126.8 299.0 L4372.8 299.0" fill="none" data-name="RbacEntity"></path>
-<path d="M4126.8 330.0 L4372.8 330.0" fill="none" data-name="RbacEntity"></path>
+<rect x="5295.5" y="298.0" height="108.0" width="246.0" data-name="RbacEntity"></rect>
+<path d="M5295.5 329.0 L5541.5 329.0" fill="none" data-name="RbacEntity"></path>
+<path d="M5295.5 360.0 L5541.5 360.0" fill="none" data-name="RbacEntity"></path>
 </g>
-<g transform="translate(4126.75, 268)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacEntity">
+<g transform="translate(5295.5, 298)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacEntity">
 <a id="src/domain/authorization/entity/rbac/rbac.entity.ts.RbacEntity" xlink:href="src/domain/authorization/entity/rbac/rbac.entity.ts"><text x="115.0" y="13.5" stroke="none" text-anchor="middle" data-name="RbacEntity">RbacEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(4126.75, 299)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacEntity">
+<g transform="translate(5295.5, 329)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="RbacEntity">-_roles: RoleEntity[]</text>
 
 </g>
 </g>
-<g transform="translate(4126.75, 330)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacEntity">
+<g transform="translate(5295.5, 360)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="RbacEntity">+static from(): RbacEntity</text>
 <text x="0.0" y="28.5" stroke="none" data-name="RbacEntity">+checkPermission(): boolean</text>
@@ -911,23 +1155,23 @@
 </g>
 <g data-name="RbacParams">
 <g fill="lightblue" stroke="#33322E" data-name="RbacParams">
-<rect x="7026.8" y="49.0" height="70.0" width="165.0" data-name="RbacParams"></rect>
-<path d="M7026.8 80.0 L7191.8 80.0" fill="none" data-name="RbacParams"></path>
-<path d="M7026.8 111.0 L7191.8 111.0" fill="none" data-name="RbacParams"></path>
+<rect x="8450.0" y="64.0" height="70.0" width="165.0" data-name="RbacParams"></rect>
+<path d="M8450.0 95.0 L8615.0 95.0" fill="none" data-name="RbacParams"></path>
+<path d="M8450.0 126.0 L8615.0 126.0" fill="none" data-name="RbacParams"></path>
 </g>
-<g transform="translate(7026.75, 49)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacParams">
+<g transform="translate(8450, 64)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacParams">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacParams">
 <a id="src/domain/authorization/entity/rbac/rbac.entity.ts.RbacParams" xlink:href="src/domain/authorization/entity/rbac/rbac.entity.ts"><text x="74.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacParams">RbacParams</text></a>
 
 </g>
 </g>
-<g transform="translate(7026.75, 80)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacParams">
+<g transform="translate(8450, 95)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacParams">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacParams">
 <text x="0.0" y="13.5" stroke="none" data-name="RbacParams">+roles: RoleEntity[]</text>
 
 </g>
 </g>
-<g transform="translate(7026.75, 111)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacParams">
+<g transform="translate(8450, 126)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacParams">
 <g transform="translate(8, 8)" fill="#33322E" data-name="RbacParams">
 
 </g>
@@ -935,17 +1179,17 @@
 </g>
 <g data-name="RoleEntity">
 <g fill="#eee8d5" stroke="#33322E" data-name="RoleEntity">
-<rect x="4412.8" y="260.5" height="123.0" width="278.0" data-name="RoleEntity"></rect>
-<path d="M4412.8 291.5 L4690.8 291.5" fill="none" data-name="RoleEntity"></path>
-<path d="M4412.8 352.5 L4690.8 352.5" fill="none" data-name="RoleEntity"></path>
+<rect x="5581.5" y="290.5" height="123.0" width="278.0" data-name="RoleEntity"></rect>
+<path d="M5581.5 321.5 L5859.5 321.5" fill="none" data-name="RoleEntity"></path>
+<path d="M5581.5 382.5 L5859.5 382.5" fill="none" data-name="RoleEntity"></path>
 </g>
-<g transform="translate(4412.75, 260.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RoleEntity">
+<g transform="translate(5581.5, 290.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RoleEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RoleEntity">
 <a id="src/domain/authorization/entity/rbac/role.entity.ts.RoleEntity" xlink:href="src/domain/authorization/entity/rbac/role.entity.ts"><text x="131.0" y="13.5" stroke="none" text-anchor="middle" data-name="RoleEntity">RoleEntity</text></a>
 
 </g>
 </g>
-<g transform="translate(4412.75, 291.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleEntity">
+<g transform="translate(5581.5, 321.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RoleEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="RoleEntity">-_id: number</text>
 <text x="0.0" y="28.5" stroke="none" data-name="RoleEntity">-_name: string</text>
@@ -953,7 +1197,7 @@
 
 </g>
 </g>
-<g transform="translate(4412.75, 352.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleEntity">
+<g transform="translate(5581.5, 382.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleEntity">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RoleEntity">
 <text x="0.0" y="13.5" stroke="none" data-name="RoleEntity">+static from(): RoleEntity</text>
 
@@ -962,17 +1206,17 @@
 </g>
 <g data-name="RoleParams">
 <g fill="lightblue" stroke="#33322E" data-name="RoleParams">
-<rect x="7231.8" y="34.0" height="100.0" width="272.0" data-name="RoleParams"></rect>
-<path d="M7231.8 65.0 L7503.8 65.0" fill="none" data-name="RoleParams"></path>
-<path d="M7231.8 126.0 L7503.8 126.0" fill="none" data-name="RoleParams"></path>
+<rect x="8655.0" y="49.0" height="100.0" width="272.0" data-name="RoleParams"></rect>
+<path d="M8655.0 80.0 L8927.0 80.0" fill="none" data-name="RoleParams"></path>
+<path d="M8655.0 141.0 L8927.0 141.0" fill="none" data-name="RoleParams"></path>
 </g>
-<g transform="translate(7231.75, 34)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleParams">
+<g transform="translate(8655, 49)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleParams">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RoleParams">
 <a id="src/domain/authorization/entity/rbac/role.entity.ts.RoleParams" xlink:href="src/domain/authorization/entity/rbac/role.entity.ts"><text x="128.0" y="13.5" stroke="none" text-anchor="middle" data-name="RoleParams">RoleParams</text></a>
 
 </g>
 </g>
-<g transform="translate(7231.75, 65)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleParams">
+<g transform="translate(8655, 80)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleParams">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RoleParams">
 <text x="0.0" y="13.5" stroke="none" data-name="RoleParams">+id: number</text>
 <text x="0.0" y="28.5" stroke="none" data-name="RoleParams">+name: string</text>
@@ -980,7 +1224,7 @@
 
 </g>
 </g>
-<g transform="translate(7231.75, 126)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleParams">
+<g transform="translate(8655, 141)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RoleParams">
 <g transform="translate(8, 8)" fill="#33322E" data-name="RoleParams">
 
 </g>
@@ -988,17 +1232,17 @@
 </g>
 <g data-name="UserModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="UserModel">
-<rect x="4730.8" y="223.0" height="198.0" width="235.0" data-name="UserModel"></rect>
-<path d="M4730.8 254.0 L4965.8 254.0" fill="none" data-name="UserModel"></path>
-<path d="M4730.8 390.0 L4965.8 390.0" fill="none" data-name="UserModel"></path>
+<rect x="5899.5" y="253.0" height="198.0" width="235.0" data-name="UserModel"></rect>
+<path d="M5899.5 284.0 L6134.5 284.0" fill="none" data-name="UserModel"></path>
+<path d="M5899.5 420.0 L6134.5 420.0" fill="none" data-name="UserModel"></path>
 </g>
-<g transform="translate(4730.75, 223)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserModel">
+<g transform="translate(5899.5, 253)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserModel">
 <a id="src/infrastructure/db/@shared/models/User.model.ts.UserModel" xlink:href="src/infrastructure/db/@shared/models/User.model.ts"><text x="109.5" y="13.5" stroke="none" text-anchor="middle" data-name="UserModel">UserModel</text></a>
 
 </g>
 </g>
-<g transform="translate(4730.75, 254)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserModel">
+<g transform="translate(5899.5, 284)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserModel">
 <text x="0.0" y="13.5" stroke="none" data-name="UserModel">+uuid: string</text>
 <text x="0.0" y="28.5" stroke="none" data-name="UserModel">+name: string</text>
@@ -1011,7 +1255,7 @@
 
 </g>
 </g>
-<g transform="translate(4730.75, 390)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserModel">
+<g transform="translate(5899.5, 420)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserModel">
 <text x="0.0" y="13.5" stroke="none" data-name="UserModel">+static toEntity(): UserEntity</text>
 
@@ -1020,9 +1264,9 @@
 </g>
 <g data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">
 <g fill="#eee8d5" stroke="#33322E" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">
-<rect x="7543.8" y="68.5" height="31.0" width="374.0" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;"></rect>
+<rect x="8967.0" y="83.5" height="31.0" width="374.0" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;"></rect>
 </g>
-<g transform="translate(7543.75, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">
+<g transform="translate(8967, 83.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">
 <text x="179.0" y="13.5" stroke="none" text-anchor="middle" data-name="Model&lt;TModelAttributes,TCreationAttributes&gt;">Model&lt;TModelAttributes,TCreationAttributes&gt;</text>
 
@@ -1031,17 +1275,17 @@
 </g>
 <g data-name="AbacModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="AbacModel">
-<rect x="5005.8" y="242.0" height="160.0" width="414.0" data-name="AbacModel"></rect>
-<path d="M5005.8 273.0 L5419.8 273.0" fill="none" data-name="AbacModel"></path>
-<path d="M5005.8 394.0 L5419.8 394.0" fill="none" data-name="AbacModel"></path>
+<rect x="6174.5" y="272.0" height="160.0" width="414.0" data-name="AbacModel"></rect>
+<path d="M6174.5 303.0 L6588.5 303.0" fill="none" data-name="AbacModel"></path>
+<path d="M6174.5 424.0 L6588.5 424.0" fill="none" data-name="AbacModel"></path>
 </g>
-<g transform="translate(5005.75, 242)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacModel">
+<g transform="translate(6174.5, 272)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AbacModel">
 <a id="src/infrastructure/db/@shared/models/abac/Abac.model.ts.AbacModel" xlink:href="src/infrastructure/db/@shared/models/abac/Abac.model.ts"><text x="199.0" y="13.5" stroke="none" text-anchor="middle" data-name="AbacModel">AbacModel</text></a>
 
 </g>
 </g>
-<g transform="translate(5005.75, 273)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacModel">
+<g transform="translate(6174.5, 303)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AbacModel">
 <text x="0.0" y="13.5" stroke="none" data-name="AbacModel">+id: number</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AbacModel">+userUuid: string</text>
@@ -1053,7 +1297,7 @@
 
 </g>
 </g>
-<g transform="translate(5005.75, 394)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacModel">
+<g transform="translate(6174.5, 424)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacModel">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AbacModel">
 
 </g>
@@ -1061,17 +1305,17 @@
 </g>
 <g data-name="AbacAccessPolicyModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="AbacAccessPolicyModel">
-<rect x="5459.8" y="219.5" height="205.0" width="582.0" data-name="AbacAccessPolicyModel"></rect>
-<path d="M5459.8 250.5 L6041.8 250.5" fill="none" data-name="AbacAccessPolicyModel"></path>
-<path d="M5459.8 416.5 L6041.8 416.5" fill="none" data-name="AbacAccessPolicyModel"></path>
+<rect x="6628.5" y="249.5" height="205.0" width="582.0" data-name="AbacAccessPolicyModel"></rect>
+<path d="M6628.5 280.5 L7210.5 280.5" fill="none" data-name="AbacAccessPolicyModel"></path>
+<path d="M6628.5 446.5 L7210.5 446.5" fill="none" data-name="AbacAccessPolicyModel"></path>
 </g>
-<g transform="translate(5459.75, 219.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacAccessPolicyModel">
+<g transform="translate(6628.5, 249.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacAccessPolicyModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AbacAccessPolicyModel">
 <a id="src/infrastructure/db/@shared/models/abac/AbacAccessPolicy.model.ts.AbacAccessPolicyModel" xlink:href="src/infrastructure/db/@shared/models/abac/AbacAccessPolicy.model.ts"><text x="283.0" y="13.5" stroke="none" text-anchor="middle" data-name="AbacAccessPolicyModel">AbacAccessPolicyModel</text></a>
 
 </g>
 </g>
-<g transform="translate(5459.75, 250.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacAccessPolicyModel">
+<g transform="translate(6628.5, 280.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacAccessPolicyModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AbacAccessPolicyModel">
 <text x="0.0" y="13.5" stroke="none" data-name="AbacAccessPolicyModel">+id: number</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AbacAccessPolicyModel">+userAttributeName: string</text>
@@ -1086,7 +1330,7 @@
 
 </g>
 </g>
-<g transform="translate(5459.75, 416.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacAccessPolicyModel">
+<g transform="translate(6628.5, 446.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacAccessPolicyModel">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AbacAccessPolicyModel">
 
 </g>
@@ -1094,17 +1338,17 @@
 </g>
 <g data-name="AbacActionModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="AbacActionModel">
-<rect x="6081.8" y="264.5" height="115.0" width="167.0" data-name="AbacActionModel"></rect>
-<path d="M6081.8 295.5 L6248.8 295.5" fill="none" data-name="AbacActionModel"></path>
-<path d="M6081.8 371.5 L6248.8 371.5" fill="none" data-name="AbacActionModel"></path>
+<rect x="7250.5" y="294.5" height="115.0" width="167.0" data-name="AbacActionModel"></rect>
+<path d="M7250.5 325.5 L7417.5 325.5" fill="none" data-name="AbacActionModel"></path>
+<path d="M7250.5 401.5 L7417.5 401.5" fill="none" data-name="AbacActionModel"></path>
 </g>
-<g transform="translate(6081.75, 264.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacActionModel">
+<g transform="translate(7250.5, 294.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacActionModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AbacActionModel">
 <a id="src/infrastructure/db/@shared/models/abac/AbacAction.model.ts.AbacActionModel" xlink:href="src/infrastructure/db/@shared/models/abac/AbacAction.model.ts"><text x="75.5" y="13.5" stroke="none" text-anchor="middle" data-name="AbacActionModel">AbacActionModel</text></a>
 
 </g>
 </g>
-<g transform="translate(6081.75, 295.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacActionModel">
+<g transform="translate(7250.5, 325.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacActionModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AbacActionModel">
 <text x="0.0" y="13.5" stroke="none" data-name="AbacActionModel">+name: string</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AbacActionModel">+description: string</text>
@@ -1113,7 +1357,7 @@
 
 </g>
 </g>
-<g transform="translate(6081.75, 371.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacActionModel">
+<g transform="translate(7250.5, 401.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacActionModel">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AbacActionModel">
 
 </g>
@@ -1121,17 +1365,17 @@
 </g>
 <g data-name="AbacResourceModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="AbacResourceModel">
-<rect x="6288.8" y="242.0" height="160.0" width="350.0" data-name="AbacResourceModel"></rect>
-<path d="M6288.8 273.0 L6638.8 273.0" fill="none" data-name="AbacResourceModel"></path>
-<path d="M6288.8 394.0 L6638.8 394.0" fill="none" data-name="AbacResourceModel"></path>
+<rect x="7457.5" y="272.0" height="160.0" width="350.0" data-name="AbacResourceModel"></rect>
+<path d="M7457.5 303.0 L7807.5 303.0" fill="none" data-name="AbacResourceModel"></path>
+<path d="M7457.5 424.0 L7807.5 424.0" fill="none" data-name="AbacResourceModel"></path>
 </g>
-<g transform="translate(6288.75, 242)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacResourceModel">
+<g transform="translate(7457.5, 272)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacResourceModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AbacResourceModel">
 <a id="src/infrastructure/db/@shared/models/abac/AbacResource.model.ts.AbacResourceModel" xlink:href="src/infrastructure/db/@shared/models/abac/AbacResource.model.ts"><text x="167.0" y="13.5" stroke="none" text-anchor="middle" data-name="AbacResourceModel">AbacResourceModel</text></a>
 
 </g>
 </g>
-<g transform="translate(6288.75, 273)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacResourceModel">
+<g transform="translate(7457.5, 303)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacResourceModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AbacResourceModel">
 <text x="0.0" y="13.5" stroke="none" data-name="AbacResourceModel">+id: string</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AbacResourceModel">+name: string</text>
@@ -1143,7 +1387,7 @@
 
 </g>
 </g>
-<g transform="translate(6288.75, 394)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacResourceModel">
+<g transform="translate(7457.5, 424)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacResourceModel">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AbacResourceModel">
 
 </g>
@@ -1151,17 +1395,17 @@
 </g>
 <g data-name="AbacResourceAttributeModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="AbacResourceAttributeModel">
-<rect x="7181.8" y="249.5" height="145.0" width="246.0" data-name="AbacResourceAttributeModel"></rect>
-<path d="M7181.8 280.5 L7427.8 280.5" fill="none" data-name="AbacResourceAttributeModel"></path>
-<path d="M7181.8 386.5 L7427.8 386.5" fill="none" data-name="AbacResourceAttributeModel"></path>
+<rect x="8531.8" y="279.5" height="145.0" width="246.0" data-name="AbacResourceAttributeModel"></rect>
+<path d="M8531.8 310.5 L8777.8 310.5" fill="none" data-name="AbacResourceAttributeModel"></path>
+<path d="M8531.8 416.5 L8777.8 416.5" fill="none" data-name="AbacResourceAttributeModel"></path>
 </g>
-<g transform="translate(7181.75, 249.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacResourceAttributeModel">
+<g transform="translate(8531.75, 279.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacResourceAttributeModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AbacResourceAttributeModel">
 <a id="src/infrastructure/db/@shared/models/abac/AbacResourceAttribute.model.ts.AbacResourceAttributeModel" xlink:href="src/infrastructure/db/@shared/models/abac/AbacResourceAttribute.model.ts"><text x="115.0" y="13.5" stroke="none" text-anchor="middle" data-name="AbacResourceAttributeModel">AbacResourceAttributeModel</text></a>
 
 </g>
 </g>
-<g transform="translate(7181.75, 280.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacResourceAttributeModel">
+<g transform="translate(8531.75, 310.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacResourceAttributeModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AbacResourceAttributeModel">
 <text x="0.0" y="13.5" stroke="none" data-name="AbacResourceAttributeModel">+name: string</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AbacResourceAttributeModel">+resourceId: number</text>
@@ -1172,7 +1416,7 @@
 
 </g>
 </g>
-<g transform="translate(7181.75, 386.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacResourceAttributeModel">
+<g transform="translate(8531.75, 416.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacResourceAttributeModel">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AbacResourceAttributeModel">
 
 </g>
@@ -1180,17 +1424,17 @@
 </g>
 <g data-name="AbacUserAttributeModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="AbacUserAttributeModel">
-<rect x="7467.8" y="257.0" height="130.0" width="207.0" data-name="AbacUserAttributeModel"></rect>
-<path d="M7467.8 288.0 L7674.8 288.0" fill="none" data-name="AbacUserAttributeModel"></path>
-<path d="M7467.8 379.0 L7674.8 379.0" fill="none" data-name="AbacUserAttributeModel"></path>
+<rect x="8817.8" y="287.0" height="130.0" width="207.0" data-name="AbacUserAttributeModel"></rect>
+<path d="M8817.8 318.0 L9024.8 318.0" fill="none" data-name="AbacUserAttributeModel"></path>
+<path d="M8817.8 409.0 L9024.8 409.0" fill="none" data-name="AbacUserAttributeModel"></path>
 </g>
-<g transform="translate(7467.75, 257)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacUserAttributeModel">
+<g transform="translate(8817.75, 287)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="AbacUserAttributeModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="AbacUserAttributeModel">
 <a id="src/infrastructure/db/@shared/models/abac/AbacUserAttribute.model.ts.AbacUserAttributeModel" xlink:href="src/infrastructure/db/@shared/models/abac/AbacUserAttribute.model.ts"><text x="95.5" y="13.5" stroke="none" text-anchor="middle" data-name="AbacUserAttributeModel">AbacUserAttributeModel</text></a>
 
 </g>
 </g>
-<g transform="translate(7467.75, 288)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacUserAttributeModel">
+<g transform="translate(8817.75, 318)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacUserAttributeModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="AbacUserAttributeModel">
 <text x="0.0" y="13.5" stroke="none" data-name="AbacUserAttributeModel">+name: string</text>
 <text x="0.0" y="28.5" stroke="none" data-name="AbacUserAttributeModel">+description: string</text>
@@ -1200,7 +1444,7 @@
 
 </g>
 </g>
-<g transform="translate(7467.75, 379)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacUserAttributeModel">
+<g transform="translate(8817.75, 409)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="AbacUserAttributeModel">
 <g transform="translate(8, 8)" fill="#33322E" data-name="AbacUserAttributeModel">
 
 </g>
@@ -1208,17 +1452,17 @@
 </g>
 <g data-name="RbacModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="RbacModel">
-<rect x="7714.8" y="215.5" height="213.0" width="239.0" data-name="RbacModel"></rect>
-<path d="M7714.8 246.5 L7953.8 246.5" fill="none" data-name="RbacModel"></path>
-<path d="M7714.8 397.5 L7953.8 397.5" fill="none" data-name="RbacModel"></path>
+<rect x="9064.8" y="245.5" height="213.0" width="239.0" data-name="RbacModel"></rect>
+<path d="M9064.8 276.5 L9303.8 276.5" fill="none" data-name="RbacModel"></path>
+<path d="M9064.8 427.5 L9303.8 427.5" fill="none" data-name="RbacModel"></path>
 </g>
-<g transform="translate(7714.75, 215.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacModel">
+<g transform="translate(9064.75, 245.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacModel">
 <a id="src/infrastructure/db/@shared/models/rbac/Rbac.model.ts.RbacModel" xlink:href="src/infrastructure/db/@shared/models/rbac/Rbac.model.ts"><text x="111.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacModel">RbacModel</text></a>
 
 </g>
 </g>
-<g transform="translate(7714.75, 246.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacModel">
+<g transform="translate(9064.75, 276.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacModel">
 <text x="0.0" y="13.5" stroke="none" data-name="RbacModel">+id: number</text>
 <text x="0.0" y="28.5" stroke="none" data-name="RbacModel">+name: string</text>
@@ -1232,7 +1476,7 @@
 
 </g>
 </g>
-<g transform="translate(7714.75, 397.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacModel">
+<g transform="translate(9064.75, 427.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacModel">
 <text x="0.0" y="13.5" stroke="none" data-name="RbacModel">+static toEntity(): RbacEntity</text>
 
@@ -1241,17 +1485,17 @@
 </g>
 <g data-name="RbacPermissionModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="RbacPermissionModel">
-<rect x="7993.8" y="249.5" height="145.0" width="192.0" data-name="RbacPermissionModel"></rect>
-<path d="M7993.8 280.5 L8185.8 280.5" fill="none" data-name="RbacPermissionModel"></path>
-<path d="M7993.8 386.5 L8185.8 386.5" fill="none" data-name="RbacPermissionModel"></path>
+<rect x="9343.8" y="268.0" height="168.0" width="285.0" data-name="RbacPermissionModel"></rect>
+<path d="M9343.8 299.0 L9628.8 299.0" fill="none" data-name="RbacPermissionModel"></path>
+<path d="M9343.8 405.0 L9628.8 405.0" fill="none" data-name="RbacPermissionModel"></path>
 </g>
-<g transform="translate(7993.75, 249.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacPermissionModel">
+<g transform="translate(9343.75, 268)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacPermissionModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacPermissionModel">
-<a id="src/infrastructure/db/@shared/models/rbac/RbacPermission.model.ts.RbacPermissionModel" xlink:href="src/infrastructure/db/@shared/models/rbac/RbacPermission.model.ts"><text x="88.0" y="13.5" stroke="none" text-anchor="middle" data-name="RbacPermissionModel">RbacPermissionModel</text></a>
+<a id="src/infrastructure/db/@shared/models/rbac/RbacPermission.model.ts.RbacPermissionModel" xlink:href="src/infrastructure/db/@shared/models/rbac/RbacPermission.model.ts"><text x="134.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacPermissionModel">RbacPermissionModel</text></a>
 
 </g>
 </g>
-<g transform="translate(7993.75, 280.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacPermissionModel">
+<g transform="translate(9343.75, 299)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacPermissionModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacPermissionModel">
 <text x="0.0" y="13.5" stroke="none" data-name="RbacPermissionModel">+id: number</text>
 <text x="0.0" y="28.5" stroke="none" data-name="RbacPermissionModel">+name: string</text>
@@ -1262,25 +1506,26 @@
 
 </g>
 </g>
-<g transform="translate(7993.75, 386.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacPermissionModel">
-<g transform="translate(8, 8)" fill="#33322E" data-name="RbacPermissionModel">
+<g transform="translate(9343.75, 405)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacPermissionModel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacPermissionModel">
+<text x="0.0" y="13.5" stroke="none" data-name="RbacPermissionModel">+static toEntity(): PermissionEntity</text>
 
 </g>
 </g>
 </g>
 <g data-name="RbacRoleModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="RbacRoleModel">
-<rect x="8225.8" y="242.0" height="160.0" width="393.0" data-name="RbacRoleModel"></rect>
-<path d="M8225.8 273.0 L8618.8 273.0" fill="none" data-name="RbacRoleModel"></path>
-<path d="M8225.8 394.0 L8618.8 394.0" fill="none" data-name="RbacRoleModel"></path>
+<rect x="9668.8" y="264.5" height="175.0" width="447.0" data-name="RbacRoleModel"></rect>
+<path d="M9668.8 295.5 L10115.8 295.5" fill="none" data-name="RbacRoleModel"></path>
+<path d="M9668.8 431.5 L10115.8 431.5" fill="none" data-name="RbacRoleModel"></path>
 </g>
-<g transform="translate(8225.75, 242)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacRoleModel">
+<g transform="translate(9668.75, 264.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacRoleModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacRoleModel">
-<a id="src/infrastructure/db/@shared/models/rbac/RbacRole.model.ts.RbacRoleModel" xlink:href="src/infrastructure/db/@shared/models/rbac/RbacRole.model.ts"><text x="188.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacRoleModel">RbacRoleModel</text></a>
+<a id="src/infrastructure/db/@shared/models/rbac/RbacRole.model.ts.RbacRoleModel" xlink:href="src/infrastructure/db/@shared/models/rbac/RbacRole.model.ts"><text x="215.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacRoleModel">RbacRoleModel</text></a>
 
 </g>
 </g>
-<g transform="translate(8225.75, 273)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRoleModel">
+<g transform="translate(9668.75, 295.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRoleModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacRoleModel">
 <text x="0.0" y="13.5" stroke="none" data-name="RbacRoleModel">+id: number</text>
 <text x="0.0" y="28.5" stroke="none" data-name="RbacRoleModel">+name: string</text>
@@ -1289,10 +1534,11 @@
 <text x="0.0" y="73.5" stroke="none" data-name="RbacRoleModel">+createdAt: Date</text>
 <text x="0.0" y="88.5" stroke="none" data-name="RbacRoleModel">+updatedAt: Date</text>
 <text x="0.0" y="103.5" stroke="none" data-name="RbacRoleModel">+rolesPermissions: RbacRolePermissionModel[]</text>
+<text x="0.0" y="118.5" stroke="none" data-name="RbacRoleModel">+static toEntity: (model: RbacRoleModel) =&gt; RoleEntity</text>
 
 </g>
 </g>
-<g transform="translate(8225.75, 394)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRoleModel">
+<g transform="translate(9668.75, 431.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRoleModel">
 <g transform="translate(8, 8)" fill="#33322E" data-name="RbacRoleModel">
 
 </g>
@@ -1300,17 +1546,17 @@
 </g>
 <g data-name="RbacRolePermissionModel">
 <g fill="#eee8d5" stroke="#33322E" data-name="RbacRolePermissionModel">
-<rect x="8658.8" y="249.5" height="145.0" width="317.0" data-name="RbacRolePermissionModel"></rect>
-<path d="M8658.8 280.5 L8975.8 280.5" fill="none" data-name="RbacRolePermissionModel"></path>
-<path d="M8658.8 386.5 L8975.8 386.5" fill="none" data-name="RbacRolePermissionModel"></path>
+<rect x="10155.8" y="279.5" height="145.0" width="317.0" data-name="RbacRolePermissionModel"></rect>
+<path d="M10155.8 310.5 L10472.8 310.5" fill="none" data-name="RbacRolePermissionModel"></path>
+<path d="M10155.8 416.5 L10472.8 416.5" fill="none" data-name="RbacRolePermissionModel"></path>
 </g>
-<g transform="translate(8658.75, 249.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacRolePermissionModel">
+<g transform="translate(10155.75, 279.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RbacRolePermissionModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RbacRolePermissionModel">
 <a id="src/infrastructure/db/@shared/models/rbac/RbacRolePermission.model.ts.RbacRolePermissionModel" xlink:href="src/infrastructure/db/@shared/models/rbac/RbacRolePermission.model.ts"><text x="150.5" y="13.5" stroke="none" text-anchor="middle" data-name="RbacRolePermissionModel">RbacRolePermissionModel</text></a>
 
 </g>
 </g>
-<g transform="translate(8658.75, 280.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRolePermissionModel">
+<g transform="translate(10155.75, 310.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRolePermissionModel">
 <g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RbacRolePermissionModel">
 <text x="0.0" y="13.5" stroke="none" data-name="RbacRolePermissionModel">+id: number</text>
 <text x="0.0" y="28.5" stroke="none" data-name="RbacRolePermissionModel">+roleId: number</text>
@@ -1321,7 +1567,7 @@
 
 </g>
 </g>
-<g transform="translate(8658.75, 386.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRolePermissionModel">
+<g transform="translate(10155.75, 416.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RbacRolePermissionModel">
 <g transform="translate(8, 8)" fill="#33322E" data-name="RbacRolePermissionModel">
 
 </g>

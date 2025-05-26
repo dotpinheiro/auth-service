@@ -19,11 +19,6 @@ export const baseRoutes = [
     element: <Users/>
   },
   {
-    path: "/settings",
-    name: "Settings",
-    element: <Settings/>
-  },
-  {
     path: "/rbac",
     name: "Permissions",
     element: <Permissions/>,

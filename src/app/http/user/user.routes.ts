@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import {UserService} from "../../../domain/user/service/user.service";
 import {UserEntity} from "../../../domain/user/entity/user.entity";
+import {authMiddleware} from "../../../middlewares/auth.middleware";
 
 const userRouter = Router();
 
-userRouter.post('/', async (req, res) => {
+userRouter.post('/', authMiddleware(['USERS.UPDATE']), async (req, res) => {
   const userService = new UserService();
   const userEntity = new UserEntity();
   await userEntity.create({
@@ -21,7 +22,7 @@ userRouter.post('/', async (req, res) => {
   }
 });
 
-userRouter.put('/:uuid', async (req, res) => {
+userRouter.put('/:uuid', authMiddleware(['USERS.CREATE']), async (req, res) => {
   const userService = new UserService();
   const user = await userService.findByUuid(req.params.uuid);
   try{
@@ -38,7 +39,7 @@ userRouter.put('/:uuid', async (req, res) => {
   }
 });
 
-userRouter.get('/', async (req, res) => {
+userRouter.get('/', authMiddleware(['USERS.LIST']), async (req, res) => {
 
   const userService = new UserService();
   const users = await userService.findAll();
@@ -46,7 +47,7 @@ userRouter.get('/', async (req, res) => {
   res.send(users);
 });
 
-userRouter.get('/:uuid', async (req, res) => {
+userRouter.get('/:uuid', authMiddleware(['USERS.LIST']), async (req, res) => {
   const userService = new UserService();
   try{
     const user = await userService.findUserWithPermissions(req.params.uuid);

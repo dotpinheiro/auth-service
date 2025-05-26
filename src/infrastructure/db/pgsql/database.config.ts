@@ -14,6 +14,7 @@ export class Postgres implements DatabaseInterface {
         password: process.env.POSTGRES_DB_PASSWORD,
         database: process.env.POSTGRES_DB_NAME,
         port: process.env.POSTGRES_DB_PORT ? parseInt(process.env.POSTGRES_DB_PORT) : 5432,
+        ssl: false,
       });
 
       Postgres.instance.addModels([

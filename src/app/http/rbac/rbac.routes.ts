@@ -1,5 +1,7 @@
 import {Router} from "express";
 import {RbacService} from "../../../domain/authorization/service/rbac.service";
+import {RoleEntity} from "../../../domain/authorization/entity/rbac/role.entity";
+import {PermissionEntity} from "../../../domain/authorization/entity/rbac/permission.entity";
 
 const rbacRouter = Router();
 
@@ -17,13 +19,14 @@ rbacRouter.get('/roles', async (req, res) => {
 
 rbacRouter.post('/roles', async (req, res) => {
   const rbacService = new RbacService();
-  const role = await rbacService.createRole(req.body);
+  const role = await rbacService.createRole(RoleEntity.from(req.body));
+
   return res.send(role);
 })
 
 rbacRouter.post('/permissions', async (req, res) => {
   const rbacService = new RbacService();
-  const permission = await rbacService.createPermission(req.body);
+  const permission = await rbacService.createPermission(PermissionEntity.from(req.body));
   return res.send(permission);
 })
 

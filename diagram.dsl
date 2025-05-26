@@ -1,6 +1,7 @@
 
 classDiagram
 
+
 class ConfigEntity{
             -_sessionValidationType: "jwt"
 -_database: AvailableDatabases
@@ -9,7 +10,7 @@ class ConfigEntity{
             
         }
 class AuthorizationRepository{
-            
+            -_cacheManager: CacheInterface
             +create() Promise~AuthorizationEntity~
 +delete() Promise~boolean~
 +findAll() Promise~AuthorizationEntity[]~
@@ -21,6 +22,32 @@ class AuthorizationRepository{
 -_findAbacPermissionsByUserUuid() Promise~AbacEntity~$
         }
 AuthorizationRepositoryInterface<|..AuthorizationRepository
+class RbacRepository{
+            
+            +getPermissions() Promise~PermissionEntity[]~
++getRoles() Promise~RoleEntity[]~
++create() Promise~RbacRepositoryInterface~
++delete() Promise~boolean~
++findAll() Promise~RbacRepositoryInterface[]~
++findOne() Promise~RbacRepositoryInterface~
++findOneByUuid() Promise~RbacRepositoryInterface~
++update() Promise~RbacRepositoryInterface~
++createRole() Promise~RoleEntity~
++createPermission() Promise~PermissionEntity~
+        }
+RbacRepositoryInterface<|..RbacRepository
+class CacheManager{
+            -_client: CacheInterface
+            
+        }
+class CacheInterface {
+            <<interface>>
+            
+            +get() any
++set() void
++delete() void
++clear() void
+        }
 class DatabaseHandler{
             -_handler: DatabaseInterface
             
@@ -34,6 +61,17 @@ class DatabaseInterface {
             <<interface>>
             
             +init() Sequelize
+        }
+class LogHandler{
+            -instance: any$
+            +getInstance() LogInterface$
+        }
+class LogInterface {
+            <<interface>>
+            +log: (message: string, level?: string) =~ void
++info: (message: string) =~ void
++error: (message: string) =~ void
+            
         }
 class UserRepository{
             
@@ -52,7 +90,7 @@ class BaseEntity{
 #_updatedAt: Date
 #_deletedAt: Date
 #_isActive: boolean
-            
+            +toJSON() Record~string, unknown~
         }
 class BaseRepositoryInterface~T~ {
             <<interface>>
@@ -100,10 +138,24 @@ class AuthorizationRepositoryInterface {
             +findPermissionsByUserUuid() Promise~AuthorizationEntity~
         }
 BaseRepositoryInterface~T~<|..AuthorizationRepositoryInterface
+class RbacRepositoryInterface {
+            <<interface>>
+            
+            +getPermissions() Promise~any~
++getRoles() Promise~any~
+        }
+BaseRepositoryInterface~T~<|..RbacRepositoryInterface
 class AuthorizationService{
             -_authorizationRepository: AuthorizationRepository
             +checkPermission() Promise~boolean~
 +checkPolicy() Promise~boolean~
+        }
+class RbacService{
+            -_rbacRepository: RbacRepository
+            +getPermissions() Promise~PermissionEntity[]~
++getRoles() Promise~RoleEntity[]~
++createRole() Promise~RoleEntity~
++createPermission() Promise~PermissionEntity~
         }
 class UserEntity{
             -_uuid: string
@@ -136,11 +188,21 @@ class UserService{
             -_userRepository: UserRepository
 -_authorizationRepository: AuthorizationRepository
             +createUser() Promise~UserEntity~
++updateUser() Promise~UserEntity~
 +findUserWithPermissions() Promise~UserEntity~
 +findUserByEmail() Promise~UserEntity~
 +findUserByUsername() Promise~UserEntity~
 +findAll() Promise~UserEntity[]~
++findByUuid() Promise~UserEntity~
         }
+class RedisClient{
+            -_client: Redis
+            +clear() Promise~"OK"~
++delete() Promise~number~
++get() Promise~string~
++set() void
+        }
+CacheInterface<|..RedisClient
 class Postgres{
             -instance: Sequelize$
             +getInstance() Sequelize$
@@ -311,7 +373,7 @@ class RbacPermissionModel{
 +isActive: boolean
 +createdAt: Date
 +updatedAt: Date
-            
+            +toEntity() PermissionEntity$
         }
 Model~TModelAttributes,TCreationAttributes~<|--RbacPermissionModel
 class RbacRoleModel{
@@ -322,6 +384,7 @@ class RbacRoleModel{
 +createdAt: Date
 +updatedAt: Date
 +rolesPermissions: RbacRolePermissionModel[]
++toEntity: (model: RbacRoleModel) =~ RoleEntity$
             
         }
 Model~TModelAttributes,TCreationAttributes~<|--RbacRoleModel

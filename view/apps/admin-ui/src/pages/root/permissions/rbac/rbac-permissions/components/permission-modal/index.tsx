@@ -16,6 +16,7 @@ export const PermissionModal = ({ open, handleModal, selectedPermission }) => {
   },[selectedPermission])
 
   async function onFinish(values) {
+    console.log(values)
     setLoading(true);
     try {
       await rbacService.createPermission(values);
