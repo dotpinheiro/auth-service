@@ -7,14 +7,6 @@ This project consists of an identity service developed in Node.js. The identity 
 
 classDiagram
 
-
-class ConfigEntity{
-            -_sessionValidationType: "jwt"
--_database: AvailableDatabases
--_port: number
--_host: string
-
-        }
 class AuthorizationRepository{
             -_cacheManager: CacheInterface
             +create() Promise~AuthorizationEntity~
@@ -113,11 +105,6 @@ class AuthenticationEntity{
 -_session: Session
 
         }
-class AuthenticationEntityConstructor {
-            <<interface>>
-            +user: UserEntity
-
-        }
 class Session {
             <<interface>>
             +token: string
@@ -176,12 +163,6 @@ class UserEntity{
 +checkPassword() Promise~boolean~
 +hashPassword() Promise~void~
         }
-class UserEntityErrors {
-        <<enumeration>>
-        INVALID_EMAIL
-INVALID_USERNAME
-INVALID_PASSWORD
-      }
 BaseEntity<|--UserEntity
 class UserRepositoryInterface {
             <<interface>>
@@ -284,126 +265,6 @@ class RoleParams {
 
         }
 BaseEntity<|--RoleEntity
-class UserModel{
-            +uuid: string
-+name: string
-+username: string
-+email: string
-+password: string
-+isActive: boolean
-+createdAt: Date
-+updatedAt: Date
-            +toEntity() UserEntity$
-        }
-Model~TModelAttributes,TCreationAttributes~<|--UserModel
-class AbacModel{
-            +id: number
-+userUuid: string
-+accessPolicyId: number
-+policies: AbacAccessPolicyModel[]
-+createdAt: Date
-+updatedAt: Date
-+toEntity: (model: AbacModel) =~ AbacEntity$
-
-        }
-Model~TModelAttributes,TCreationAttributes~<|--AbacModel
-class AbacAccessPolicyModel{
-            +id: number
-+userAttributeName: string
-+resourceAttributeName: string
-+actionName: string
-+actions: AbacActionModel[]
-+resourceAttributes: AbacResourceAttributeModel[]
-+userAttributes: AbacUserAttributeModel[]
-+createdAt: Date
-+updatedAt: Date
-+toEntity: (model: AbacAccessPolicyModel) =~ AccessPolicyEntity$
-
-        }
-Model~TModelAttributes,TCreationAttributes~<|--AbacAccessPolicyModel
-class AbacActionModel{
-            +name: string
-+description: string
-+createdAt: Date
-+updatedAt: Date
-
-        }
-Model~TModelAttributes,TCreationAttributes~<|--AbacActionModel
-class AbacResourceModel{
-            +id: string
-+name: string
-+description: string
-+isActive: boolean
-+createdAt: Date
-+updatedAt: Date
-+attributes: AbacResourceAttributeModel[]
-
-        }
-Model~TModelAttributes,TCreationAttributes~<|--AbacResourceModel
-class AbacResourceAttributeModel{
-            +name: string
-+resourceId: number
-+description: string
-+isActive: boolean
-+createdAt: Date
-+updatedAt: Date
-
-        }
-Model~TModelAttributes,TCreationAttributes~<|--AbacResourceAttributeModel
-class AbacUserAttributeModel{
-            +name: string
-+description: string
-+isActive: boolean
-+createdAt: Date
-+updatedAt: Date
-
-        }
-Model~TModelAttributes,TCreationAttributes~<|--AbacUserAttributeModel
-class RbacModel{
-            +id: number
-+name: string
-+description: string
-+isActive: boolean
-+createdAt: Date
-+updatedAt: Date
-+userUuid: string
-+rbacRoleId: number
-+roles: RbacRoleModel[]
-            +toEntity() RbacEntity$
-        }
-Model~TModelAttributes,TCreationAttributes~<|--RbacModel
-class RbacPermissionModel{
-            +id: number
-+name: string
-+description: string
-+isActive: boolean
-+createdAt: Date
-+updatedAt: Date
-            +toEntity() PermissionEntity$
-        }
-Model~TModelAttributes,TCreationAttributes~<|--RbacPermissionModel
-class RbacRoleModel{
-            +id: number
-+name: string
-+description: string
-+isActive: boolean
-+createdAt: Date
-+updatedAt: Date
-+rolesPermissions: RbacRolePermissionModel[]
-+toEntity: (model: RbacRoleModel) =~ RoleEntity$
-
-        }
-Model~TModelAttributes,TCreationAttributes~<|--RbacRoleModel
-class RbacRolePermissionModel{
-            +id: number
-+roleId: number
-+permissionId: number
-+createdAt: Date
-+updatedAt: Date
-+permissions: RbacPermissionModel[]
-
-        }
-Model~TModelAttributes,TCreationAttributes~<|--RbacRolePermissionModel
 ```
 
 ## Features
