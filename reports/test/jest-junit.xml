@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="22" failures="0" errors="0" time="2.683">
+  <testsuite name="ConfigEntity tests" errors="0" failures="0" skipped="0" timestamp="2025-06-03T22:54:59" time="0.21" tests="1">
+    <testcase classname="ConfigEntity tests should be defined" name="ConfigEntity tests should be defined" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="AuthorizationService tests" errors="0" failures="0" skipped="0" timestamp="2025-06-03T22:54:59" time="0.211" tests="1">
+    <testcase classname="AuthorizationService tests should be defined" name="AuthorizationService tests should be defined" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="Authentication Entity tests" errors="0" failures="0" skipped="0" timestamp="2025-06-03T22:54:59" time="1.596" tests="1">
+    <testcase classname="Authentication Entity tests mounts an authentication entity based on an user" name="Authentication Entity tests mounts an authentication entity based on an user" time="0.079">
+    </testcase>
+  </testsuite>
+  <testsuite name="User Service Test" errors="0" failures="0" skipped="0" timestamp="2025-06-03T22:54:59" time="2.064" tests="6">
+    <testcase classname="User Service Test User creation creates a new user" name="User Service Test User creation creates a new user" time="0.092">
+    </testcase>
+    <testcase classname="User Service Test Find user Find user with rbac throws error when user does not have any rbac" name="User Service Test Find user Find user with rbac throws error when user does not have any rbac" time="0.001">
+    </testcase>
+    <testcase classname="User Service Test Find user Find by email finds a user by email" name="User Service Test Find user Find by email finds a user by email" time="0.007">
+    </testcase>
+    <testcase classname="User Service Test Find user Find by email throws not found when email does not exists" name="User Service Test Find user Find by email throws not found when email does not exists" time="0.001">
+    </testcase>
+    <testcase classname="User Service Test Find user Find by username finds an user by username" name="User Service Test Find user Find by username finds an user by username" time="0.002">
+    </testcase>
+    <testcase classname="User Service Test Find user Find by username throws not found when username does not exists" name="User Service Test Find user Find by username throws not found when username does not exists" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="AuthenticationService tests" errors="0" failures="0" skipped="0" timestamp="2025-06-03T22:54:59" time="2.053" tests="3">
+    <testcase classname="AuthenticationService tests Success cases authenticates a user" name="AuthenticationService tests Success cases authenticates a user" time="0.077">
+    </testcase>
+    <testcase classname="AuthenticationService tests Failure cases throws an error if the user does not exist" name="AuthenticationService tests Failure cases throws an error if the user does not exist" time="0">
+    </testcase>
+    <testcase classname="AuthenticationService tests Failure cases throws an error if the password is incorrect" name="AuthenticationService tests Failure cases throws an error if the password is incorrect" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="UserEntity tests" errors="0" failures="0" skipped="0" timestamp="2025-06-03T22:54:59" time="2.181" tests="10">
+    <testcase classname="UserEntity tests Password Hash hashes a password" name="UserEntity tests Password Hash hashes a password" time="0.081">
+    </testcase>
+    <testcase classname="UserEntity tests Password Hash checks a password" name="UserEntity tests Password Hash checks a password" time="0.149">
+    </testcase>
+    <testcase classname="UserEntity tests Password Hash fails when password is invalid" name="UserEntity tests Password Hash fails when password is invalid" time="0.152">
+    </testcase>
+    <testcase classname="UserEntity tests User validation passes when user is valid" name="UserEntity tests User validation passes when user is valid" time="0.071">
+    </testcase>
+    <testcase classname="UserEntity tests User validation fails when password is invalid" name="UserEntity tests User validation fails when password is invalid" time="0.003">
+    </testcase>
+    <testcase classname="UserEntity tests User validation fails when username is invalid" name="UserEntity tests User validation fails when username is invalid" time="0.001">
+    </testcase>
+    <testcase classname="UserEntity tests User validation fails when email is invalid" name="UserEntity tests User validation fails when email is invalid" time="0">
+    </testcase>
+    <testcase classname="UserEntity tests User creation creates a valid user" name="UserEntity tests User creation creates a valid user" time="0.145">
+    </testcase>
+    <testcase classname="UserEntity tests User creation instantiates an user from params" name="UserEntity tests User creation instantiates an user from params" time="0.001">
+    </testcase>
+    <testcase classname="UserEntity tests User creation includes an authorization instance" name="UserEntity tests User creation includes an authorization instance" time="0.07">
+    </testcase>
+  </testsuite>
+</testsuites>

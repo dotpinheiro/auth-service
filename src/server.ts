@@ -18,11 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', routes);
 
-app.use((err, req, res, next) => {
+app.use((err:any) => {
   console.log("got error");
   console.error(err);
-
-  // replace this with whatever UI you want to show the user
 });
 
 const packageDefinition = protoLoader.loadSync(
