@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for infrastructure/db/database-handler.ts</title>
+    <title>Code coverage report for infrastructure/db/@shared/models/abac/Abac.model.ts</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">infrastructure/db</a> database-handler.ts</h1>
+        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">infrastructure/db/@shared/models/abac</a> Abac.model.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">94.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/28</span>
+                <span class='fraction'>33/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">94.28% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>28/28</span>
+                <span class='fraction'>33/35</span>
             </div>
         
             
@@ -91,7 +91,14 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -104,49 +111,63 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {Postgres} from "./pgsql/database.config";
-import {Sqlite} from "./sqlite/database.config";
-import {DatabaseInterface} from "./database.interface";
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {AutoIncrement, BelongsToMany, Column, Model, PrimaryKey, Table} from "sequelize-typescript";
+import UserModel from "../User.model";
+import {AbacAccessPolicyModel} from "./AbacAccessPolicy.model";
+import RbacRoleModel from "../rbac/RbacRole.model";
+import {AbacEntity} from "../../../../../domain/authorization/entity/abac/abac.entity";
 &nbsp;
-export enum DatabaseHandlers {
-  SQLITE = 'sqlite',
-  POSTGRES = 'postgres',
+@Table({
+  tableName: "abac_users",
+  timestamps: true
+})
+export class AbacModel extends Model {
+  @PrimaryKey
+  @AutoIncrement
+  @Column
+  declare id: number;
+&nbsp;
+  @Column({ allowNull: false })
+  declare userUuid: string;
+&nbsp;
+  @Column({ allowNull: false })
+  declare accessPolicyId: number;
+&nbsp;
+  @BelongsToMany(() =&gt; AbacAccessPolicyModel, () =&gt; AbacModel, 'id', 'accessPolicyId')
+  declare policies: AbacAccessPolicyModel[];
+&nbsp;
+  @Column({ allowNull: false, defaultValue: new Date() })
+  declare createdAt: <span class="branch-0 cbranch-no" title="branch not covered" >Date;</span>
+&nbsp;
+  @Column({ allowNull: true, defaultValue: new Date() })
+  declare updatedAt: <span class="branch-0 cbranch-no" title="branch not covered" >Date;</span>
+&nbsp;
+  static toEntity = (model: AbacModel): AbacEntity =&gt; {
+<span class="cstat-no" title="statement not covered" >    return AbacEntity.from(model);</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 }
-&nbsp;
-export class DatabaseHandler {
-  private readonly _handler: DatabaseInterface;
-&nbsp;
-  constructor(handler = DatabaseHandlers.SQLITE) {
-    const handlerMapping = {
-      [DatabaseHandlers.SQLITE]: new Sqlite,
-      [DatabaseHandlers.POSTGRES]: new Postgres,
-    }
-    this._handler = handlerMapping[handler];
-    if(!this._handler) <span class="branch-0 cbranch-no" title="branch not covered" >throw new Error(`Database handler ${handler} not found.`)</span>
-    console.log(`Database: ${handler} selected.`)
-  }
-&nbsp;
-  get handler(){
-    return this._handler.init();
-  }
-}
-&nbsp;
-export default DatabaseHandler;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -156,14 +177,14 @@ export default DatabaseHandler;
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
                 at 2025-06-03T23:03:33.372Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="../../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../../../../../sorter.js"></script>
+        <script src="../../../../../block-navigation.js"></script>
     </body>
 </html>
     

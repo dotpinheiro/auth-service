@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for infrastructure/db/@shared/models/rbac/Rbac.model.ts</title>
+    <title>Code coverage report for infrastructure/db/@shared/models/abac/AbacAccessPolicy.model.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">infrastructure/db/@shared/models/rbac</a> Rbac.model.ts</h1>
+        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">infrastructure/db/@shared/models/abac</a> AbacAccessPolicy.model.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.15% </span>
+                <span class="strong">95.55% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>50/52</span>
+                <span class='fraction'>43/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/4</span>
+                <span class='fraction'>6/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.15% </span>
+                <span class="strong">95.55% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>50/52</span>
+                <span class='fraction'>43/45</span>
             </div>
         
             
@@ -108,21 +108,7 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -167,36 +153,40 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {
-  Column,
-  PrimaryKey,
-  Model,
-  Table,
-  ForeignKey,
-  AutoIncrement, BelongsToMany
-} from "sequelize-typescript";
-import UserModel from "../User.model";
-import RbacRoleModel from "./RbacRole.model";
-import {RbacEntity} from "../../../../../domain/authorization/entity/rbac/rbac.entity";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {AutoIncrement, BelongsToMany, Column, Model, PrimaryKey, Table} from "sequelize-typescript";
+import {AbacActionModel} from "./AbacAction.model";
+import {AbacResourceAttributeModel} from "./AbacResourceAttribute.model";
+import {AbacUserAttributeModel} from "./AbacUserAttribute.model";
+import {AbacEntity} from "../../../../../domain/authorization/entity/abac/abac.entity";
+import {AccessPolicyEntity} from "../../../../../domain/authorization/entity/abac/access-policy.entity";
 &nbsp;
 @Table({
-  tableName: "rbac_users",
-  timestamps: true,
+  tableName: "abac_access_policies",
+  timestamps: true
 })
-export default class RbacModel extends Model {
+export class AbacAccessPolicyModel extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column
   declare id: number;
 &nbsp;
   @Column({ allowNull: false })
-  declare name: string;
+  declare userAttributeName: string;
 &nbsp;
-  @Column({ allowNull: true })
-  declare description: string;
+  @Column({ allowNull: false })
+  declare resourceAttributeName: string;
 &nbsp;
-  @Column({ allowNull: false, defaultValue: true })
-  declare isActive: boolean;
+  @Column({ allowNull: false })
+  declare actionName: string;
+&nbsp;
+  @BelongsToMany(() =&gt; AbacActionModel, () =&gt; AbacAccessPolicyModel, 'id', 'actionName')
+  declare actions: AbacActionModel[];
+&nbsp;
+  @BelongsToMany(() =&gt; AbacResourceAttributeModel, () =&gt; AbacAccessPolicyModel, 'id', 'resourceAttributeName')
+  declare resourceAttributes: AbacResourceAttributeModel[];
+&nbsp;
+  @BelongsToMany(() =&gt; AbacUserAttributeModel, () =&gt; AbacAccessPolicyModel, 'id', 'userAttributeName')
+  declare userAttributes: AbacUserAttributeModel[];
 &nbsp;
   @Column({ allowNull: false, defaultValue: new Date() })
   declare createdAt: <span class="branch-0 cbranch-no" title="branch not covered" >Date;</span>
@@ -204,19 +194,8 @@ export default class RbacModel extends Model {
   @Column({ allowNull: true, defaultValue: new Date() })
   declare updatedAt: <span class="branch-0 cbranch-no" title="branch not covered" >Date;</span>
 &nbsp;
-  @ForeignKey(() =&gt; UserModel)
-  @Column({ allowNull: false })
-  declare userUuid: string;
-&nbsp;
-  @ForeignKey(() =&gt; RbacRoleModel)
-  @Column({ allowNull: false })
-  declare rbacRoleId: number;
-&nbsp;
-  @BelongsToMany(() =&gt; RbacRoleModel, () =&gt; RbacModel, 'id', 'rbacRoleId')
-  declare roles: RbacRoleModel[];
-&nbsp;
-  static <span class="fstat-no" title="function not covered" >toEntity(rbac: RbacModel): RbacEntity {</span>
-<span class="cstat-no" title="statement not covered" >    return RbacEntity.from(rbac)</span>
+  static toEntity = (model: AbacAccessPolicyModel): AccessPolicyEntity =&gt; {
+<span class="cstat-no" title="statement not covered" >    return AccessPolicyEntity.from(model);</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 }
 &nbsp;</pre></td></tr></table></pre>
