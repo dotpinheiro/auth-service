@@ -6,7 +6,7 @@ Este projeto consiste em um serviço de identidade desenvolvido em Node.js. O se
 
 A arquitetura do sistema segue princípios de Clean Architecture, separando claramente as camadas de domínio, aplicação, infraestrutura e interfaces. Isso facilita a manutenção, testes e evolução do sistema.
 
-![Diagrama de Arquitetura](.github/architecture.png)
+![Diagrama de Arquitetura](.github/architecture.jpg)
 
 ### Principais Camadas
 
