@@ -1,10 +1,23 @@
-## Project Description
+## Descrição do Projeto
 
-This project consists of an identity service developed in Node.js. The identity service is responsible for managing user authentication and authorization in web applications, ensuring security and reliability.
+Este projeto consiste em um serviço de identidade desenvolvido em Node.js. O serviço é responsável por gerenciar autenticação e autorização de usuários em aplicações web, garantindo segurança e confiabilidade.
 
-## Class Diagram
+## Arquitetura
+
+A arquitetura do sistema segue princípios de Clean Architecture, separando claramente as camadas de domínio, aplicação, infraestrutura e interfaces. Isso facilita a manutenção, testes e evolução do sistema.
+
+![Diagrama de Arquitetura](.github/architecture.png)
+
+### Principais Camadas
+
+- **Domain:** Contém as regras de negócio, entidades e interfaces de repositórios.
+- **Application:** Implementa os casos de uso e orquestra as operações entre as camadas.
+- **Infrastructure:** Implementa integrações com banco de dados, cache, logging e outros serviços externos.
+- **Interfaces (HTTP/gRPC):** Expõe endpoints REST e gRPC para integração com clientes.
+
+## Diagrama de Classes
+
 ```mermaid
-
 classDiagram
 
 class AuthorizationRepository{
@@ -267,10 +280,31 @@ class RoleParams {
 BaseEntity<|--RoleEntity
 ```
 
-## Features
+## Endpoints
 
-- User registration
-- User authentication (login)
-- Authorization
+### API HTTP
 
+- `POST /api/auth/login` — Autenticação de usuário
+- `POST /api/user` — Cadastro de usuário
+- `PUT /api/user/:uuid` — Atualização de usuário
+- `GET /api/user` — Listagem de usuários
+- `GET /api/user/:uuid` — Detalhes de usuário
 
+### gRPC
+
+- Serviço AuthService com métodos:
+  - `Authenticate`
+  - `CheckPermissions`
+
+## Funcionalidades
+
+- Cadastro de usuários
+- Autenticação de usuários (login)
+- Autorização baseada em RBAC e ABAC
+- Integração com banco de dados relacional (Postgres/SQLite)
+- Suporte a cache (Redis)
+- Logging estruturado
+
+## Licença
+
+Distribuído sob a licença MIT.
